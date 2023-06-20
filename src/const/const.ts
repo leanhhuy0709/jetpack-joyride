@@ -1,0 +1,1 @@
+export const PLAYER_1 = 'assets/player/1.png'
