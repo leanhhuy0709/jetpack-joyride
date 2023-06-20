@@ -1,18 +1,27 @@
-import 'phaser'
+import * as Phaser from 'phaser'
 
-class GameScene extends Phaser.Scene {
+class MyScene extends Phaser.Scene {
     constructor() {
-        super({ key: 'GameScene' })
+        super('MyScene')
     }
 
     preload() {
-        this.load.image('background', 'assets/phaser-logo.png')
-        //this.load.image('player', 'assets/player.png')
+        // Load game assets
+        console.log('Load game assets')
     }
 
     create() {
-        this.add.image(0, 0, 'background').setOrigin(0)
-        //this.add.image(400, 300, 'player')
+        // Initialize game objects
+        console.log('Initialize game objects')
+        const canvas: HTMLCanvasElement = <HTMLCanvasElement>document.getElementById('game')
+        const ctx: CanvasRenderingContext2D | null = canvas.getContext('2d')
+        console.log(canvas)
+        console.log(ctx)
+    }
+
+    update() {
+        // Update game logic
+        console.log('Update game logic')
     }
 }
 
@@ -20,8 +29,7 @@ const config: Phaser.Types.Core.GameConfig = {
     type: Phaser.AUTO,
     width: 800,
     height: 600,
-    scene: [GameScene],
+    scene: [MyScene],
 }
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const game = new Phaser.Game(config)
