@@ -1,3 +1,4 @@
+import GamePlayScene from "./scenes/GamePlayScene"
 import MenuScene from "./scenes/MenuScene"
 
 export const GameConfig: Phaser.Types.Core.GameConfig = {
@@ -6,7 +7,7 @@ export const GameConfig: Phaser.Types.Core.GameConfig = {
     version: '1.0',
     type: Phaser.AUTO,
     parent: 'game',
-    scene: [MenuScene],
+    scene: [MenuScene, GamePlayScene],
     input: {
         keyboard: true,
     },
@@ -14,11 +15,13 @@ export const GameConfig: Phaser.Types.Core.GameConfig = {
         default: 'arcade',
         arcade: {
             gravity: { y: 300 },
+            debug: true
         },
     },
     width: 800,
     height: 400,
     scale: {
+        mode: Phaser.Scale.ScaleModes.NONE,
         autoCenter: Phaser.Scale.Center.CENTER_BOTH
     },
     backgroundColor: '#98d687',
