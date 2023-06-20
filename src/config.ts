@@ -16,9 +16,10 @@ export const GameConfig: Phaser.Types.Core.GameConfig = {
             gravity: { y: 300 },
         },
     },
+    width: 800,
+    height: 400,
     scale: {
-        mode: Phaser.Scale.ScaleModes.FIT,
-        autoCenter: Phaser.Scale.Center.CENTER_BOTH,
+        autoCenter: Phaser.Scale.Center.CENTER_BOTH
     },
     backgroundColor: '#98d687',
     render: { pixelArt: true, antialias: false },
