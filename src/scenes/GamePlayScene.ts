@@ -3,14 +3,14 @@ import { BARRY_SPRITE_SHEET, BULLET, CACTUS, EXPLOSION, SCENE, ZAP_1 } from '../
 import Player from '../object/Player'
 import Obstacle from '../object/Obstacle'
 import ObstacleManager from '../object/ObstacleManager'
+import Score from '../Score'
 
 export default class GamePlayScene extends Phaser.Scene {
     private player: Player
     private platforms: Phaser.Physics.Arcade.StaticGroup
     private obstacle: Obstacle
     private obstacleManager: ObstacleManager
-    private score: number
-    private scoreText: Phaser.GameObjects.Text
+    private score: Score
 
     private cursors: {
         left: Phaser.Input.Keyboard.Key
@@ -59,10 +59,8 @@ export default class GamePlayScene extends Phaser.Scene {
 
         this.physics.add.collider(this.player, this.platforms)
 
-        this.score = 0 
-        this.scoreText = this.add.text(100, 100, `${Math.floor(this.score)}`)
-        this.scoreText.setFontSize('100px')
-        this.scoreText.setColor('#000000')
+        this.score = new Score(this, 0, 0)
+        
     }
 
     public update(_time: number, delta: number): void {
@@ -80,10 +78,9 @@ export default class GamePlayScene extends Phaser.Scene {
 
         if (this.obstacleManager.checkCollider(this.player)) {
             console.log('You die!')
-            this.score = 0
+            this.score.resetScore()
         }
 
-        this.score += delta / 10
-        this.scoreText.setText(`${Math.floor(this.score)}`)
+        this.score.add(delta, 0.1)
     }
 }
