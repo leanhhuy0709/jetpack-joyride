@@ -6,7 +6,8 @@ import {
     EXPLOSION,
     SCENE,
     ZAP_1,
-    ZAP_SPRITE,
+    ZAP_SPRITE_BOT,
+    ZAP_SPRITE_TOP,
 } from '../const/const'
 import Player from '../object/Player'
 import Obstacle from '../object/Obstacle'
@@ -46,7 +47,8 @@ export default class GamePlayScene extends Phaser.Scene {
         this.load.image('bullet', BULLET)
         this.load.image('explosion', EXPLOSION)
 
-        this.load.spritesheet('zapsprite', ZAP_SPRITE, { frameWidth: 75, frameHeight: 58 })
+        this.load.spritesheet('zapbot', ZAP_SPRITE_BOT, { frameWidth: 75, frameHeight: 58 })
+        this.load.spritesheet('zaptop', ZAP_SPRITE_TOP, { frameWidth: 75, frameHeight: 58 })
     }
 
     public create(): void {
@@ -71,18 +73,26 @@ export default class GamePlayScene extends Phaser.Scene {
 
         this.score = new Score(this, 0, 0)
 
-        const a = this.add.sprite(500, 1000, 'zapsprite').setDisplaySize(75 * 2, 58 * 2)
+        const a = this.add.sprite(500, 1000, 'zapbot').setDisplaySize(75 * 2, 58 * 2)
 
         this.anims.create({
-            key: 'turn',
-            frames: this.anims.generateFrameNumbers('zapsprite', { start: 0, end: 2 }),
+            key: 'turn-bot',
+            frames: this.anims.generateFrameNumbers('zapbot', { start: 0, end: 2 }),
             frameRate: 10,
             repeat: -1,
         })
-        a.play('turn')
+        a.setRotation(Math.PI/2)
+        a.play('turn-bot')
 
+        const b = this.add.sprite(500, 600, 'zaptop').setDisplaySize(75 * 2, 58 * 2)
 
-        
+        this.anims.create({
+            key: 'turn-top',
+            frames: this.anims.generateFrameNumbers('zaptop', { start: 0, end: 2 }),
+            frameRate: 10,
+            repeat: -1,
+        })
+        b.play('turn-top')
     }
 
     public update(_time: number, delta: number): void {

@@ -24,4 +24,5 @@ export const BULLET = 'assets/bullet/1.png'
 export const ZAP_1 = 'assets/zap/zap.png'
 export const EXPLOSION = 'assets/bullet/3.png'
 
-export const ZAP_SPRITE = 'assets/zap/spritesheet.png'
+export const ZAP_SPRITE_BOT = 'assets/zap/spritesheet-bot.png'
+export const ZAP_SPRITE_TOP = 'assets/zap/spritesheet-top.png'
