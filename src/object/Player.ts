@@ -1,13 +1,15 @@
 import * as Phaser from 'phaser'
 import Bullet from './Bullet'
+import Explosion from './Explosion'
 
 const DELAY_FIRE_BULLET = 5
 export default class Player extends Phaser.GameObjects.Sprite {
     private isFlying: boolean
     private bullets: Bullet[]
     private delayFire: number
+    private platforms: Phaser.Physics.Arcade.StaticGroup
 
-    public constructor(scene: Phaser.Scene, x: number, y: number, key: string) {
+    public constructor(scene: Phaser.Scene, x: number, y: number, key: string, platforms: Phaser.Physics.Arcade.StaticGroup) {
         super(scene, x, y, key)
         this.setSize(200, 200)
         this.setDisplaySize(200, 200)
@@ -36,8 +38,9 @@ export default class Player extends Phaser.GameObjects.Sprite {
 
         this.bullets = []
         this.delayFire = DELAY_FIRE_BULLET
-
+        this.setDepth(1)
         this.scene.physics.world.enable(this)
+        this.platforms = platforms
 
         this.anims.play('fall')
         if (this.body) {
@@ -57,6 +60,16 @@ export default class Player extends Phaser.GameObjects.Sprite {
 
         for (let i = 0; i < this.getBullets().length; i++) {
             this.bullets[i].update(delta)
+            const body = this.bullets[i].body
+            if (body)
+            {
+                //console.log(body.velocity.y)
+                if (body.velocity.y == 0)
+                {
+                    this.bullets[i].setVisible(false)
+                }
+            }
+                
         }
     }
 
@@ -72,8 +85,9 @@ export default class Player extends Phaser.GameObjects.Sprite {
         }
         this.delayFire += 0.5
         if (this.delayFire >= DELAY_FIRE_BULLET) {
-            this.bullets.push(new Bullet(this.scene, this.x, this.y, 'bullet'))
+            this.bullets.push(new Bullet(this.scene, this.x - 10, this.y + 95, 'bullet'))
             this.delayFire -= DELAY_FIRE_BULLET
+            this.scene.physics.add.collider(this.bullets[this.bullets.length - 1], this.platforms)
         }
 
     }

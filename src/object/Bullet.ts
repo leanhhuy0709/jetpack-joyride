@@ -9,6 +9,7 @@ export default class Bullet extends Phaser.GameObjects.Sprite {
             this.body.velocity.y = 1500
             this.body.velocity.x = Math.floor(Math.random() * 500) - 250
         }
+        
     }
 
     public update(delta: number): void {
