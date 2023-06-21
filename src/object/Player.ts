@@ -1,6 +1,12 @@
 import * as Phaser from 'phaser'
+import Bullet from './Bullet'
+
+const DELAY_FIRE_BULLET = 5
 export default class Player extends Phaser.GameObjects.Sprite {
     private isFlying: boolean
+    private bullets: Bullet[]
+    private delayFire: number
+
     public constructor(scene: Phaser.Scene, x: number, y: number, key: string) {
         super(scene, x, y, key)
         this.setSize(200, 200)
@@ -28,6 +34,9 @@ export default class Player extends Phaser.GameObjects.Sprite {
             repeat: -1,
         })
 
+        this.bullets = []
+        this.delayFire = DELAY_FIRE_BULLET
+
         this.scene.physics.world.enable(this)
 
         this.anims.play('fall')
@@ -37,13 +46,17 @@ export default class Player extends Phaser.GameObjects.Sprite {
         this.scene.add.existing(this)
     }
 
-    public update(_delta: number): void {
+    public update(delta: number): void {
         super.update()
 
         if (this.body) {
             if (this.body.velocity.y == 0 && this.anims.currentAnim?.key != 'move') this.moving()
             else if (this.isFlying) this.flying()
             else this.falling()
+        }
+
+        for (let i = 0; i < this.getBullets().length; i++) {
+            this.bullets[i].update(delta)
         }
     }
 
@@ -57,6 +70,12 @@ export default class Player extends Phaser.GameObjects.Sprite {
                 this.anims.play('fly')
             }
         }
+        this.delayFire += 0.5
+        if (this.delayFire >= DELAY_FIRE_BULLET) {
+            this.bullets.push(new Bullet(this.scene, this.x, this.y, 'bullet'))
+            this.delayFire -= DELAY_FIRE_BULLET
+        }
+
     }
 
     public falling(): void {
@@ -69,5 +88,9 @@ export default class Player extends Phaser.GameObjects.Sprite {
 
     public moving(): void {
         this.anims.play('move')
+    }
+
+    public getBullets(): Bullet[] {
+        return this.bullets
     }
 }

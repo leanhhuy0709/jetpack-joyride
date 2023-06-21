@@ -1,6 +1,7 @@
 import * as Phaser from 'phaser'
 import {
     BARRY_SPRITE_SHEET,
+    BULLET,
     CACTUS,
     SCENE,
 } from '../const/const'
@@ -12,6 +13,7 @@ export default class GamePlayScene extends Phaser.Scene {
     private player: Player
     private obstacle: Obstacle
     private obstacleManager: ObstacleManager
+    private score: number
 
     private cursors: {
         left: Phaser.Input.Keyboard.Key
@@ -35,6 +37,7 @@ export default class GamePlayScene extends Phaser.Scene {
         })
         this.load.image('cactus', CACTUS)
         this.load.image('ground', 'assets/platform.png')
+        this.load.image('bullet', BULLET)
     }
 
     public create(): void {
@@ -59,6 +62,12 @@ export default class GamePlayScene extends Phaser.Scene {
         if (this.input.keyboard) this.cursors = this.input.keyboard.createCursorKeys()
 
         this.physics.add.collider(this.player, platforms)
+        for (let i = 0; i < this.player.getBullets().length; i++)
+        {
+            this.physics.add.collider(this.player.getBullets()[i], platforms)
+        }
+
+        this.score = 0 //delete me
     }
 
     public update(_time: number, delta: number): void {
