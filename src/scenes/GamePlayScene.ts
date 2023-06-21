@@ -1,5 +1,13 @@
 import * as Phaser from 'phaser'
-import { BARRY_SPRITE_SHEET, BULLET, CACTUS, EXPLOSION, SCENE, ZAP_1 } from '../const/const'
+import {
+    BARRY_SPRITE_SHEET,
+    BULLET,
+    CACTUS,
+    EXPLOSION,
+    SCENE,
+    ZAP_1,
+    ZAP_SPRITE,
+} from '../const/const'
 import Player from '../object/Player'
 import Obstacle from '../object/Obstacle'
 import ObstacleManager from '../object/ObstacleManager'
@@ -37,6 +45,8 @@ export default class GamePlayScene extends Phaser.Scene {
         this.load.image('ground', 'assets/platform.png')
         this.load.image('bullet', BULLET)
         this.load.image('explosion', EXPLOSION)
+
+        this.load.spritesheet('zapsprite', ZAP_SPRITE, { frameWidth: 75, frameHeight: 58 })
     }
 
     public create(): void {
@@ -60,14 +70,26 @@ export default class GamePlayScene extends Phaser.Scene {
         this.physics.add.collider(this.player, this.platforms)
 
         this.score = new Score(this, 0, 0)
+
+        const a = this.add.sprite(500, 1000, 'zapsprite').setDisplaySize(75 * 2, 58 * 2)
+
+        this.anims.create({
+            key: 'turn',
+            frames: this.anims.generateFrameNumbers('zapsprite', { start: 0, end: 2 }),
+            frameRate: 10,
+            repeat: -1,
+        })
+        a.play('turn')
+
+
         
     }
 
     public update(_time: number, delta: number): void {
         // Update game objects
-        
+
         this.player.update(delta)
-        
+
         if (this.cursors.space?.isDown) {
             this.player.flying()
         } else if (this.cursors.space?.isUp) {
