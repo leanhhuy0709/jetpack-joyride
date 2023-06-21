@@ -31,8 +31,9 @@ export default class Player extends Phaser.GameObjects.Sprite {
         this.scene.physics.world.enable(this)
 
         this.anims.play('fall')
-        if (this.body) this.body.velocity.y = 800 //defaul fall
-
+        if (this.body) {
+            this.body.velocity.y = 1 //defaul fall
+        }
         this.scene.add.existing(this)
     }
 
@@ -60,7 +61,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
 
     public falling(): void {
         if (this.body && this.isFlying) {
-            this.body.velocity.y = 800
+            this.body.velocity.y = 1
             this.isFlying = false
             this.anims.play('fall')
         }

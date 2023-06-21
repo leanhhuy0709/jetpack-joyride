@@ -54,6 +54,8 @@ export default class GamePlayScene extends Phaser.Scene {
         ground.setDisplaySize(3200, 100)
         //ground.setDisplaySize(3200, 100)
 
+        this.physics.world.gravity.y = 1250
+
         if (this.input.keyboard) this.cursors = this.input.keyboard.createCursorKeys()
 
         this.physics.add.collider(this.player, platforms)
