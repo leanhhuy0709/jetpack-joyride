@@ -11,7 +11,7 @@ export default class ObstacleManager {
         let tmp = 2000
         for (let i = 0; i < numObstacle; i++) {
             this.obstacles.push(new Obstacle(scene, 0, 0, key))
-            tmp = Math.floor(Math.random() * 1000) + 400 + tmp
+            tmp = Math.floor(Math.random() * 1000) + 200 + tmp
             const x = tmp
             const y = Math.floor(Math.random() * 2000)
             this.obstacles[i].reset(x, y)
@@ -48,7 +48,7 @@ export default class ObstacleManager {
 
         for (let i = 0, j = 0; i < listObstacleNeedToReset.length; i++) {
             j = listObstacleNeedToReset[i]
-            tmp = Math.floor(Math.random() * 1000) + 400 + tmp
+            tmp = Math.floor(Math.random() * 1000) + 200 + tmp
             if (this.obstacles[j].x < -this.obstacles[j].width) {
                 const x = tmp
                 const y = Math.floor(Math.random() * 2000)

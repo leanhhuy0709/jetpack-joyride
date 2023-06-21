@@ -20,3 +20,6 @@ export const BARRY_MOVE_2 = 'assets/barry/2.png'
 
 export const CACTUS = 'assets/cactus/Cactus.png'
 export const BULLET = 'assets/bullet/1.png'
+
+export const ZAP_1 = 'assets/zap/zap.png'
+export const EXPLOSION = 'assets/bullet/3.png'

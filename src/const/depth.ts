@@ -1,0 +1,8 @@
+export enum DEPTH {
+    BACKGROUND_LOW = 0,
+    BACKGROUND_MEDIUM = 1,
+    BACKGROUND_HIGH = 2,
+    OBJECT_LOW = 3,
+    OBJECT_MEDIUM = 4,
+    OBJECT_HIGH = 5,
+}
