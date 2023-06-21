@@ -1,18 +1,10 @@
 import * as Phaser from 'phaser'
-import {
-    BARRY_SPRITE_SHEET,
-    BULLET,
-    CACTUS,
-    EXPLOSION,
-    SCENE,
-    ZAP_1,
-    ZAP_SPRITE_BOT,
-    ZAP_SPRITE_TOP,
-} from '../const/const'
+import { BARRY_SPRITE_SHEET, BULLET, CACTUS, EXPLOSION, SCENE, ZAP_SPRITE } from '../const/const'
 import Player from '../object/Player'
 import Obstacle from '../object/Obstacle'
 import ObstacleManager from '../object/ObstacleManager'
 import Score from '../Score'
+import Zap from '../object/Zap'
 
 export default class GamePlayScene extends Phaser.Scene {
     private player: Player
@@ -20,6 +12,8 @@ export default class GamePlayScene extends Phaser.Scene {
     private obstacle: Obstacle
     private obstacleManager: ObstacleManager
     private score: Score
+
+    private testZap: Obstacle
 
     private cursors: {
         left: Phaser.Input.Keyboard.Key
@@ -42,13 +36,11 @@ export default class GamePlayScene extends Phaser.Scene {
             frameHeight: 95,
         })
         this.load.image('cactus', CACTUS)
-        this.load.image('zap', ZAP_1)
         this.load.image('ground', 'assets/platform.png')
         this.load.image('bullet', BULLET)
         this.load.image('explosion', EXPLOSION)
 
-        this.load.spritesheet('zapbot', ZAP_SPRITE_BOT, { frameWidth: 75, frameHeight: 58 })
-        this.load.spritesheet('zaptop', ZAP_SPRITE_TOP, { frameWidth: 75, frameHeight: 58 })
+        this.load.spritesheet('zap', ZAP_SPRITE, { frameWidth: 75, frameHeight: 58 })
     }
 
     public create(): void {
@@ -63,7 +55,7 @@ export default class GamePlayScene extends Phaser.Scene {
         ground.setSize(3200, 100)
         ground.setDisplaySize(3200, 100)
 
-        this.obstacleManager = new ObstacleManager(this, 10, 'zap')
+        this.obstacleManager = new ObstacleManager(this, 10)
 
         this.physics.world.gravity.y = 1250
 
@@ -73,26 +65,18 @@ export default class GamePlayScene extends Phaser.Scene {
 
         this.score = new Score(this, 0, 0)
 
-        const a = this.add.sprite(500, 1000, 'zapbot').setDisplaySize(75 * 2, 58 * 2)
+        const a = this.add.sprite(500, 1000, 'zap').setDisplaySize(75 * 2, 58 * 2)
 
         this.anims.create({
             key: 'turn-bot',
-            frames: this.anims.generateFrameNumbers('zapbot', { start: 0, end: 2 }),
+            frames: this.anims.generateFrameNumbers('zap', { start: 0, end: 2 }),
             frameRate: 10,
             repeat: -1,
         })
-        a.setRotation(Math.PI/2)
+        a.setRotation(Math.PI / 2)
         a.play('turn-bot')
 
-        const b = this.add.sprite(500, 600, 'zaptop').setDisplaySize(75 * 2, 58 * 2)
-
-        this.anims.create({
-            key: 'turn-top',
-            frames: this.anims.generateFrameNumbers('zaptop', { start: 0, end: 2 }),
-            frameRate: 10,
-            repeat: -1,
-        })
-        b.play('turn-top')
+        this.testZap = new Zap(this, 400, 1200, 950, 500)
     }
 
     public update(_time: number, delta: number): void {

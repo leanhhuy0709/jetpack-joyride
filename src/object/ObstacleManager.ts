@@ -5,28 +5,21 @@ export default class ObstacleManager {
     private obstacles: Obstacle[]
     private scene: Phaser.Scene
 
-    public constructor(scene: Phaser.Scene, numObstacle: number, key: string) {
+    public constructor(scene: Phaser.Scene, _numObstacle: number) {
         this.scene = scene
         this.obstacles = []
-        let tmp = 2000
-        for (let i = 0; i < numObstacle; i++) {
-            this.obstacles.push(new Obstacle(scene, 0, 0, key))
-            tmp = Math.floor(Math.random() * 1000) + 200 + tmp
-            const x = tmp
-            const y = Math.floor(Math.random() * 2000)
-            this.obstacles[i].reset(x, y)
-            
-        }
     }
 
-    public checkCollider(player: Player): boolean {
-        for (let i = 0; i < this.obstacles.length; i++) {
+    public checkCollider(_player: Player): boolean {
+        /*for (let i = 0; i < this.obstacles.length; i++) {
             if (this.scene.physics.overlap(player, this.obstacles[i])) return true
         }
+        return false*/
         return false
     }
 
-    public update(delta: number): void {
+    public update(_delta: number): void {
+        /*
         const listObstacleNeedToReset = []
 
         for (let i = 0; i < this.obstacles.length; i++) {
@@ -54,6 +47,6 @@ export default class ObstacleManager {
                 const y = Math.floor(Math.random() * 2000)
                 this.obstacles[j].reset(x, y)
             }
-        }
+        }*/
     }
 }
