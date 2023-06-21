@@ -1,81 +1,72 @@
 import * as Phaser from 'phaser'
-export default class Player {
-    private x: number
-    private y: number
-    private w: number
-    private h: number
-    private keySprite: string
-    private spriteHref: string
-    private obj: Phaser.Types.Physics.Arcade.SpriteWithDynamicBody
-    private scene: Phaser.Scene
+export default class Player extends Phaser.GameObjects.Sprite {
+    private isFlying: boolean
+    public constructor(scene: Phaser.Scene, x: number, y: number, key: string) {
+        super(scene, x, y, key)
+        this.setSize(200, 200)
+        this.setDisplaySize(200, 200)
+        this.isFlying = false
 
-    public constructor(
-        scene: Phaser.Scene,
-        x: number,
-        y: number,
-        w: number,
-        h: number,
-        keySprite: string,
-        spriteHref: string
-    ) {
-        this.scene = scene
-        this.x = x
-        this.y = y
-        this.w = w
-        this.h = h
-        this.keySprite = keySprite
-        this.spriteHref = spriteHref
-    }
-
-    public preload(): void {
-        this.scene.load.spritesheet(this.keySprite, this.spriteHref, {
-            frameWidth: this.w,
-            frameHeight: this.h,
+        this.scene.anims.create({
+            key: 'move',
+            frames: this.anims.generateFrameNumbers(key, { start: 0, end: 1 }),
+            frameRate: 10,
+            repeat: -1,
         })
+
+        this.scene.anims.create({
+            key: 'fly',
+            frames: this.anims.generateFrameNumbers(key, { start: 3, end: 3 }),
+            frameRate: 10,
+            repeat: -1,
+        })
+
+        this.scene.anims.create({
+            key: 'fall',
+            frames: this.anims.generateFrameNumbers(key, { start: 2, end: 2 }),
+            frameRate: 10,
+            repeat: -1,
+        })
+
+        this.scene.physics.world.enable(this)
+
+        this.anims.play('fall')
+        if (this.body) this.body.velocity.y = 800 //defaul fall
+
+        this.scene.add.existing(this)
     }
 
-    public create(): void {
-        this.obj = this.scene.physics.add.sprite(100, 300, 'dude')
-        this.obj.setBounce(0.2)
-        this.obj.setCollideWorldBounds(true)
+    public update(_delta: number): void {
+        super.update()
+
+        if (this.body) {
+            if (this.body.velocity.y == 0 && this.anims.currentAnim?.key != 'move') this.moving()
+            else if (this.isFlying) this.flying()
+            else this.falling()
+        }
     }
 
-    public getObj(): Phaser.Types.Physics.Arcade.SpriteWithDynamicBody
-    {
-        return this.obj
+    public flying(): void {
+        if (this.body) {
+            if (this.body.position.y <= 0) {
+                this.body.position.y = 0
+            } else {
+                this.body.velocity.y = -1200
+                this.isFlying = true
+                this.anims.play('fly')
+            }
+        }
     }
 
-    public getX(): number {
-        return this.x
+    public falling(): void {
+        if (this.body && this.isFlying) {
+            this.body.velocity.y = 800
+            this.isFlying = false
+            this.anims.play('fall')
+        }
     }
 
-    public getY(): number {
-        return this.y
+    public moving(): void {
+        this.anims.play('move')
     }
-
-    public setX(x: number): void {
-        this.x = x
-    }
-
-    public setY(y: number): void {
-        this.y = y
-    }
-
-    public getW(): number {
-        return this.w
-    }
-
-    public getH(): number {
-        return this.h
-    }
-
-    public setW(w: number): void {
-        this.w = w
-    }
-
-    public setH(h: number): void {
-        this.h = h
-    }
-
-
 }

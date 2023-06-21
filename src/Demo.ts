@@ -141,4 +141,5 @@ const config: Phaser.Types.Core.GameConfig = {
     },
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const game = new Phaser.Game(config)

@@ -1,10 +1,19 @@
 import * as Phaser from 'phaser'
-import { PLAYER_1, SCENE } from '../const/const'
+import {
+    BARRY_SPRITE_SHEET,
+    CACTUS,
+    SCENE,
+} from '../const/const'
 import Player from '../object/Player'
+import Obstacle from '../object/Obstacle'
+import ObstacleManager from '../object/ObstacleManager'
 
 export default class GamePlayScene extends Phaser.Scene {
-    platforms: Phaser.Physics.Arcade.StaticGroup
-    cursors: {
+    private player: Player
+    private obstacle: Obstacle
+    private obstacleManager: ObstacleManager
+
+    private cursors: {
         left: Phaser.Input.Keyboard.Key
         right: Phaser.Input.Keyboard.Key
         up: Phaser.Input.Keyboard.Key
@@ -13,82 +22,83 @@ export default class GamePlayScene extends Phaser.Scene {
         shift?: Phaser.Input.Keyboard.Key
     }
 
-    private player: Player
-
-    stars: Phaser.Physics.Arcade.Group
-
     public constructor() {
         super(SCENE.GAMEPLAY)
-        this.player = new Player(this, 100, 300, 32, 48, 'dude', PLAYER_1)
     }
 
     public preload(): void {
         // Load game assets
         console.log('Load game assets')
-        this.load.image('sky', 'assets/cloud.png')
+        this.load.spritesheet('barry', BARRY_SPRITE_SHEET, {
+            frameWidth: 93,
+            frameHeight: 95,
+        })
+        this.load.image('cactus', CACTUS)
         this.load.image('ground', 'assets/platform.png')
-
-        this.player.preload()
     }
 
     public create(): void {
         // Initialize game objects
         console.log('Initialize game objects')
-        this.cameras.main.setBounds(0, 0, Infinity, Infinity);
-        this.add.image(400, 300, 'sky').setDisplaySize(10000, 400)
 
-        this.platforms = this.physics.add.staticGroup()
+        this.player = new Player(this, 800, 240, 'barry')
 
-        this.platforms.create(400, 368, 'ground').setScale(2).refreshBody()
+        const platforms = this.physics.add.staticGroup()
 
-        this.player.create()
+        const ground = platforms.create(1600, 1500, 'ground')
 
-        this.anims.create({
-            key: 'left',
-            frames: this.anims.generateFrameNumbers('dude', { start: 0, end: 3 }),
-            frameRate: 10,
-            repeat: -1,
-        })
+        //this.obstacle = new Obstacle(this, 800, 240, 'cactus')
+        this.obstacleManager = new ObstacleManager(this, 10, 'cactus')
 
-        this.anims.create({
-            key: 'turn',
-            frames: [{ key: 'dude', frame: 4 }],
-            frameRate: 20,
-        })
-
-        this.anims.create({
-            key: 'right',
-            frames: this.anims.generateFrameNumbers('dude', { start: 5, end: 8 }),
-            frameRate: 10,
-            repeat: -1,
-        })
+        ground.setSize(3200, 100)
+        ground.setDisplaySize(3200, 100)
+        //ground.setDisplaySize(3200, 100)
 
         if (this.input.keyboard) this.cursors = this.input.keyboard.createCursorKeys()
 
-        this.physics.add.collider(this.player.getObj(), this.platforms)
+        this.physics.add.collider(this.player, platforms)
     }
 
-    public update(time: number, delta: number): void {
+    public update(_time: number, delta: number): void {
+        this.player.update(delta)
+        // Update game objects
+        if (this.cursors.space?.isDown)
+        {
+            this.player.flying()
+        }
+        else if (this.cursors.space?.isUp)
+        {
+            this.player.falling()
+        }
+
+        this.obstacleManager.update(delta)
+
+        if (this.obstacleManager.checkCollider(this.player))
+            console.log("You die!")
+        
+
+
+        /*
         if (this.cursors.left.isDown) {
-            this.player.getObj().setVelocityX(-160)
+            this.player.setVelocityX(-160)
 
-            this.player.getObj().anims.play('left', true)
+            this.player.anims.play('left', true)
         } else if (this.cursors.right.isDown) {
-            this.player.getObj().setVelocityX(160)
+            this.player.setVelocityX(160)
 
-            this.player.getObj().anims.play('right', true)
+            this.player.anims.play('right', true)
         } else {
-            this.player.getObj().setVelocityX(0)
+            this.player.setVelocityX(0)
 
-            this.player.getObj().anims.play('turn')
+            this.player.anims.play('turn')
         }
 
-        if (this.cursors.up.isDown && this.player.getObj().body.touching.down) {
-            this.player.getObj().setVelocityY(-330)
+        if (this.cursors.up.isDown && this.player.body.touching.down) {
+            this.player.setVelocityY(-330)
         }
 
-        if (this.cursors.up.isDown && this.player.getObj().body.touching.down) {
-            this.player.getObj().setVelocityY(-330)
-        }
+        if (this.cursors.up.isDown && this.player.body.touching.down) {
+            this.player.setVelocityY(-330)
+        }*/
     }
 }

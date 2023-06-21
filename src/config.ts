@@ -18,12 +18,13 @@ export const GameConfig: Phaser.Types.Core.GameConfig = {
             debug: true
         },
     },
-    width: 800,
-    height: 400,
+    width: 3200,
+    height: 1600,
     scale: {
-        mode: Phaser.Scale.ScaleModes.NONE,
-        autoCenter: Phaser.Scale.Center.CENTER_BOTH
+        mode: Phaser.Scale.ScaleModes.FIT,
+        autoCenter: Phaser.Scale.Center.CENTER_BOTH,
+        resizeInterval: 1
     },
-    backgroundColor: '#98d687',
-    render: { pixelArt: true, antialias: false },
+    backgroundColor: '#CAE1FF',
+    render: { pixelArt: true, antialias: false }
 }

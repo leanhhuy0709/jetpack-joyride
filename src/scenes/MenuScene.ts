@@ -25,25 +25,12 @@ export default class MenuScene extends Phaser.Scene {
 
     public create(): void {
         this.add
-            .image(400, 200, 'bg').setDisplaySize(800, 400)
-
-        
+            .image(this.cameras.main.width / 2, this.cameras.main.height / 2, 'bg')
+            .setDisplaySize(this.cameras.main.width, this.cameras.main.height)
 
         const image = this.add
-            .image(this.cameras.main.width / 2, this.cameras.main.height / 2, 'logo')//.setScale(0.7)//setDisplaySize(400, 232.5)
-
-        //image.setSize(400, 232.5)
-        //image.setDisplaySize(400, 232.5)
-        //image.setSizeToFrame(true)
-        
-            
-        const setting = this.add.rectangle(700, 25, 200, 50, 0x2b2e38)
-
-        const coinNum = this.add.text((this.cameras.main.width * 3) / 4, 0, '7922')
-        coinNum.setFontSize('20px')
-
-        const settingText = this.add.text(700, 0, 'Setting')
-        coinNum.setFontSize('20px')
+            .image(this.cameras.main.width / 2, this.cameras.main.height / 2, 'logo')
+            .setDisplaySize(this.cameras.main.width / 2, this.cameras.main.height / 2)
 
         if (this.input.keyboard) this.cursors = this.input.keyboard.createCursorKeys()
     }
