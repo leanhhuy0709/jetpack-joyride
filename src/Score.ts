@@ -1,3 +1,5 @@
+import { FONT_NAME } from "./const/const"
+
 export default class Score extends Phaser.GameObjects.Text {
     private score: number
     private highScore: number
@@ -14,13 +16,13 @@ export default class Score extends Phaser.GameObjects.Text {
 
         this.setFontSize('100px')
         this.setColor('#000000')
-        this.setFontFamily('Cambria')
+        this.setFontFamily(FONT_NAME)
 
         this.highScoreText = this.scene.add.text(2000, 0, '0')
         this.highScoreText.setFontSize('100px')
         this.highScoreText.setAlign('right')
         this.highScoreText.setColor('#000000')
-        this.highScoreText.setFontFamily('Cambria')
+        this.highScoreText.setFontFamily(FONT_NAME)
 
         this.score = 0
         if (localStorage.getItem('highscore')) 

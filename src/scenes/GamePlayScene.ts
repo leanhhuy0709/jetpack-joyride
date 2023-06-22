@@ -70,6 +70,6 @@ export default class GamePlayScene extends Phaser.Scene {
             this.scene.start(SCENE.GAMEOVER)
         }
 
-        this.score.add(delta, 0.1)
+        this.score.add(delta, 0.01)
     }
 }

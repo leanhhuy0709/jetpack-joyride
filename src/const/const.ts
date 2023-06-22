@@ -30,3 +30,5 @@ export const EXPLOSION = 'assets/bullet/3.png'
 export const ZAP_SPRITE = 'assets/zap/spritesheet.png'
 export const LOGO2 = 'assets/logo2.jpg'
 export const COIN = 'assets/coin/1.png'
+
+export const FONT_NAME = '"New Athletic M54", Verdana, Cambria'
