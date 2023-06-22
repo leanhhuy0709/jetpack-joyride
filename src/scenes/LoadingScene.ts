@@ -1,5 +1,5 @@
 import * as Phaser from 'phaser'
-import { BARRY_SPRITE_SHEET, BG1, BULLET, CACTUS, COIN, EXPLOSION, SCENE, ZAP_SPRITE } from '../const/const'
+import { BARRY_SPRITE_SHEET, BG1, BULLET, CACTUS, COIN, EXPLOSION, FIRE, SCENE, ZAP_RECT, ZAP_SPRITE } from '../const/const'
 import { DEPTH } from '../const/depth'
 
 export default class LoadingScene extends Phaser.Scene {
@@ -48,6 +48,8 @@ export default class LoadingScene extends Phaser.Scene {
         this.load.image('light1', 'assets/zap/light1.webp')
         this.load.image('coin', COIN)
         this.load.image('bg1', BG1)
+        this.load.image('fire', FIRE)
+        this.load.image('zap-rect', ZAP_RECT)
     }
 
     public create(): void {

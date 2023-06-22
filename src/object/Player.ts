@@ -9,6 +9,7 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
     private bullets: Bullet[]
     private explosions: Explosion[]
     private delayFire: number
+    private speed: number
 
     public constructor(scene: Phaser.Scene, x: number, y: number, key: string) {
         super(scene.matter.world, x, y, key)
@@ -52,6 +53,7 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
         this.delayFire = DELAY_FIRE_BULLET
 
         this.setCollisionGroup(-2)
+        this.speed = 0.5
         
     }
 
@@ -122,5 +124,13 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
 
     public getBullets(): Bullet[] {
         return this.bullets
+    }
+
+    public getSpeed(): number {
+        return this.speed
+    }
+
+    public setSpeed(speed: number): void {
+        this.speed = speed 
     }
 }

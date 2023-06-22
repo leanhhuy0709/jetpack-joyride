@@ -37,9 +37,7 @@ export default class GamePlayScene extends Phaser.Scene {
         // Initialize game objects
         console.log('Initialize game objects')
 
-        
         this.background = new Background(this, 'bg1')
-        
 
         this.matter.world.setBounds(0, 0, 10000, 1600)
         this.matter.world.enabled = true
@@ -59,7 +57,8 @@ export default class GamePlayScene extends Phaser.Scene {
 
     public update(_time: number, delta: number): void {
         // Update game objects
-        this.background.update(delta)
+        console.log(1000/delta)
+        this.background.update(delta, this.player.getSpeed())
         this.player.update(delta)
         if (this.cursors.space?.isDown) {
             this.player.flying()
@@ -67,13 +66,14 @@ export default class GamePlayScene extends Phaser.Scene {
             this.player.falling()
         }
 
-        this.obstacleManager.update(delta)
+        this.obstacleManager.update(delta, this.player.getSpeed())
 
         if (this.obstacleManager.checkCollider(this.player)) {
             console.log('You die!')
-            this.scene.start(SCENE.GAMEOVER)
+            this.player.setSpeed(0)
+            this.scene.launch(SCENE.GAMEOVER)
         }
 
-        this.score.add(delta, 0.01)
+        this.score.add(delta, this.player.getSpeed() / 10)
     }
 }

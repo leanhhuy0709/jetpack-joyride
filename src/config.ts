@@ -21,8 +21,8 @@ export const GameConfig: Phaser.Types.Core.GameConfig = {
                 y: 0.8,
             },
             debug: {
-                showBody: true,
-                showStaticBody: true,
+                showBody: false,
+                showStaticBody: false,
                 lineColor: 0xfc1200
             }
             

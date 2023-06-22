@@ -22,7 +22,7 @@ export default abstract class Obstacle {
         */
     }
 
-    public update(_delta: number): void {
+    public update(_delta: number, _playerSpeed: number): void {
         //
     }
 

@@ -4,6 +4,7 @@ export default class Score extends Phaser.GameObjects.Text {
     private score: number
     private highScore: number
     private highScoreText: Phaser.GameObjects.Text
+    private level: number
 
     public constructor(scene: Phaser.Scene) {
         super(scene, 0, 60, '0', {})
@@ -26,16 +27,17 @@ export default class Score extends Phaser.GameObjects.Text {
         if (localStorage.getItem('highscore'))
             this.highScore = Number(localStorage.getItem('highscore'))
         else this.highScore = 0
+        this.level = 100
     }
 
     public add(delta: number, coeff = 1): void {
         this.score += delta * coeff
 
         if (this.highScore < this.score) {
-            localStorage.setItem('highscore', `${Math.floor(this.score)}`)
+            
             this.highScore = this.score
         }
-        localStorage.setItem('score', `${Math.floor(this.score)}`)
+        
         this.setNewScore()
     }
 
@@ -45,7 +47,17 @@ export default class Score extends Phaser.GameObjects.Text {
     }
 
     public resetScore(): void {
+        localStorage.setItem('score', `${Math.floor(this.score)}`)
+        localStorage.setItem('highscore', `${Math.floor(this.score)}`)
         this.score = 0
         this.setNewScore()
+    }
+
+    public getLevel(): number {
+        return this.level
+    }
+
+    public setLevel(level: number): void {
+        this.level = level
     }
 }

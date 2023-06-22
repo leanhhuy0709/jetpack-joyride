@@ -12,7 +12,7 @@ export default class ObstacleManager {
         
         let tmp = 2000
         for (let i = 0; i < numObstacle; i++) {
-            this.obstacles.push(new Zap(scene, 1300, 1200, 1750, 500))
+            this.obstacles.push(new Zap(scene, 1300, 1300, 1750, 500))
             this.obstacles[i].reset(tmp)
             tmp = (this.obstacles[i] as Zap).maxX() + 1000
         }
@@ -28,11 +28,11 @@ export default class ObstacleManager {
         return false
     }
 
-    public update(delta: number): void {
+    public update(delta: number, playerSpeed: number): void {
         const listObstacleNeedToReset = []
 
         for (let i = 0; i < this.obstacles.length; i++) {
-            this.obstacles[i].update(delta)
+            this.obstacles[i].update(delta, playerSpeed)
             
             if ((this.obstacles[i] as Zap).maxX() + 75 < 0) {
                 listObstacleNeedToReset.push(i)

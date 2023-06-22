@@ -34,3 +34,6 @@ export const COIN = 'assets/coin/1.png'
 export const FONT_NAME = '"New Athletic M54", Verdana, Cambria'
 
 export const BG1 = 'assets/bg/bg1.png'
+
+export const FIRE = 'assets/zap/fire.png'
+export const ZAP_RECT = 'assets/zap/zap-rect.png'

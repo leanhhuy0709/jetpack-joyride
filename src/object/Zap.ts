@@ -1,9 +1,12 @@
+import { DEPTH } from '../const/depth'
 import Obstacle from './Obstacle'
 
 export default class Zap extends Obstacle {
     private sprite1: Phaser.Physics.Matter.Sprite
     private sprite2: Phaser.Physics.Matter.Sprite
     private isSpin: boolean
+    private fire1: Phaser.Physics.Matter.Image
+    private fire2: Phaser.Physics.Matter.Image
     public constructor(scene: Phaser.Scene, x1: number, y1: number, x2: number, y2: number) {
         super(scene)
         this.sprite1 = scene.matter.add
@@ -15,9 +18,20 @@ export default class Zap extends Obstacle {
 
         this.sprite1.setStatic(true)
         this.sprite2.setStatic(true)
+        this.sprite1.setDepth(DEPTH.OBJECT_HIGH)
+        this.sprite2.setDepth(DEPTH.OBJECT_HIGH)
 
-        //this.sprite1.setRotation(Math.PI / 2 + Math.atan((y2 - y1) / (x2 - x1)))
-        //this.sprite2.setRotation(-Math.PI / 2 + Math.atan((y2 - y1) / (x2 - x1)))
+        this.fire1 = scene.matter.add
+            .image(x1, y1, 'fire', 0, { isStatic: true })
+            .setDepth(DEPTH.BACKGROUND_MEDIUM)
+            .setDisplaySize(230, 230)
+        this.fire2 = scene.matter.add
+            .image(x2, y2, 'fire', 0, { isStatic: true })
+            .setDepth(DEPTH.BACKGROUND_MEDIUM)
+            .setDisplaySize(230, 230)
+
+        this.fire1.setCollidesWith(-2)
+        this.fire2.setCollidesWith(-2)
 
         this.sprite1.anims.create({
             key: 'turn1',
@@ -36,22 +50,34 @@ export default class Zap extends Obstacle {
         this.sprite1.anims.play('turn1')
         this.sprite2.anims.play('turn2')
 
-        this.rect = scene.matter.add.sprite((x1 + x2) / 2, (y1 + y2) / 2, 'light1', 0, {
-            isStatic: true,
-        }).setOrigin(0.5, 0.5)
+        this.rect = scene.matter.add
+            .sprite((x1 + x2) / 2, (y1 + y2) / 2, 'zap-rect', 0, {
+                isStatic: true,
+            })
+            .setOrigin(0.5, 0.5)
+        this.rect.setDepth(DEPTH.OBJECT_LOW)
 
         this.sprite1.setCollisionGroup(-2)
         this.sprite2.setCollisionGroup(-2)
         this.rect.setCollisionGroup(-2)
 
-        if (Phaser.Math.Between(0, 10) == 10) this.isSpin = false
+        if (Phaser.Math.Between(0, 10) == 10) this.isSpin = true
         else this.isSpin = false
     }
 
-    public update(delta: number): void {
+    public update(delta: number, playerSpeed: number): void {
         //
-        this.sprite1.x -= delta / 2
-        this.sprite2.x -= delta / 2
+        this.sprite1.x -= delta * playerSpeed
+        this.sprite2.x -= delta * playerSpeed
+
+        if (this.sprite1.x > this.sprite2.x) {
+            let tmp = this.sprite1.x
+            this.sprite1.x = this.sprite2.x
+            this.sprite2.x = tmp
+            tmp = this.sprite1.y
+            this.sprite1.y = this.sprite2.y
+            this.sprite2.y = tmp
+        }
 
         //spin
         if (this.isSpin) {
@@ -94,22 +120,54 @@ export default class Zap extends Obstacle {
             this.sprite2.setRotation(-Math.PI / 2 + Math.atan((y2 - y1) / (x2 - x1)))
             this.rect.setRotation(Math.PI / 2 + Math.atan((y2 - y1) / (x2 - x1)))
         }
-        this.resetRect()
+        this.updateRect()
+        this.updateFire()
     }
 
-    public resetRect(): void {
+    public updateFire(): void {
+        this.fire1.x = this.sprite1.x
+        this.fire1.y = this.sprite1.y
+        this.fire2.x = this.sprite2.x
+        this.fire2.y = this.sprite2.y
+    }
+
+    public updateRect(): void {
         this.rect.x = (this.sprite1.x + this.sprite2.x) / 2
         this.rect.y = (this.sprite1.y + this.sprite2.y) / 2
+
+        this.rect.setRotation(0)
+        this.rect.setDisplaySize(
+            100,
+            Math.sqrt(
+                (this.sprite1.x - this.sprite2.x) ** 2 + (this.sprite1.y - this.sprite2.y) ** 2
+            )
+        )
+        this.rect.setRotation(
+            Math.PI / 2 +
+                Math.atan((this.sprite2.y - this.sprite1.y) / (this.sprite2.x - this.sprite1.x))
+        )
     }
 
     public reset(minX: number): void {
         const x1 = minX + Phaser.Math.Between(0, 300)
         const x2 = x1 + Phaser.Math.Between(150, 450)
-        const y1 = Phaser.Math.Between(500, 1000)
-        const y2 = Phaser.Math.Between(500, 1000)
+        const y1 = Phaser.Math.Between(500, 1300)
+        let y2 = Phaser.Math.Between(500, 1300)
+        const tmp = Phaser.Math.Between(0, 4)
+        switch (tmp) {
+            case 0:
+                if (y1 != 500) y2 = 1300
+                break
+            case 1:
+                if (y1 != 1300) y2 = 500
+                break
+        }
+
         this.sprite1.setRotation(Math.PI / 2 + Math.atan((y2 - y1) / (x2 - x1)))
         this.sprite2.setRotation(-Math.PI / 2 + Math.atan((y2 - y1) / (x2 - x1)))
         this.set(x1, y1, x2, y2)
+        if (Phaser.Math.Between(0, 10) == 10) this.isSpin = true
+        else this.isSpin = true
     }
 
     public set(x1: number, y1: number, x2: number, y2: number): void {
@@ -126,10 +184,8 @@ export default class Zap extends Obstacle {
         this.sprite2.x = x2
         this.sprite1.y = y1
         this.sprite2.y = y2
-        this.resetRect()
-        this.rect.setRotation(0)
-        this.rect.setDisplaySize(75, Math.sqrt((x1 - x2) ** 2 + (y1 - y2) ** 2))
-        this.rect.setRotation(Math.PI/2 + Math.atan((y2 - y1) / (x2 - x1)))
+        this.updateRect()
+        this.updateFire()
     }
 
     public maxX(): number {
