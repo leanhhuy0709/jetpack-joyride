@@ -23,7 +23,9 @@ export default class GamePlayScene extends Phaser.Scene {
     }
 
     public constructor() {
-        super(SCENE.GAMEPLAY)
+        super({
+            key: SCENE.GAMEPLAY,
+        })
     }
 
     public preload(): void {
@@ -65,7 +67,7 @@ export default class GamePlayScene extends Phaser.Scene {
 
         if (this.obstacleManager.checkCollider(this.player)) {
             console.log('You die!')
-            this.scene.start('MenuScene')
+            this.scene.start(SCENE.GAMEOVER)
         }
 
         this.score.add(delta, 0.1)

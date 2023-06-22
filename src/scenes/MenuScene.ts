@@ -27,18 +27,13 @@ export default class MenuScene extends Phaser.Scene {
 
         this.add
             .image(this.cameras.main.width / 2, this.cameras.main.height / 2, 'logo')
-            .setDisplaySize(this.cameras.main.width / 2, this.cameras.main.height / 2)
+            .setDisplaySize((this.cameras.main.width * 5) / 12, (this.cameras.main.height / 12) * 5)
 
         if (this.input.keyboard) this.cursors = this.input.keyboard.createCursorKeys()
     }
 
     public update(): void {
-        if (this.cursors.left.isDown) {
-            console.log('left')
-        } else if (this.cursors.right.isDown) {
-            console.log('right')
-        } else if (this.cursors.space && this.cursors.space.isDown) {
-            console.log('space')
+        if (this.cursors.space && this.cursors.space.isDown) {
             this.scene.start('GamePlayScene')
         }
     }

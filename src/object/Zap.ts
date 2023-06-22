@@ -54,8 +54,8 @@ export default class Zap extends Obstacle {
 
     public update(delta: number): void {
         //
-        this.sprite1.x -= delta / 10
-        this.sprite2.x -= delta / 10
+        this.sprite1.x -= delta / 5
+        this.sprite2.x -= delta / 5
         this.resetRect()
     }
 

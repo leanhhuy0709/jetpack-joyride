@@ -7,60 +7,60 @@ export default class Button {
     private isPointerDown: boolean
     private isPointerOver: boolean
 
+    private rectColor: number
+
     public constructor(
         scene: Phaser.Scene,
         x: number,
         y: number,
         width?: number | undefined,
         height?: number | undefined,
-        fillColor?: number | undefined,
-        fillAlpha?: number | undefined,
-        content = ''
+        fillColor = 0x0000,
+        content = '',
+        style?: Phaser.Types.GameObjects.Text.TextStyle | undefined
     ) {
-        this.rectangle = scene.add.rectangle(x, y, width, height, fillColor, fillAlpha)
-        console.log(this.rectangle)
-        this.text = scene.add.text(x, y, content)
+        this.rectangle = scene.add.rectangle(x, y, width, height, fillColor)
+        this.text = scene.add.text(x, y, content, style).setOrigin(0.5, 0.5).setStroke('#000000', 5)
         this.isPointerDown = false
         this.isPointerOver = false
+        this.rectColor = fillColor
 
-        this.rectangle.setInteractive()
-
-        
+        this.rectangle.setInteractive()    
     }
 
     public setInteractive(): void 
     {
-        this.rectangle.on('pointerdown', this.handlePointerDown)
+        this.rectangle.on('pointerdown', () => this.handlePointerDown(this))
 
-        this.rectangle.on('pointerup', this.handlePointerUp)
+        this.rectangle.on('pointerup', () => this.handlePointerUp(this))
 
-        this.rectangle.on('pointerover', this.handlePointerOver)
+        this.rectangle.on('pointerover', () => this.handlePointerOver(this))
 
-        this.rectangle.on('pointerout', this.handlePointerOut)
+        this.rectangle.on('pointerout', () => this.handlePointerOut(this))
     }
 
-    private handlePointerDown(): void
+    private handlePointerDown(btn: Button): void
     {
         this.isPointerDown = true
-        console.log(this.rectangle)
-        //this.rectangle.setFillStyle(0xffff, 1)
+        btn.rectangle.setFillStyle(btn.rectColor, 1)
     }
 
-    private handlePointerUp(): void
+    private handlePointerUp(btn: Button): void
     {
         this.isPointerDown = false
-        //this.rectangle.setFillStyle(0xf5e3, 1)
+        btn.rectangle.setFillStyle(btn.rectColor, 0.8)
     }
 
-    private handlePointerOver(): void
+    private handlePointerOver(btn: Button): void
     {
         this.isPointerOver = true
-        
+        btn.rectangle.setFillStyle(btn.rectColor, 0.8)
     }
 
-    private handlePointerOut(): void
+    private handlePointerOut(btn: Button): void
     {
         this.isPointerOver = false
+        btn.rectangle.setFillStyle(btn.rectColor, 1)
         
     }
 
@@ -72,10 +72,5 @@ export default class Button {
     public getIsPointerOver(): boolean
     {
         return this.isPointerOver
-    }
-
-    public changeColor(fillColor: number, fillAlpha: number): void 
-    {
-        this.rectangle.setFillStyle(fillColor, fillAlpha)
     }
 }

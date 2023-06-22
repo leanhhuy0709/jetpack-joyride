@@ -10,7 +10,10 @@ export const DINO_8 = 'assets/dino/Run (8).png'
 //C:\Users\Admin\Documents\SunStudio-Works\phase2\jetpack-joyride\assets\dino\Run (1).png
 export enum SCENE {
     MENU = 'MenuScene',
-    GAMEPLAY = 'GamePlayScene'
+    GAMEPLAY = 'GamePlayScene',
+    INIT = 'InitScene',
+    GAMEOVER = 'GameOverScene',
+    LOADING = 'LoadingScene'
 }
 
 export const BARRY_SPRITE_SHEET = 'assets/barry/spritesheet.png'
@@ -26,3 +29,4 @@ export const EXPLOSION = 'assets/bullet/3.png'
 
 export const ZAP_SPRITE = 'assets/zap/spritesheet.png'
 export const LOGO2 = 'assets/logo2.jpg'
+export const COIN = 'assets/coin/1.png'

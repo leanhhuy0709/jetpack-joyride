@@ -37,7 +37,7 @@ export default class Score extends Phaser.GameObjects.Text {
             localStorage.setItem('highscore', `${Math.floor(this.score)}`)
             this.highScore = this.score
         }
-
+        localStorage.setItem('score', `${Math.floor(this.score)}`)
         this.setNewScore()
     }
 
