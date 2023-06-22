@@ -1,18 +1,20 @@
 import { DEPTH } from "../const/depth"
 
-export default class Bullet extends Phaser.GameObjects.Sprite {
+export default class Bullet extends Phaser.Physics.Matter.Sprite {
     public constructor(scene: Phaser.Scene, x: number, y: number, key: string) {
-        super(scene, x, y, key)
-        this.setSize(20, 52)
+        super(scene.matter.world, x, y, key)
         this.setDisplaySize(20, 52)
-        this.scene.physics.world.enable(this)
-        this.scene.add.existing(this)
-        if (this.body) {
-            this.body.velocity.y = 1500
-            this.body.velocity.x = Math.floor(Math.random() * 500) - 250
-        }
 
         this.setDepth(DEPTH.OBJECT_LOW)
+
+        scene.add.existing(this)
+
+        if (this.body) {
+            this.setVelocityY(15)
+            this.setVelocityX(Phaser.Math.Between(-5, 5))
+        }       
+        
+        this.setCollisionGroup(-2)
     }
 
     public update(delta: number): void {

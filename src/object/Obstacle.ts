@@ -1,8 +1,7 @@
-const RESIZE_OBSTACLE = 30
 export default abstract class Obstacle {
     
     protected scene: Phaser.Scene
-    public rect: Phaser.GameObjects.Rectangle
+    public rect: Phaser.Physics.Matter.Sprite
 
     public constructor(scene: Phaser.Scene) {
         this.scene = scene
@@ -27,7 +26,7 @@ export default abstract class Obstacle {
         //
     }
 
-    public reset(): void {
+    public reset(_minX: number): void {
         //
     }
 }

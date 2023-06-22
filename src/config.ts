@@ -1,5 +1,5 @@
-import GamePlayScene from "./scenes/GamePlayScene"
-import MenuScene from "./scenes/MenuScene"
+import GamePlayScene from './scenes/GamePlayScene'
+import MenuScene from './scenes/MenuScene'
 
 export const GameConfig: Phaser.Types.Core.GameConfig = {
     title: 'Jetpack Joyride',
@@ -12,19 +12,36 @@ export const GameConfig: Phaser.Types.Core.GameConfig = {
         keyboard: true,
     },
     physics: {
+        default: 'matter',
+        matter: {
+            gravity: {
+                y: 0.8,
+            },
+            debug: {
+                showBody: false,
+                showStaticBody: false,
+                lineColor: 0xfc1200
+            }
+            
+        },
+    },
+
+    width: 3200,
+    height: 1600,
+    scale: {
+        mode: Phaser.Scale.ScaleModes.FIT,
+        autoCenter: Phaser.Scale.Center.CENTER_BOTH,
+        resizeInterval: 1,
+    },
+    backgroundColor: '#CAE1FF',
+    render: { pixelArt: true, antialias: false },
+}
+/*
+    physics: {
         default: 'arcade',
         arcade: {
             gravity: { y: 300 },
             debug: true
         },
     },
-    width: 3200,
-    height: 1600,
-    scale: {
-        mode: Phaser.Scale.ScaleModes.FIT,
-        autoCenter: Phaser.Scale.Center.CENTER_BOTH,
-        resizeInterval: 1
-    },
-    backgroundColor: '#CAE1FF',
-    render: { pixelArt: true, antialias: false }
-}
+*/

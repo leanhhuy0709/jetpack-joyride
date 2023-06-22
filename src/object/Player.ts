@@ -3,25 +3,20 @@ import Bullet from './Bullet'
 import { DEPTH } from '../const/depth'
 import Explosion from './Explosion'
 
-const DELAY_FIRE_BULLET = 5
-export default class Player extends Phaser.GameObjects.Sprite {
+const DELAY_FIRE_BULLET = 3
+export default class Player extends Phaser.Physics.Matter.Sprite {
     private isFlying: boolean
     private bullets: Bullet[]
     private explosions: Explosion[]
     private delayFire: number
-    private platforms: Phaser.Physics.Arcade.StaticGroup
 
-    public constructor(
-        scene: Phaser.Scene,
-        x: number,
-        y: number,
-        key: string,
-        platforms: Phaser.Physics.Arcade.StaticGroup
-    ) {
-        super(scene, x, y, key)
-        this.setSize(200, 200)
+    public constructor(scene: Phaser.Scene, x: number, y: number, key: string) {
+        super(scene.matter.world, x, y, key)
         this.setDisplaySize(200, 200)
         this.isFlying = false
+        this.setFixedRotation()
+
+        this.setAngularVelocity(0)
 
         this.scene.anims.create({
             key: 'move',
@@ -46,18 +41,18 @@ export default class Player extends Phaser.GameObjects.Sprite {
 
         this.setDepth(DEPTH.OBJECT_HIGH)
 
-        this.scene.physics.world.enable(this)
-
+        this.anims.play('fall')
+        if (this.body) {
+            this.body.velocity.y = 0.1 //defaul fall
+        }
+        this.scene.add.existing(this)
+        
         this.bullets = []
         this.explosions = []
         this.delayFire = DELAY_FIRE_BULLET
-        this.platforms = platforms
 
-        this.anims.play('fall')
-        if (this.body) {
-            this.body.velocity.y = 1 //defaul fall
-        }
-        this.scene.add.existing(this)
+        this.setCollisionGroup(-2)
+        
     }
 
     public update(delta: number): void {
@@ -71,30 +66,25 @@ export default class Player extends Phaser.GameObjects.Sprite {
 
         for (let i = 0; i < this.getBullets().length; i++) {
             this.bullets[i].update(delta)
-            const body = this.bullets[i].body
-            if (body) {
-                if (body.velocity.y == 0) {
-                    if (this.bullets[i].visible) {
-                        this.explosions.push(
-                            new Explosion(
-                                this.scene,
-                                this.bullets[i].x,
-                                this.bullets[i].y + 30,
-                                'explosion'
-                            )
+            const vY = this.bullets[i].getVelocity().y
+            if (vY && Phaser.Math.FloorTo(vY) == 0) {
+                if (this.bullets[i].visible) {
+                    this.explosions.push(
+                        new Explosion(
+                            this.scene,
+                            this.bullets[i].x,
+                            this.bullets[i].y + 30,
+                            'explosion'
                         )
-                        this.scene.physics.add.collider(
-                            this.explosions[this.explosions.length - 1],
-                            this.platforms
-                        )
-                    }
-                    this.bullets[i].setVisible(false)
+                    )
                 }
+                this.bullets[i].destroy()
+                this.bullets.splice(i, 1)
+                i--
             }
         }
 
-        for (let i = 0; i < this.explosions.length; i++)
-        {
+        for (let i = 0; i < this.explosions.length; i++) {
             this.explosions[i].update(delta)
         }
     }
@@ -104,7 +94,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
             if (this.body.position.y <= 0) {
                 this.body.position.y = 0
             } else {
-                this.body.velocity.y = -1200
+                this.setVelocityY(-10)
                 this.isFlying = true
                 this.anims.play('fly')
             }
@@ -113,13 +103,12 @@ export default class Player extends Phaser.GameObjects.Sprite {
         if (this.delayFire >= DELAY_FIRE_BULLET) {
             this.bullets.push(new Bullet(this.scene, this.x - 10, this.y + 95, 'bullet'))
             this.delayFire -= DELAY_FIRE_BULLET
-            this.scene.physics.add.collider(this.bullets[this.bullets.length - 1], this.platforms)
         }
     }
 
     public falling(): void {
         if (this.body && this.isFlying) {
-            this.body.velocity.y = 1
+            this.setVelocityY(0.1)
             this.isFlying = false
             this.anims.play('fall')
         }

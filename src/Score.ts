@@ -23,12 +23,21 @@ export default class Score extends Phaser.GameObjects.Text {
         this.highScoreText.setFontFamily('Cambria')
 
         this.score = 0
-        this.highScore = 0
+        if (localStorage.getItem('highscore')) 
+            this.highScore = Number(localStorage.getItem('highscore'))
+        else this.highScore = 0
     }
 
     public add(delta: number, coeff = 1): void {
         this.score += delta * coeff
-        this.highScore = this.highScore > this.score ? this.highScore : this.score
+        
+        
+        if (this.highScore < this.score)
+        {
+            localStorage.setItem('highscore', `${Math.floor(this.score)}`)
+            this.highScore = this.score
+        }
+
         this.setNewScore()
     }
 
