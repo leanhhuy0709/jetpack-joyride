@@ -1,5 +1,5 @@
 import * as Phaser from 'phaser'
-import { BARRY_SPRITE_SHEET, BULLET, CACTUS, COIN, EXPLOSION, SCENE, ZAP_SPRITE } from '../const/const'
+import { BARRY_SPRITE_SHEET, BG1, BULLET, CACTUS, COIN, EXPLOSION, SCENE, ZAP_SPRITE } from '../const/const'
 import { DEPTH } from '../const/depth'
 
 export default class LoadingScene extends Phaser.Scene {
@@ -47,6 +47,7 @@ export default class LoadingScene extends Phaser.Scene {
         this.load.spritesheet('zap', ZAP_SPRITE, { frameWidth: 75, frameHeight: 58 })
         this.load.image('light1', 'assets/zap/light1.webp')
         this.load.image('coin', COIN)
+        this.load.image('bg1', BG1)
     }
 
     public create(): void {

@@ -10,8 +10,10 @@ export default class Bullet extends Phaser.Physics.Matter.Sprite {
         scene.add.existing(this)
 
         if (this.body) {
-            this.setVelocityY(15)
-            this.setVelocityX(Phaser.Math.Between(-5, 5))
+            const vX = Phaser.Math.Between(-3, 3)
+            const vY = 30
+            this.setVelocityY(vY)
+            this.setVelocityX(vX)
         }       
         
         this.setCollisionGroup(-2)

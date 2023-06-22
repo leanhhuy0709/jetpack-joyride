@@ -14,13 +14,13 @@ export default class ObstacleManager {
         for (let i = 0; i < numObstacle; i++) {
             this.obstacles.push(new Zap(scene, 1300, 1200, 1750, 500))
             this.obstacles[i].reset(tmp)
-            tmp = (this.obstacles[i] as Zap).getX2() + 1000
+            tmp = (this.obstacles[i] as Zap).maxX() + 1000
         }
     }
 
     public checkCollider(player: Player): boolean {
         for (let i = 0; i < this.obstacles.length; i++) {
-            if (this.scene.matter.overlap(player, [this.obstacles[i].rect]))
+            if (this.scene.matter.overlap(player, this.obstacles[i].getBody()))
             {
                 return true
             }
@@ -34,7 +34,7 @@ export default class ObstacleManager {
         for (let i = 0; i < this.obstacles.length; i++) {
             this.obstacles[i].update(delta)
             
-            if ((this.obstacles[i] as Zap).getX2() + 75 < 0) {
+            if ((this.obstacles[i] as Zap).maxX() + 75 < 0) {
                 listObstacleNeedToReset.push(i)
             }
         }
@@ -43,14 +43,14 @@ export default class ObstacleManager {
 
         let tmp = 0
         for (let i = 0; i < this.obstacles.length; i++)
-            tmp = tmp > (this.obstacles[i] as Zap).getX2() ? tmp : (this.obstacles[i] as Zap).getX2()
+            tmp = tmp > (this.obstacles[i] as Zap).maxX() ? tmp : (this.obstacles[i] as Zap).maxX()
         tmp += Math.floor(Math.random() * 750) + 750
 
         
         for (let i = 0, j = 0; i < listObstacleNeedToReset.length; i++) {
             j = listObstacleNeedToReset[i]
             this.obstacles[j].reset(tmp)
-            tmp = Math.floor(Math.random() * 1000) + 200 + (this.obstacles[j] as Zap).getX2()            
+            tmp = Math.floor(Math.random() * 1000) + 200 + (this.obstacles[j] as Zap).maxX()            
         }
     }
 }

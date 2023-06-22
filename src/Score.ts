@@ -1,41 +1,37 @@
-import { FONT_NAME } from "./const/const"
+import { FONT_NAME } from './const/const'
 
 export default class Score extends Phaser.GameObjects.Text {
     private score: number
     private highScore: number
     private highScoreText: Phaser.GameObjects.Text
 
-    public constructor(
-        scene: Phaser.Scene,
-        x: number,
-        y: number
-    ) {
-        super(scene, x, y, '0', {})
+    public constructor(scene: Phaser.Scene) {
+        super(scene, 0, 60, '0', {})
 
         this.scene.add.existing(this)
 
         this.setFontSize('100px')
-        this.setColor('#000000')
+        this.setColor('#ffffff')
         this.setFontFamily(FONT_NAME)
+        this.setStroke('#000000', 5)
 
-        this.highScoreText = this.scene.add.text(2000, 0, '0')
+        this.highScoreText = this.scene.add.text(2000, 60, '0')
         this.highScoreText.setFontSize('100px')
         this.highScoreText.setAlign('right')
-        this.highScoreText.setColor('#000000')
+        this.highScoreText.setColor('#ffffff')
         this.highScoreText.setFontFamily(FONT_NAME)
+        this.highScoreText.setStroke('#000000', 5)
 
         this.score = 0
-        if (localStorage.getItem('highscore')) 
+        if (localStorage.getItem('highscore'))
             this.highScore = Number(localStorage.getItem('highscore'))
         else this.highScore = 0
     }
 
     public add(delta: number, coeff = 1): void {
         this.score += delta * coeff
-        
-        
-        if (this.highScore < this.score)
-        {
+
+        if (this.highScore < this.score) {
             localStorage.setItem('highscore', `${Math.floor(this.score)}`)
             this.highScore = this.score
         }
@@ -43,12 +39,11 @@ export default class Score extends Phaser.GameObjects.Text {
         this.setNewScore()
     }
 
-    public setNewScore(): void 
-    {
-        this.setText(`${Math.floor(this.score)}`)
-        this.highScoreText.setText(`HI: ${Math.floor(this.highScore)}`)
+    public setNewScore(): void {
+        this.setText(`${Math.floor(this.score)}m`)
+        this.highScoreText.setText(`HI: ${Math.floor(this.highScore)}m`)
     }
-    
+
     public resetScore(): void {
         this.score = 0
         this.setNewScore()

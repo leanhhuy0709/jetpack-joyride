@@ -21,8 +21,8 @@ export const GameConfig: Phaser.Types.Core.GameConfig = {
                 y: 0.8,
             },
             debug: {
-                showBody: false,
-                showStaticBody: false,
+                showBody: true,
+                showStaticBody: true,
                 lineColor: 0xfc1200
             }
             
@@ -36,7 +36,7 @@ export const GameConfig: Phaser.Types.Core.GameConfig = {
         autoCenter: Phaser.Scale.Center.CENTER_BOTH,
         resizeInterval: 1,
     },
-    backgroundColor: '#CAE1FF',
+    backgroundColor: '#000000',
     render: { pixelArt: true, antialias: false },
 }
 /*

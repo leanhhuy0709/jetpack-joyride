@@ -67,7 +67,7 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
         for (let i = 0; i < this.getBullets().length; i++) {
             this.bullets[i].update(delta)
             const vY = this.bullets[i].getVelocity().y
-            if (vY && Phaser.Math.FloorTo(vY) == 0) {
+            if (vY && Phaser.Math.FloorTo(Math.abs(vY)) == 0) {
                 if (this.bullets[i].visible) {
                     this.explosions.push(
                         new Explosion(
@@ -87,6 +87,8 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
         for (let i = 0; i < this.explosions.length; i++) {
             this.explosions[i].update(delta)
         }
+
+        if (this.y <= 300) this.y = 300
     }
 
     public flying(): void {

@@ -1,5 +1,5 @@
 import * as Phaser from 'phaser'
-import { SCENE } from '../const/const'
+import { FONT_NAME, SCENE } from '../const/const'
 
 export default class MenuScene extends Phaser.Scene {
     private cursors: {
@@ -30,11 +30,19 @@ export default class MenuScene extends Phaser.Scene {
             .setDisplaySize((this.cameras.main.width * 5) / 12, (this.cameras.main.height / 12) * 5)
 
         if (this.input.keyboard) this.cursors = this.input.keyboard.createCursorKeys()
+
+        this.add
+            .text(1600, 1300, 'PRESS SPACE\n TO PLAY', {
+                fontSize: '90px',
+                fontFamily: FONT_NAME,
+                align: 'center'
+            })
+            .setOrigin(0.5, 0.5).setShadow(5, 10)
     }
 
     public update(): void {
         if (this.cursors.space && this.cursors.space.isDown) {
-            this.scene.start('GamePlayScene')
+            this.scene.start(SCENE.GAMEPLAY)
         }
     }
 }

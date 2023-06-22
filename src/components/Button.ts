@@ -20,7 +20,7 @@ export default class Button {
         style?: Phaser.Types.GameObjects.Text.TextStyle | undefined
     ) {
         this.rectangle = scene.add.rectangle(x, y, width, height, fillColor)
-        this.text = scene.add.text(x, y, content, style).setOrigin(0.5, 0.5).setStroke('#000000', 10)
+        this.text = scene.add.text(x, y, content, style).setOrigin(0.5, 0.5).setStroke('#000000', 1)
         this.isPointerDown = false
         this.isPointerOver = false
         this.rectColor = fillColor

@@ -36,7 +36,7 @@ export default class GameOverScene extends Phaser.Scene {
                 fontFamily: FONT_NAME,
             })
             .setOrigin(0.5, 0.5)
-        text.setStroke('#000000', 10)
+        text.setStroke('#000000', 1)
 
         const text2 = this.add
             .text(600 + 500, 275, 'DISTANCE', {
@@ -44,7 +44,7 @@ export default class GameOverScene extends Phaser.Scene {
                 fontFamily: FONT_NAME,
             })
             .setOrigin(0.5, 0.5)
-        text2.setStroke('#000000', 10)
+        text2.setStroke('#000000', 1)
 
         let currScore = 0
         if (localStorage.getItem('score'))
@@ -59,7 +59,7 @@ export default class GameOverScene extends Phaser.Scene {
                 color: '#fef03b'
             })
             .setOrigin(0.5, 0.5)
-        text3.setStroke('#000000', 10)
+        text3.setStroke('#000000', 1)
 
         const text4 = this.add
             .text(700, 600, 'COLLECTED', {
@@ -67,7 +67,7 @@ export default class GameOverScene extends Phaser.Scene {
                 fontFamily: FONT_NAME
             })
             .setOrigin(0, 0.5)
-        text4.setStroke('#000000', 10)
+        text4.setStroke('#000000', 1)
 
         const text5 = this.add
             .text(1450, 600, '96', {
@@ -76,7 +76,7 @@ export default class GameOverScene extends Phaser.Scene {
                 color: '#fef03b'
             })
             .setOrigin(1, 0.5)
-        text5.setStroke('#000000', 10)
+        text5.setStroke('#000000', 1)
 
         this.add.image(1500, 600, 'coin').setDisplaySize(60, 60)
 
