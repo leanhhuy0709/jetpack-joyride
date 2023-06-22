@@ -1,5 +1,5 @@
 import * as Phaser from 'phaser'
-import { BARRY_SPRITE_SHEET, BULLET, CACTUS, EXPLOSION, SCENE, ZAP_SPRITE } from '../const/const'
+import { SCENE } from '../const/const'
 import Player from '../object/Player'
 import Obstacle from '../object/Obstacle'
 import ObstacleManager from '../object/ObstacleManager'
@@ -27,19 +27,7 @@ export default class GamePlayScene extends Phaser.Scene {
     }
 
     public preload(): void {
-        // Load game assets
-        console.log('Load game assets')
-        this.load.spritesheet('barry', BARRY_SPRITE_SHEET, {
-            frameWidth: 93,
-            frameHeight: 95,
-        })
-        this.load.image('cactus', CACTUS)
-        this.load.image('ground', 'assets/platform.png')
-        this.load.image('bullet', BULLET)
-        this.load.image('explosion', EXPLOSION)
-
-        this.load.spritesheet('zap', ZAP_SPRITE, { frameWidth: 75, frameHeight: 58 })
-        this.load.image('light1', 'assets/zap/light1.webp')
+        //
     }
 
     public create(): void {
@@ -61,7 +49,6 @@ export default class GamePlayScene extends Phaser.Scene {
         this.obstacleManager = new ObstacleManager(this, 10)
 
         this.score = new Score(this, 0, 0)
-
     }
 
     public update(_time: number, delta: number): void {
@@ -75,12 +62,12 @@ export default class GamePlayScene extends Phaser.Scene {
         }
 
         this.obstacleManager.update(delta)
-        
+
         if (this.obstacleManager.checkCollider(this.player)) {
             console.log('You die!')
-            this.score.resetScore()
+            this.scene.start('MenuScene')
         }
-        
+
         this.score.add(delta, 0.1)
     }
 }

@@ -17,10 +17,7 @@ export default class MenuScene extends Phaser.Scene {
     }
 
     public preload(): void {
-        //this.load.image('logo', 'assets/images/Jetpack_Joyride_Logo.png')
-        this.load.image('logo', 'assets/images/JetpackJoyride.webp')
-        //this.load.image('logo', 'assets/images/1.png')
-        this.load.image('bg', 'assets/images/2.png')
+        //
     }
 
     public create(): void {
@@ -28,7 +25,7 @@ export default class MenuScene extends Phaser.Scene {
             .image(this.cameras.main.width / 2, this.cameras.main.height / 2, 'bg')
             .setDisplaySize(this.cameras.main.width, this.cameras.main.height)
 
-        const image = this.add
+        this.add
             .image(this.cameras.main.width / 2, this.cameras.main.height / 2, 'logo')
             .setDisplaySize(this.cameras.main.width / 2, this.cameras.main.height / 2)
 
