@@ -20,6 +20,6 @@ export default class InitScene extends Phaser.Scene {
     }
 
     public update(): void {
-        this.scene.start('LoadingScene')
+        this.scene.start(SCENE.LOADING)
     }
 }

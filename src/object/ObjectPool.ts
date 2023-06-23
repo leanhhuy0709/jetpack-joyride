@@ -1,3 +1,4 @@
+import { BULLET, EXPLOSION } from '../const/const'
 import Bullet from './Bullet'
 import Explosion from './Explosion'
 import Obstacle from './Obstacle'
@@ -11,6 +12,11 @@ export default class ObjectPool {
 
     public static init(_scene: Phaser.Scene): void {
         ObjectPool.clear()
+        for (let i = 0; i < 20; i++) {
+            ObjectPool.removeBullet(new Bullet(_scene, 0, 0, BULLET))
+            ObjectPool.removeExplosion(new Explosion(_scene, 0, 0, EXPLOSION))
+            ObjectPool.removeZap(new Zap(_scene, -100, -100, -100, -100))
+        }
     }
 
     public static getBullet(scene: Phaser.Scene, x: number, y: number, key: string): Bullet {

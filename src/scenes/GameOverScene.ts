@@ -1,5 +1,5 @@
 import * as Phaser from 'phaser'
-import { FONT_NAME, SCENE } from '../const/const'
+import { COIN, FONT_NAME, SCENE } from '../const/const'
 import Button from '../components/Button'
 
 export default class GameOverScene extends Phaser.Scene {
@@ -13,7 +13,6 @@ export default class GameOverScene extends Phaser.Scene {
         })
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     public init(data: { score: number })
     {
         this.score = data.score
@@ -77,7 +76,7 @@ export default class GameOverScene extends Phaser.Scene {
             .setOrigin(1, 0.5)
         text5.setStroke('#000000', 1)
 
-        this.add.image(2500, 600, 'coin').setDisplaySize(60, 60)
+        this.add.image(2500, 600, COIN).setDisplaySize(60, 60)
 
         this.playAgainBtn = new Button(this, 2100, 800, 650, 200, 0x575f61, 'PLAY AGAIN', {
             color: '#ffffff',

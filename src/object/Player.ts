@@ -4,6 +4,7 @@ import { DEPTH } from '../const/depth'
 import Explosion from './Explosion'
 import ObjectPool from './ObjectPool'
 import GamePlayScene from '../scenes/GamePlayScene'
+import { BULLET, BULLET_FLASH, EXPLOSION } from '../const/const'
 
 const DELAY_FIRE_BULLET = 5
 export default class Player extends Phaser.Physics.Matter.Sprite {
@@ -44,7 +45,7 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
                 repeat: -1,
             })
 
-        this.setDepth(DEPTH.OBJECT_HIGH)
+        this.setDepth(DEPTH.OBJECT_VERYHIGH)
 
         this.anims.play('fall')
         if (this.body) {
@@ -59,12 +60,12 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
         this.setCollisionGroup(-2)
         this.speed = 0.5
 
-        this.bulletFlash = this.scene.matter.add.sprite(x, y, 'bullet-flash').setDisplaySize(150, 150)
+        this.bulletFlash = this.scene.matter.add.sprite(x, y, BULLET_FLASH).setDisplaySize(150, 150)
         this.bulletFlash.setCollisionGroup(-2)
         if (!this.scene.anims.exists('flash'))
             this.scene.anims.create({
                 key: 'flash',
-                frames: this.bulletFlash.anims.generateFrameNumbers('bullet-flash', { start: 0, end: 3 }),
+                frames: this.bulletFlash.anims.generateFrameNumbers(BULLET_FLASH, { start: 0, end: 3 }),
                 frameRate: 10,
                 repeat: -1,
             })
@@ -97,7 +98,7 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
                         this.scene,
                         this.bullets[i].x,
                         this.bullets[i].y,
-                        'explosion'
+                        EXPLOSION
                     )
                 )
 
@@ -122,8 +123,7 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
     public fireBullet(): void {
         this.delayFire += 0.5
         if (this.delayFire >= DELAY_FIRE_BULLET) {
-            this.bullets.push(ObjectPool.getBullet(this.scene, this.x - 10, this.y + 95, 'bullet'))
-            //this.bullets.push(new Bullet(this.scene, this.x - 10, this.y + 95, 'bullet'))
+            this.bullets.push(ObjectPool.getBullet(this.scene, this.x - 10, this.y + 95, BULLET))
             this.delayFire -= DELAY_FIRE_BULLET
         }
     }
