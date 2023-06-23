@@ -12,6 +12,7 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
     private explosions: Explosion[]
     private delayFire: number
     private speed: number
+    private bulletFlash: Phaser.Physics.Matter.Sprite
 
     public constructor(scene: Phaser.Scene, x: number, y: number, key: string) {
         super(scene.matter.world, x, y, key)
@@ -57,6 +58,20 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
 
         this.setCollisionGroup(-2)
         this.speed = 0.5
+
+        this.bulletFlash = this.scene.matter.add.sprite(x, y, 'bullet-flash').setDisplaySize(150, 150)
+        this.bulletFlash.setCollisionGroup(-2)
+        if (!this.scene.anims.exists('flash'))
+            this.scene.anims.create({
+                key: 'flash',
+                frames: this.bulletFlash.anims.generateFrameNumbers('bullet-flash', { start: 0, end: 3 }),
+                frameRate: 10,
+                repeat: -1,
+            })
+        
+        this.bulletFlash.setStatic(true)
+
+        this.bulletFlash.play('flash')
     }
 
     public update(delta: number): void {
@@ -101,6 +116,7 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
         if (countRemovedExplosion > 0) this.explosions.splice(0, countRemovedExplosion)
 
         if (this.y <= 300) this.y = 300
+        this.bulletFlash.setPosition(this.x - 11, this.y + 135)
     }
 
     public fireBullet(): void {
@@ -117,13 +133,10 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
             if (this.body.position.y <= 0) {
                 this.body.position.y = 0
             } else {
-                
                 if (this.getVelocity()) {
-                    
                     if (this.getVelocity() && (this.getVelocity().y as number) > -10) {
                         this.setVelocityY(Number(this.getVelocity().y) - 0.5)
-                    }
-                    else this.setVelocityY(-10)
+                    } else this.setVelocityY(-10)
                 }
 
                 this.isFlying = true
@@ -131,6 +144,7 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
             }
         }
         this.fireBullet()
+        this.bulletFlash.setVisible(true)
     }
 
     public falling(): void {
@@ -139,6 +153,7 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
             this.isFlying = false
             this.anims.play('fall')
         }
+        this.bulletFlash.setVisible(false)
     }
 
     public moving(): void {

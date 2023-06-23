@@ -3,15 +3,13 @@ import {
     BARRY_SPRITE_SHEET,
     BG1,
     BULLET,
-    CACTUS,
+    BULLET_FLASH,
     COIN,
     EXPLOSION,
-    FIRE,
     GLOW,
     ORB_ANIM,
     SCENE,
     ZAP_EFFECT,
-    ZAP_RECT,
 } from '../const/const'
 import { DEPTH } from '../const/depth'
 
@@ -43,7 +41,6 @@ export default class LoadingScene extends Phaser.Scene {
 
         // Load game assets
         console.log('Load game assets')
-        this.load.image('phaser', 'assets/images/phaser-logo.png')
         this.load.image('logo', 'assets/images/JetpackJoyride.webp')
         this.load.image('bg', 'assets/images/2.png')
         // Load game assets
@@ -52,7 +49,6 @@ export default class LoadingScene extends Phaser.Scene {
             frameWidth: 93,
             frameHeight: 95,
         })
-        this.load.image('cactus', CACTUS)
         this.load.image('ground', 'assets/platform.png')
         this.load.image('bullet', BULLET)
         this.load.spritesheet('explosion', EXPLOSION, {
@@ -64,8 +60,6 @@ export default class LoadingScene extends Phaser.Scene {
         this.load.image('light1', 'assets/zap/light1.webp')
         this.load.image('coin', COIN)
         this.load.image('bg1', BG1)
-        this.load.image('fire', FIRE)
-        this.load.image('zap-rect', ZAP_RECT)
 
         this.load.spritesheet('glow', GLOW, {
             frameWidth: 128,
@@ -75,6 +69,11 @@ export default class LoadingScene extends Phaser.Scene {
         this.load.spritesheet('zap-effect', ZAP_EFFECT, {
             frameWidth: 1024 / 4,
             frameHeight: 117,
+        })
+
+        this.load.spritesheet('bullet-flash', BULLET_FLASH, {
+            frameWidth: 64,
+            frameHeight: 64,
         })
     }
 
