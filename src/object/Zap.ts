@@ -76,8 +76,7 @@ export default class Zap extends Obstacle {
             this.sprite2.y = tmp
         }
 
-        if (!playerSpeed)
-        {
+        if (!playerSpeed) {
             this.sprite1.stop()
             this.sprite2.stop()
         }
@@ -121,7 +120,7 @@ export default class Zap extends Obstacle {
             if (x2 == x1) x2 += 0.00000000001
             this.sprite1.setRotation(Math.PI / 2 + Math.atan((y2 - y1) / (x2 - x1)))
             this.sprite2.setRotation(-Math.PI / 2 + Math.atan((y2 - y1) / (x2 - x1)))
-            this.rect.setRotation(Math.PI / 2 + Math.atan((y2 - y1) / (x2 - x1)))
+            //this.rect.setRotation(Math.PI / 2 + Math.atan((y2 - y1) / (x2 - x1)))
         }
         this.updateRect()
         this.updateFire()
@@ -138,16 +137,33 @@ export default class Zap extends Obstacle {
         this.rect.x = (this.sprite1.x + this.sprite2.x) / 2
         this.rect.y = (this.sprite1.y + this.sprite2.y) / 2
 
+        //console.log((this.sprite1.y + this.sprite2.y) / 2, this.rect.y)
+
         this.rect.setRotation(0)
+
+        let tmp = 0
+
+        if (
+            Math.sqrt(
+                (this.sprite1.x - this.sprite2.x) ** 2 + (this.sprite1.y - this.sprite2.y) ** 2
+            ) == 0
+        )
+            tmp = 0.0001
+
         this.rect.setDisplaySize(
             100,
             Math.sqrt(
                 (this.sprite1.x - this.sprite2.x) ** 2 + (this.sprite1.y - this.sprite2.y) ** 2
-            )
+            ) + tmp
         )
+
+        tmp = 0
+        if (this.sprite2.x - this.sprite1.x == 0) tmp = 0.0001
         this.rect.setRotation(
             Math.PI / 2 +
-                Math.atan((this.sprite2.y - this.sprite1.y) / (this.sprite2.x - this.sprite1.x))
+                Math.atan(
+                    (this.sprite2.y - this.sprite1.y) / (this.sprite2.x - this.sprite1.x + tmp)
+                )
         )
     }
 
@@ -168,27 +184,9 @@ export default class Zap extends Obstacle {
 
         this.sprite1.setRotation(Math.PI / 2 + Math.atan((y2 - y1) / (x2 - x1)))
         this.sprite2.setRotation(-Math.PI / 2 + Math.atan((y2 - y1) / (x2 - x1)))
-        this.set(x1, y1, x2, y2)
+        this.setAll(this.scene, x1, y1, x2, y2)
         if (Phaser.Math.Between(0, 10) == 10) this.isSpin = true
         else this.isSpin = false
-    }
-
-    public set(x1: number, y1: number, x2: number, y2: number): void {
-        if (x1 > x2) {
-            let tmp = x1
-            x1 = x2
-            x2 = tmp
-            tmp = y1
-            y1 = y2
-            y2 = tmp
-        }
-
-        this.sprite1.x = x1
-        this.sprite2.x = x2
-        this.sprite1.y = y1
-        this.sprite2.y = y2
-        this.updateRect()
-        this.updateFire()
     }
 
     public maxX(): number {
@@ -209,5 +207,25 @@ export default class Zap extends Obstacle {
 
     public getBody(): Phaser.Types.Physics.Matter.MatterBody[] {
         return [this.sprite1, this.sprite2, this.rect]
+    }
+
+    public setAll(_scene: Phaser.Scene, x1: number, y1: number, x2: number, y2: number): void {
+        if (x1 > x2) {
+            let tmp = x1
+            x1 = x2
+            x2 = tmp
+            tmp = y1
+            y1 = y2
+            y2 = tmp
+        }
+
+        this.sprite1.x = x1
+        this.sprite2.x = x2
+        this.sprite1.y = y1
+        this.sprite2.y = y2
+        this.updateRect()
+        this.updateFire()
+        if (Phaser.Math.Between(0, 10) == 10) this.isSpin = true
+        else this.isSpin = false
     }
 }
