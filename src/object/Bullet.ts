@@ -1,4 +1,4 @@
-import { DEPTH } from "../const/depth"
+import { DEPTH } from '../const/depth'
 
 export default class Bullet extends Phaser.Physics.Matter.Sprite {
     public constructor(scene: Phaser.Scene, x: number, y: number, key: string) {
@@ -8,16 +8,13 @@ export default class Bullet extends Phaser.Physics.Matter.Sprite {
         scene.add.existing(this)
         this.setCollisionGroup(-2)
 
-        
-        
         this.setAll(scene, x, y, key)
     }
-    
-    public setAll(scene: Phaser.Scene, x: number, y: number, key: string)
-    {
+
+    public setAll(scene: Phaser.Scene, x: number, y: number, key: string) {
         this.setRotation(0)
         this.setFixedRotation()
-        this.setPosition(x + Phaser.Math.Between(-10, 10), y)
+        this.setPosition(x + Phaser.Math.Between(-15, 15), y)
         this.setTexture(key)
 
         if (this.body) {
@@ -25,6 +22,8 @@ export default class Bullet extends Phaser.Physics.Matter.Sprite {
             const vY = 30
             this.setVelocityY(vY)
             this.setVelocityX(vX)
+            if (vX > 0) this.setRotation(Math.atan(vY / vX) - Math.PI/2)
+            else if (vX < 0) this.setRotation(Math.atan(vY / vX) + Math.PI/2)
         }
     }
 }

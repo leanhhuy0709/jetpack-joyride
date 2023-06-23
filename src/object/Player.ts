@@ -5,7 +5,7 @@ import Explosion from './Explosion'
 import ObjectPool from './ObjectPool'
 import GamePlayScene from '../scenes/GamePlayScene'
 
-const DELAY_FIRE_BULLET = 3
+const DELAY_FIRE_BULLET = 5
 export default class Player extends Phaser.Physics.Matter.Sprite {
     private isFlying: boolean
     private bullets: Bullet[]
@@ -81,7 +81,7 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
                     ObjectPool.getExplosion(
                         this.scene,
                         this.bullets[i].x,
-                        this.bullets[i].y + 30,
+                        this.bullets[i].y,
                         'explosion'
                     )
                 )
