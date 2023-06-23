@@ -5,6 +5,7 @@ import {
     BULLET,
     BULLET_FLASH,
     COIN,
+    COIN_PATTERN,
     COIN_SPRITE,
     EXPLOSION,
     GLOW,
@@ -82,6 +83,11 @@ export default class LoadingScene extends Phaser.Scene {
             frameWidth: 32,
             frameHeight: 32,
         })
+
+        for (let i = 0; i < COIN_PATTERN.length; i++)
+        {
+            this.load.text(`pattern${i}`, COIN_PATTERN[i])
+        }
     }
 
     public create(): void {
