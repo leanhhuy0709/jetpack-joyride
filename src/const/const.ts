@@ -34,7 +34,11 @@ export const CACTUS = 'assets/cactus/Cactus.png'
 export const BULLET = 'assets/bullet/1.png'
 
 export const ZAP_1 = 'assets/zap/zap.png'
-export const EXPLOSION = 'assets/bullet/3.png'
+export const ORB_ANIM = 'assets/zap/orbAnim.png'
+export const GLOW = 'assets/zap/glow.png'
+export const ZAP_EFFECT = 'assets/zap/zapEffect.png'
+
+export const EXPLOSION = 'assets/bullet/explosion-sprite.png'
 
 export const ZAP_SPRITE = 'assets/zap/spritesheet.png'
 export const LOGO2 = 'assets/logo2.jpg'

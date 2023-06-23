@@ -5,57 +5,82 @@ export default class Zap extends Obstacle {
     private sprite1: Phaser.Physics.Matter.Sprite
     private sprite2: Phaser.Physics.Matter.Sprite
     private isSpin: boolean
-    private fire1: Phaser.Physics.Matter.Image
-    private fire2: Phaser.Physics.Matter.Image
+    private glow1: Phaser.Physics.Matter.Sprite
+    private glow2: Phaser.Physics.Matter.Sprite
     public constructor(scene: Phaser.Scene, x1: number, y1: number, x2: number, y2: number) {
         super(scene)
         this.sprite1 = scene.matter.add
-            .sprite(x1, y1, 'zap', 0, { isStatic: true })
-            .setDisplaySize(75 * 2, 58 * 2)
+            .sprite(x1, y1, 'orbAnim', 0, { isStatic: true })
+            .setDisplaySize(62 * 2, 42 * 2)
         this.sprite2 = scene.matter.add
-            .sprite(x2, y2, 'zap', 0, { isStatic: true })
-            .setDisplaySize(75 * 2, 58 * 2)
+            .sprite(x2, y2, 'orbAnim', 0, { isStatic: true })
+            .setDisplaySize(62 * 2, 42 * 2)
 
         this.sprite1.setStatic(true)
         this.sprite2.setStatic(true)
         this.sprite1.setDepth(DEPTH.OBJECT_HIGH)
         this.sprite2.setDepth(DEPTH.OBJECT_HIGH)
 
-        this.fire1 = scene.matter.add
-            .image(x1, y1, 'fire', 0, { isStatic: true })
+        this.glow1 = scene.matter.add
+            .sprite(x1, y1, 'glow', 0, { isStatic: true })
             .setDepth(DEPTH.BACKGROUND_MEDIUM)
             .setDisplaySize(230, 230)
-        this.fire2 = scene.matter.add
-            .image(x2, y2, 'fire', 0, { isStatic: true })
+        this.glow2 = scene.matter.add
+            .sprite(x2, y2, 'glow', 0, { isStatic: true })
             .setDepth(DEPTH.BACKGROUND_MEDIUM)
             .setDisplaySize(230, 230)
 
-        this.fire1.setCollidesWith(-2)
-        this.fire2.setCollidesWith(-2)
+        this.glow1.setCollidesWith(-2)
+        this.glow2.setCollidesWith(-2)
 
         this.sprite1.anims.create({
             key: 'turn1',
-            frames: this.sprite1.anims.generateFrameNumbers('zap', { start: 0, end: 2 }),
+            frames: this.sprite1.anims.generateFrameNumbers('orbAnim', { start: 0, end: 2 }),
             frameRate: 10,
             repeat: -1,
         })
 
         this.sprite2.anims.create({
             key: 'turn2',
-            frames: this.sprite2.anims.generateFrameNumbers('zap', { start: 0, end: 2 }),
+            frames: this.sprite2.anims.generateFrameNumbers('orbAnim', { start: 0, end: 2 }),
+            frameRate: 10,
+            repeat: -1,
+        })
+
+        this.glow1.anims.create({
+            key: 'bloom1',
+            frames: this.glow1.anims.generateFrameNumbers('glow', { start: 0, end: 15 }),
+            frameRate: 10,
+            repeat: -1,
+        })
+
+        this.glow2.anims.create({
+            key: 'bloom2',
+            frames: this.glow2.anims.generateFrameNumbers('glow', { start: 0, end: 15 }),
             frameRate: 10,
             repeat: -1,
         })
 
         this.sprite1.anims.play('turn1')
         this.sprite2.anims.play('turn2')
+        this.glow1.anims.play('bloom1')
+        this.glow2.anims.play('bloom2')
 
         this.rect = scene.matter.add
-            .sprite((x1 + x2) / 2, (y1 + y2) / 2, 'zap-rect', 0, {
+            .sprite((x1 + x2) / 2, (y1 + y2) / 2, 'zap-effect', 0, {
                 isStatic: true,
             })
             .setOrigin(0.5, 0.5)
         this.rect.setDepth(DEPTH.OBJECT_LOW)
+        this.rect.setRotation(0)
+
+        this.rect.anims.create({
+            key: 'electric',
+            frames: this.rect.anims.generateFrameNumbers('zap-effect', { start: 0, end: 3 }),
+            frameRate: 10,
+            repeat: -1,
+        })
+        this.rect.play('electric')
 
         this.sprite1.setCollisionGroup(-2)
         this.sprite2.setCollisionGroup(-2)
@@ -120,17 +145,19 @@ export default class Zap extends Obstacle {
             if (x2 == x1) x2 += 0.00000000001
             this.sprite1.setRotation(Math.PI / 2 + Math.atan((y2 - y1) / (x2 - x1)))
             this.sprite2.setRotation(-Math.PI / 2 + Math.atan((y2 - y1) / (x2 - x1)))
+            this.glow1.setRotation(Math.PI / 2 + Math.atan((y2 - y1) / (x2 - x1)))
+            this.glow2.setRotation(-Math.PI / 2 + Math.atan((y2 - y1) / (x2 - x1)))
             //this.rect.setRotation(Math.PI / 2 + Math.atan((y2 - y1) / (x2 - x1)))
         }
         this.updateRect()
-        this.updateFire()
+        this.updateGlow()
     }
 
-    public updateFire(): void {
-        this.fire1.x = this.sprite1.x
-        this.fire1.y = this.sprite1.y
-        this.fire2.x = this.sprite2.x
-        this.fire2.y = this.sprite2.y
+    public updateGlow(): void {
+        this.glow1.x = this.sprite1.x
+        this.glow1.y = this.sprite1.y
+        this.glow2.x = this.sprite2.x
+        this.glow2.y = this.sprite2.y
     }
 
     public updateRect(): void {
@@ -151,19 +178,16 @@ export default class Zap extends Obstacle {
             tmp = 0.0001
 
         this.rect.setDisplaySize(
-            100,
             Math.sqrt(
                 (this.sprite1.x - this.sprite2.x) ** 2 + (this.sprite1.y - this.sprite2.y) ** 2
-            ) + tmp
+            ) + tmp,
+            100
         )
 
         tmp = 0
         if (this.sprite2.x - this.sprite1.x == 0) tmp = 0.0001
         this.rect.setRotation(
-            Math.PI / 2 +
-                Math.atan(
-                    (this.sprite2.y - this.sprite1.y) / (this.sprite2.x - this.sprite1.x + tmp)
-                )
+            Math.atan((this.sprite2.y - this.sprite1.y) / (this.sprite2.x - this.sprite1.x + tmp))
         )
     }
 
@@ -224,7 +248,7 @@ export default class Zap extends Obstacle {
         this.sprite1.y = y1
         this.sprite2.y = y2
         this.updateRect()
-        this.updateFire()
+        this.updateGlow()
         if (Phaser.Math.Between(0, 10) == 10) this.isSpin = true
         else this.isSpin = false
     }

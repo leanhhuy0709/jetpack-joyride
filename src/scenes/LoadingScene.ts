@@ -1,5 +1,18 @@
 import * as Phaser from 'phaser'
-import { BARRY_SPRITE_SHEET, BG1, BULLET, CACTUS, COIN, EXPLOSION, FIRE, SCENE, ZAP_RECT, ZAP_SPRITE } from '../const/const'
+import {
+    BARRY_SPRITE_SHEET,
+    BG1,
+    BULLET,
+    CACTUS,
+    COIN,
+    EXPLOSION,
+    FIRE,
+    GLOW,
+    ORB_ANIM,
+    SCENE,
+    ZAP_EFFECT,
+    ZAP_RECT,
+} from '../const/const'
 import { DEPTH } from '../const/depth'
 
 export default class LoadingScene extends Phaser.Scene {
@@ -22,7 +35,7 @@ export default class LoadingScene extends Phaser.Scene {
                 .setDisplaySize(this.cameras.main.width, this.cameras.main.height)
 
             this.progressBar.clear()
-            this.progressBar.fillStyle(0xB0BEF7, 1)
+            this.progressBar.fillStyle(0xb0bef7, 1)
             this.progressBar.fillRoundedRect(750, 1250, 1600 * value, 50, 20)
             this.progressBar.lineStyle(5, 0x0000)
             this.progressBar.strokeRoundedRect(750, 1250, 1600 * value, 50, 20)
@@ -42,14 +55,27 @@ export default class LoadingScene extends Phaser.Scene {
         this.load.image('cactus', CACTUS)
         this.load.image('ground', 'assets/platform.png')
         this.load.image('bullet', BULLET)
-        this.load.image('explosion', EXPLOSION)
+        this.load.spritesheet('explosion', EXPLOSION, {
+            frameWidth: 64,
+            frameHeight: 64,
+        })
 
-        this.load.spritesheet('zap', ZAP_SPRITE, { frameWidth: 75, frameHeight: 58 })
+        this.load.spritesheet('orbAnim', ORB_ANIM, { frameWidth: 62, frameHeight: 42 })
         this.load.image('light1', 'assets/zap/light1.webp')
         this.load.image('coin', COIN)
         this.load.image('bg1', BG1)
         this.load.image('fire', FIRE)
         this.load.image('zap-rect', ZAP_RECT)
+
+        this.load.spritesheet('glow', GLOW, {
+            frameWidth: 128,
+            frameHeight: 128,
+        })
+
+        this.load.spritesheet('zap-effect', ZAP_EFFECT, {
+            frameWidth: 1024 / 4,
+            frameHeight: 117,
+        })
     }
 
     public create(): void {

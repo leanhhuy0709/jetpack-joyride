@@ -117,7 +117,15 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
             if (this.body.position.y <= 0) {
                 this.body.position.y = 0
             } else {
-                this.setVelocityY(-10)
+                
+                if (this.getVelocity()) {
+                    
+                    if (this.getVelocity() && (this.getVelocity().y as number) > -10) {
+                        this.setVelocityY(Number(this.getVelocity().y) - 0.5)
+                    }
+                    else this.setVelocityY(-10)
+                }
+
                 this.isFlying = true
                 this.anims.play('fly')
             }

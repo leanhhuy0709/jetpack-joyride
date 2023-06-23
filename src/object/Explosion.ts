@@ -7,20 +7,29 @@ export default class Explosion extends Phaser.GameObjects.Sprite {
         this.setDisplaySize(110, 92)
         scene.add.existing(this)
 
+        if (!this.scene.anims.exists('explosion'))
+            this.scene.anims.create({
+                key: 'explosion',
+                frames: this.anims.generateFrameNumbers(key, { start: 0, end: 3 }),
+                frameRate: 40,
+                repeat: 1,
+            })
+
         this.setAll(scene, x, y, key)
     }
 
-    public setAll(scene: Phaser.Scene, x: number, y: number, key: string)
-    {
+    public setAll(scene: Phaser.Scene, x: number, y: number, key: string) {
         this.setPosition(x, y + Phaser.Math.Between(-10, 20))
         this.setTexture(key)
         this.setAlpha(1)
         scene.add.existing(this)
 
+        this.anims.play('explosion')
+
         scene.tweens.add({
             targets: this,
             alpha: 0,
-            duration: 500,
+            duration: 100,
         })
     }
 }
