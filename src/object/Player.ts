@@ -13,14 +13,16 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
     private explosions: Explosion[]
     private delayFire: number
     private speed: number
-    private bulletFlash: Phaser.Physics.Matter.Sprite
+    private bulletFlash: Phaser.GameObjects.Sprite
 
     public constructor(scene: Phaser.Scene, x: number, y: number, key: string) {
         super(scene.matter.world, x, y, key)
         this.setDisplaySize(200, 200)
+
+            .setRectangle(175, 150)
             .setFixedRotation()
-            .setDepth(DEPTH.OBJECT_VERYHIGH)
             .setCollisionGroup(-2)
+            .setDepth(DEPTH.OBJECT_VERYHIGH)
 
         this.isFlying = false
 
@@ -54,11 +56,7 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
         this.delayFire = DELAY_FIRE_BULLET
         this.speed = 0.5
 
-        this.bulletFlash = this.scene.matter.add
-            .sprite(x, y, BULLET_FLASH)
-            .setDisplaySize(150, 150)
-            .setCollisionGroup(-2)
-            .setStatic(true)
+        this.bulletFlash = this.scene.add.sprite(x, y, BULLET_FLASH).setDisplaySize(150, 150)
         if (!this.scene.anims.exists('flash'))
             this.scene.anims.create({
                 key: 'flash',
@@ -105,7 +103,7 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
                 i--
             }
         }
-        
+
         let countRemovedExplosion = 0
         for (let i = 0; i < this.explosions.length; i++) {
             if (this.explosions[i].alpha == 0) {

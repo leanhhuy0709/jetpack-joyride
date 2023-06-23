@@ -1,12 +1,11 @@
 import * as Phaser from 'phaser'
-import { BARRY_SPRITE_SHEET, BG1, COIN_SPRITE, SCENE } from '../const/const'
+import { BARRY_SPRITE_SHEET, BG1, SCENE } from '../const/const'
 import Player from '../object/Player'
 import Obstacle from '../object/Obstacle'
 import ObstacleManager from '../object/ObstacleManager'
 import Score from '../Score'
 import Background from '../object/Background'
 import ObjectPool from '../object/ObjectPool'
-import Coin from '../object/Coin'
 
 export default class GamePlayScene extends Phaser.Scene {
     private player: Player
@@ -60,7 +59,7 @@ export default class GamePlayScene extends Phaser.Scene {
 
         this.score = new Score(this)
 
-        new Coin(this, 2000, 1000, COIN_SPRITE)
+        //new Coin(this, 2000, 1000, COIN_SPRITE)
     }
 
     public update(_time: number, delta: number): void {
@@ -73,7 +72,7 @@ export default class GamePlayScene extends Phaser.Scene {
         } else if (this.cursors.space?.isUp) {
             this.player.falling()
         }
-        
+
         this.obstacleManager.update(delta, this.player.getSpeed())
 
         this.score.add(delta, this.player.getSpeed() / 10)

@@ -6,8 +6,8 @@ export default class Zap extends Obstacle {
     private sprite1: Phaser.Physics.Matter.Sprite
     private sprite2: Phaser.Physics.Matter.Sprite
     private isSpin: boolean
-    private glow1: Phaser.Physics.Matter.Sprite
-    private glow2: Phaser.Physics.Matter.Sprite
+    private glow1: Phaser.GameObjects.Sprite
+    private glow2: Phaser.GameObjects.Sprite
     public constructor(scene: Phaser.Scene, x1: number, y1: number, x2: number, y2: number) {
         super(scene)
         this.sprite1 = scene.matter.add
@@ -23,16 +23,14 @@ export default class Zap extends Obstacle {
             .setDepth(DEPTH.OBJECT_HIGH)
             .setCollisionGroup(-2)
 
-        this.glow1 = scene.matter.add
-            .sprite(x1, y1, GLOW, 0, { isStatic: true })
+        this.glow1 = scene.add
+            .sprite(x1, y1, GLOW, 0)
             .setDepth(DEPTH.BACKGROUND_MEDIUM)
             .setDisplaySize(230, 230)
-            .setCollidesWith(-2)
-        this.glow2 = scene.matter.add
-            .sprite(x2, y2, GLOW, 0, { isStatic: true })
+        this.glow2 = scene.add
+            .sprite(x2, y2, GLOW, 0)
             .setDepth(DEPTH.BACKGROUND_MEDIUM)
             .setDisplaySize(230, 230)
-            .setCollidesWith(-2)
 
         this.rect = scene.matter.add
             .sprite((x1 + x2) / 2, (y1 + y2) / 2, ZAP_EFFECT, 0, {
@@ -166,12 +164,20 @@ export default class Zap extends Obstacle {
         )
             tmp = 0.0001
 
-        this.rect.setDisplaySize(
-            Math.sqrt(
-                (this.sprite1.x - this.sprite2.x) ** 2 + (this.sprite1.y - this.sprite2.y) ** 2
-            ) + tmp,
-            100
-        )
+        this.rect
+            .setDisplaySize(
+                Math.sqrt(
+                    (this.sprite1.x - this.sprite2.x) ** 2 + (this.sprite1.y - this.sprite2.y) ** 2
+                ) + tmp,
+                100
+            )
+            .setRectangle(
+                Math.sqrt(
+                    (this.sprite1.x - this.sprite2.x) ** 2 + (this.sprite1.y - this.sprite2.y) ** 2
+                ) + tmp,
+                100 - 50
+            )
+            .setCollisionGroup(-2)
 
         tmp = 0
         if (this.sprite2.x - this.sprite1.x == 0) tmp = 0.0001
