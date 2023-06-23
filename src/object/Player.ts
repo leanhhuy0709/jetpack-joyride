@@ -18,10 +18,11 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
     public constructor(scene: Phaser.Scene, x: number, y: number, key: string) {
         super(scene.matter.world, x, y, key)
         this.setDisplaySize(200, 200)
-        this.isFlying = false
-        this.setFixedRotation()
+            .setFixedRotation()
+            .setDepth(DEPTH.OBJECT_VERYHIGH)
+            .setCollisionGroup(-2)
 
-        this.setAngularVelocity(0)
+        this.isFlying = false
 
         if (!this.scene.anims.exists('move'))
             this.scene.anims.create({
@@ -45,32 +46,29 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
                 repeat: -1,
             })
 
-        this.setDepth(DEPTH.OBJECT_VERYHIGH)
-
         this.anims.play('fall')
-        if (this.body) {
-            this.body.velocity.y = 0.1 //defaul fall
-        }
         this.scene.add.existing(this)
 
         this.bullets = []
         this.explosions = []
         this.delayFire = DELAY_FIRE_BULLET
-
-        this.setCollisionGroup(-2)
         this.speed = 0.5
 
-        this.bulletFlash = this.scene.matter.add.sprite(x, y, BULLET_FLASH).setDisplaySize(150, 150)
-        this.bulletFlash.setCollisionGroup(-2)
+        this.bulletFlash = this.scene.matter.add
+            .sprite(x, y, BULLET_FLASH)
+            .setDisplaySize(150, 150)
+            .setCollisionGroup(-2)
+            .setStatic(true)
         if (!this.scene.anims.exists('flash'))
             this.scene.anims.create({
                 key: 'flash',
-                frames: this.bulletFlash.anims.generateFrameNumbers(BULLET_FLASH, { start: 0, end: 3 }),
+                frames: this.bulletFlash.anims.generateFrameNumbers(BULLET_FLASH, {
+                    start: 0,
+                    end: 3,
+                }),
                 frameRate: 10,
                 repeat: -1,
             })
-        
-        this.bulletFlash.setStatic(true)
 
         this.bulletFlash.play('flash')
     }
@@ -107,6 +105,7 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
                 i--
             }
         }
+        
         let countRemovedExplosion = 0
         for (let i = 0; i < this.explosions.length; i++) {
             if (this.explosions[i].alpha == 0) {

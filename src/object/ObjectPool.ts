@@ -22,8 +22,7 @@ export default class ObjectPool {
     public static getBullet(scene: Phaser.Scene, x: number, y: number, key: string): Bullet {
         if (ObjectPool.bullets.length > 0) {
             const bullet = ObjectPool.bullets.pop() as Bullet
-            bullet.setVisible(true)
-            bullet.setAll(scene, x, y, key)
+            bullet.setVisible(true).setAll(scene, x, y, key)
             return bullet
         }
         ObjectPool.count++
@@ -38,8 +37,7 @@ export default class ObjectPool {
     public static getExplosion(scene: Phaser.Scene, x: number, y: number, key: string): Explosion {
         if (ObjectPool.explosions.length > 0) {
             const explosion = ObjectPool.explosions.pop() as Explosion
-            explosion.setVisible(true)
-            explosion.setAll(scene, x, y, key)
+            explosion.setVisible(true).setAll(scene, x, y, key)
             return explosion
         }
         ObjectPool.count++

@@ -13,26 +13,35 @@ export default class Zap extends Obstacle {
         this.sprite1 = scene.matter.add
             .sprite(x1, y1, ORB_ANIM, 0, { isStatic: true })
             .setDisplaySize(62 * 2, 42 * 2)
+            .setStatic(true)
+            .setDepth(DEPTH.OBJECT_HIGH)
+            .setCollisionGroup(-2)
         this.sprite2 = scene.matter.add
             .sprite(x2, y2, ORB_ANIM, 0, { isStatic: true })
             .setDisplaySize(62 * 2, 42 * 2)
-
-        this.sprite1.setStatic(true)
-        this.sprite2.setStatic(true)
-        this.sprite1.setDepth(DEPTH.OBJECT_HIGH)
-        this.sprite2.setDepth(DEPTH.OBJECT_HIGH)
+            .setStatic(true)
+            .setDepth(DEPTH.OBJECT_HIGH)
+            .setCollisionGroup(-2)
 
         this.glow1 = scene.matter.add
             .sprite(x1, y1, GLOW, 0, { isStatic: true })
             .setDepth(DEPTH.BACKGROUND_MEDIUM)
             .setDisplaySize(230, 230)
+            .setCollidesWith(-2)
         this.glow2 = scene.matter.add
             .sprite(x2, y2, GLOW, 0, { isStatic: true })
             .setDepth(DEPTH.BACKGROUND_MEDIUM)
             .setDisplaySize(230, 230)
+            .setCollidesWith(-2)
 
-        this.glow1.setCollidesWith(-2)
-        this.glow2.setCollidesWith(-2)
+        this.rect = scene.matter.add
+            .sprite((x1 + x2) / 2, (y1 + y2) / 2, ZAP_EFFECT, 0, {
+                isStatic: true,
+            })
+            .setOrigin(0.5, 0.5)
+            .setDepth(DEPTH.OBJECT_LOW)
+            .setRotation(0)
+            .setCollisionGroup(-2)
 
         this.sprite1.anims.create({
             key: 'turn1',
@@ -62,30 +71,18 @@ export default class Zap extends Obstacle {
             repeat: -1,
         })
 
-        this.sprite1.anims.play('turn1')
-        this.sprite2.anims.play('turn2')
-        this.glow1.anims.play('bloom1')
-        this.glow2.anims.play('bloom2')
-
-        this.rect = scene.matter.add
-            .sprite((x1 + x2) / 2, (y1 + y2) / 2, ZAP_EFFECT, 0, {
-                isStatic: true,
-            })
-            .setOrigin(0.5, 0.5)
-        this.rect.setDepth(DEPTH.OBJECT_LOW)
-        this.rect.setRotation(0)
-
         this.rect.anims.create({
             key: 'electric',
             frames: this.rect.anims.generateFrameNumbers(ZAP_EFFECT, { start: 0, end: 3 }),
             frameRate: 10,
             repeat: -1,
         })
-        this.rect.play('electric')
 
-        this.sprite1.setCollisionGroup(-2)
-        this.sprite2.setCollisionGroup(-2)
-        this.rect.setCollisionGroup(-2)
+        this.sprite1.anims.play('turn1')
+        this.sprite2.anims.play('turn2')
+        this.glow1.anims.play('bloom1')
+        this.glow2.anims.play('bloom2')
+        this.rect.play('electric')
     }
 
     public update(delta: number, playerSpeed: number): void {
@@ -102,13 +99,8 @@ export default class Zap extends Obstacle {
             this.sprite2.y = tmp
         }
 
-        if (!playerSpeed) {
-            this.sprite1.stop()
-            this.sprite2.stop()
-        }
-
         //spin
-        if (this.isSpin && playerSpeed) {
+        if (this.isSpin) {
             //do something
             let x = (this.sprite1.x + this.sprite2.x) / 2,
                 y = (this.sprite1.y + this.sprite2.y) / 2,
@@ -165,12 +157,8 @@ export default class Zap extends Obstacle {
         this.rect.x = (this.sprite1.x + this.sprite2.x) / 2
         this.rect.y = (this.sprite1.y + this.sprite2.y) / 2
 
-        //console.log((this.sprite1.y + this.sprite2.y) / 2, this.rect.y)
-
         this.rect.setRotation(0)
-
         let tmp = 0
-
         if (
             Math.sqrt(
                 (this.sprite1.x - this.sprite2.x) ** 2 + (this.sprite1.y - this.sprite2.y) ** 2

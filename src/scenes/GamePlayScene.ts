@@ -67,11 +67,13 @@ export default class GamePlayScene extends Phaser.Scene {
         // Update game objects
         this.background.update(delta, this.player.getSpeed())
         this.player.update(delta)
+
         if (this.cursors.space?.isDown) {
             this.player.flying()
         } else if (this.cursors.space?.isUp) {
             this.player.falling()
         }
+        
         this.obstacleManager.update(delta, this.player.getSpeed())
 
         this.score.add(delta, this.player.getSpeed() / 10)

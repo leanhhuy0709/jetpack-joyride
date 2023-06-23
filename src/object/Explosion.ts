@@ -3,8 +3,7 @@ import { DEPTH } from '../const/depth'
 export default class Explosion extends Phaser.GameObjects.Sprite {
     public constructor(scene: Phaser.Scene, x: number, y: number, key: string) {
         super(scene, x, y, key)
-        this.setDepth(DEPTH.OBJECT_MEDIUM)
-        this.setDisplaySize(110, 92)
+        this.setDepth(DEPTH.OBJECT_MEDIUM).setDisplaySize(110, 92)
         scene.add.existing(this)
 
         if (!this.scene.anims.exists('explosion'))
@@ -20,8 +19,8 @@ export default class Explosion extends Phaser.GameObjects.Sprite {
 
     public setAll(scene: Phaser.Scene, x: number, y: number, key: string) {
         this.setPosition(x, y + Phaser.Math.Between(-10, 20))
-        this.setTexture(key)
-        this.setAlpha(1)
+            .setTexture(key)
+            .setAlpha(1)
         scene.add.existing(this)
 
         this.anims.play('explosion')
