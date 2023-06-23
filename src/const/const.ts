@@ -7,13 +7,22 @@ export const DINO_5 = 'assets/dino/Run (5).png'
 export const DINO_6 = 'assets/dino/Run (6).png'
 export const DINO_7 = 'assets/dino/Run (7).png'
 export const DINO_8 = 'assets/dino/Run (8).png'
-//C:\Users\Admin\Documents\SunStudio-Works\phase2\jetpack-joyride\assets\dino\Run (1).png
+
 export enum SCENE {
     MENU = 'MenuScene',
     GAMEPLAY = 'GamePlayScene',
     INIT = 'InitScene',
     GAMEOVER = 'GameOverScene',
     LOADING = 'LoadingScene'
+}
+
+export enum PLAYER {
+    MOVE = 1,
+    FLY,
+    FALL,
+    DEAD,
+    TREX,
+    BIRD
 }
 
 export const BARRY_SPRITE_SHEET = 'assets/barry/spritesheet.png'

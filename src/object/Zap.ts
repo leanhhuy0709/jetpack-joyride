@@ -60,9 +60,6 @@ export default class Zap extends Obstacle {
         this.sprite1.setCollisionGroup(-2)
         this.sprite2.setCollisionGroup(-2)
         this.rect.setCollisionGroup(-2)
-
-        if (Phaser.Math.Between(0, 10) == 10) this.isSpin = true
-        else this.isSpin = false
     }
 
     public update(delta: number, playerSpeed: number): void {
@@ -79,8 +76,14 @@ export default class Zap extends Obstacle {
             this.sprite2.y = tmp
         }
 
+        if (!playerSpeed)
+        {
+            this.sprite1.stop()
+            this.sprite2.stop()
+        }
+
         //spin
-        if (this.isSpin) {
+        if (this.isSpin && playerSpeed) {
             //do something
             let x = (this.sprite1.x + this.sprite2.x) / 2,
                 y = (this.sprite1.y + this.sprite2.y) / 2,
@@ -150,16 +153,16 @@ export default class Zap extends Obstacle {
 
     public reset(minX: number): void {
         const x1 = minX + Phaser.Math.Between(0, 300)
-        const x2 = x1 + Phaser.Math.Between(150, 450)
-        const y1 = Phaser.Math.Between(500, 1300)
-        let y2 = Phaser.Math.Between(500, 1300)
+        const x2 = x1 + Phaser.Math.Between(200, 500)
+        const y1 = Phaser.Math.Between(600, 1200)
+        let y2 = Phaser.Math.Between(600, 1200)
         const tmp = Phaser.Math.Between(0, 4)
         switch (tmp) {
             case 0:
-                if (y1 != 500) y2 = 1300
+                y2 = 1250
                 break
             case 1:
-                if (y1 != 1300) y2 = 500
+                y2 = 550
                 break
         }
 
@@ -167,7 +170,7 @@ export default class Zap extends Obstacle {
         this.sprite2.setRotation(-Math.PI / 2 + Math.atan((y2 - y1) / (x2 - x1)))
         this.set(x1, y1, x2, y2)
         if (Phaser.Math.Between(0, 10) == 10) this.isSpin = true
-        else this.isSpin = true
+        else this.isSpin = false
     }
 
     public set(x1: number, y1: number, x2: number, y2: number): void {

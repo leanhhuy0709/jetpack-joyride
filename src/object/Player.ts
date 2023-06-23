@@ -47,21 +47,24 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
             this.body.velocity.y = 0.1 //defaul fall
         }
         this.scene.add.existing(this)
-        
+
         this.bullets = []
         this.explosions = []
         this.delayFire = DELAY_FIRE_BULLET
 
         this.setCollisionGroup(-2)
         this.speed = 0.5
-        
     }
 
     public update(delta: number): void {
         super.update()
 
         if (this.body) {
-            if (this.body.velocity.y == 0 && this.anims.currentAnim?.key != 'move') this.moving()
+            if (
+                Math.floor(Math.abs(this.body.velocity.y) * 100) / 100 == 0 &&
+                this.anims.currentAnim?.key != 'move'
+            )
+                this.moving()
             else if (this.isFlying) this.flying()
             else this.falling()
         }
@@ -81,6 +84,7 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
                     )
                 }
                 this.bullets[i].destroy()
+                //ObjectPool.removeBullet(this.bullets[i])
                 this.bullets.splice(i, 1)
                 i--
             }
@@ -105,6 +109,7 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
         }
         this.delayFire += 0.5
         if (this.delayFire >= DELAY_FIRE_BULLET) {
+            //this.bullets.push(ObjectPool.getBullet(this.scene, this.x - 10, this.y + 95, 'bullet'))
             this.bullets.push(new Bullet(this.scene, this.x - 10, this.y + 95, 'bullet'))
             this.delayFire -= DELAY_FIRE_BULLET
         }
@@ -131,6 +136,6 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
     }
 
     public setSpeed(speed: number): void {
-        this.speed = speed 
+        this.speed = speed
     }
 }

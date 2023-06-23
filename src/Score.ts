@@ -11,13 +11,13 @@ export default class Score extends Phaser.GameObjects.Text {
 
         this.scene.add.existing(this)
 
-        this.setFontSize('100px')
+        this.setFontSize('80px')
         this.setColor('#ffffff')
         this.setFontFamily(FONT_NAME)
         this.setStroke('#000000', 5)
 
-        this.highScoreText = this.scene.add.text(2000, 60, '0')
-        this.highScoreText.setFontSize('100px')
+        this.highScoreText = this.scene.add.text(0, 150, '0')
+        this.highScoreText.setFontSize('80px')
         this.highScoreText.setAlign('right')
         this.highScoreText.setColor('#ffffff')
         this.highScoreText.setFontFamily(FONT_NAME)
@@ -43,12 +43,10 @@ export default class Score extends Phaser.GameObjects.Text {
 
     public setNewScore(): void {
         this.setText(`${Math.floor(this.score)}m`)
-        this.highScoreText.setText(`HI: ${Math.floor(this.highScore)}m`)
+        this.highScoreText.setText(`Best: ${Math.floor(this.highScore)}m`)
     }
 
     public resetScore(): void {
-        localStorage.setItem('score', `${Math.floor(this.score)}`)
-        localStorage.setItem('highscore', `${Math.floor(this.score)}`)
         this.score = 0
         this.setNewScore()
     }
@@ -59,5 +57,13 @@ export default class Score extends Phaser.GameObjects.Text {
 
     public setLevel(level: number): void {
         this.level = level
+    }
+
+    public getScore(): number{
+        return this.score
+    }
+
+    public saveHighScore(): void {
+        localStorage.setItem('highscore', `${this.highScore}`)
     }
 }

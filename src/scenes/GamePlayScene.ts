@@ -57,7 +57,8 @@ export default class GamePlayScene extends Phaser.Scene {
 
     public update(_time: number, delta: number): void {
         // Update game objects
-        console.log(1000/delta)
+        //console.log(Math.round(1000 / delta))
+        //console.log(ObjectPool.count)
         this.background.update(delta, this.player.getSpeed())
         this.player.update(delta)
         if (this.cursors.space?.isDown) {
@@ -68,12 +69,20 @@ export default class GamePlayScene extends Phaser.Scene {
 
         this.obstacleManager.update(delta, this.player.getSpeed())
 
+        this.score.add(delta, this.player.getSpeed() / 10)
+
         if (this.obstacleManager.checkCollider(this.player)) {
             console.log('You die!')
-            this.player.setSpeed(0)
-            this.scene.launch(SCENE.GAMEOVER)
+            this.score.saveHighScore()
+            this.scene.pause()
+            this.scene.launch(SCENE.GAMEOVER, { score: this.score.getScore() })
         }
 
-        this.score.add(delta, this.player.getSpeed() / 10)
+        
+
+        if (this.score.getScore() > this.score.getLevel()) {
+            this.score.setLevel(this.score.getLevel() + 1000)
+            this.player.setSpeed(this.player.getSpeed() + 0.1)
+        }
     }
 }
