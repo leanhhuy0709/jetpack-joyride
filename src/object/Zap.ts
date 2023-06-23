@@ -12,12 +12,14 @@ export default class Zap extends Obstacle {
         super(scene)
         this.sprite1 = scene.matter.add
             .sprite(x1, y1, ORB_ANIM, 0, { isStatic: true })
+            .setCircle(30)
             .setDisplaySize(62 * 2, 42 * 2)
             .setStatic(true)
             .setDepth(DEPTH.OBJECT_HIGH)
             .setCollisionGroup(-2)
         this.sprite2 = scene.matter.add
             .sprite(x2, y2, ORB_ANIM, 0, { isStatic: true })
+            .setCircle(30)
             .setDisplaySize(62 * 2, 42 * 2)
             .setStatic(true)
             .setDepth(DEPTH.OBJECT_HIGH)
