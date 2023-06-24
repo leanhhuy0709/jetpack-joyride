@@ -12,7 +12,7 @@ export default class Coin {
         const d = 60
 
         const temp = this.scene.add.sprite(-10, -10, COIN_SPRITE)
-
+        if (!this.scene.anims.exists('turn'))
         this.scene.anims.create({
             key: 'turn',
             frames: temp.anims.generateFrameNumbers(COIN_SPRITE, { start: 0, end: 7 }),

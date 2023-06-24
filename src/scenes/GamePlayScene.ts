@@ -6,7 +6,7 @@ import ObstacleManager from '../object/ObstacleManager'
 import Score from '../Score'
 import Background from '../object/Background'
 import ObjectPool from '../object/ObjectPool'
-import Coin from '../object/Coin'
+import CoinManager from '../object/CoinManager'
 
 export default class GamePlayScene extends Phaser.Scene {
     private player: Player
@@ -24,7 +24,7 @@ export default class GamePlayScene extends Phaser.Scene {
         space?: Phaser.Input.Keyboard.Key
         shift?: Phaser.Input.Keyboard.Key
     }
-    private coin: Coin//temporary
+    private coinManager: CoinManager
 
     public constructor() {
         super({
@@ -61,7 +61,8 @@ export default class GamePlayScene extends Phaser.Scene {
 
         this.score = new Score(this)
 
-        this.coin = new Coin(this, 1000, 500, 2)
+        this.coinManager = new CoinManager(this, 20)
+        
     }
 
     public update(_time: number, delta: number): void {
@@ -91,6 +92,6 @@ export default class GamePlayScene extends Phaser.Scene {
             this.player.setSpeed(this.player.getSpeed() + 0.1)
         }
 
-        this.coin.update(delta, this.player.getSpeed())
+        this.coinManager.update(delta, this.player.getSpeed())
     }
 }
