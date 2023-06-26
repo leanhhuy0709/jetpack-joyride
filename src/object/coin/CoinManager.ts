@@ -1,7 +1,7 @@
-import { COIN_SPRITE, FONT_NAME } from '../const/const'
+import { COIN_SPRITE, FONT_NAME } from '../../const/const'
 import Coin from './Coin'
-import ObjectPool from './ObjectPool'
-import Player from './Player'
+import ObjectPool from '../ObjectPool'
+import Player from '../Player'
 
 export default class CoinManager {
     private coins: Coin[]
@@ -54,7 +54,7 @@ export default class CoinManager {
         }
 
         for (let i = 0; i < numDel; i++) {
-            const coin = ObjectPool.getCoin(this.scene, this.coins[this.coins.length - 1].getMaxX(), Phaser.Math.Between(400, 800))
+            const coin = ObjectPool.getCoin(this.scene, this.coins[this.coins.length - 1].getMaxX() + 700, Phaser.Math.Between(400, 800))
             this.coins.push(coin)
         }
     }

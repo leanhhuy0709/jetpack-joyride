@@ -1,5 +1,5 @@
-import { GLOW, ORB_ANIM, ZAP_EFFECT } from '../const/const'
-import { DEPTH } from '../const/depth'
+import { GLOW, ORB_ANIM, ZAP_EFFECT } from '../../const/const'
+import { DEPTH } from '../../const/depth'
 import Obstacle from './Obstacle'
 
 export default class Zap extends Obstacle {

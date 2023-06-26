@@ -6,6 +6,7 @@ import {
     BG1,
     BULLET,
     BULLET_FLASH,
+    BUTTON_BACKING,
     COIN,
     COIN_COLLECT_1,
     COIN_COLLECT_2,
@@ -16,8 +17,8 @@ import {
     GLOW,
     ORB_ANIM,
     SCENE,
-    TITLE_1,
-    TITLE_2,
+    TITLE,
+    TITLE_GLOW,
     ZAP_EFFECT,
 } from '../const/const'
 import { DEPTH } from '../const/depth'
@@ -92,22 +93,23 @@ export default class LoadingScene extends Phaser.Scene {
             frameHeight: 64,
         })
 
-        this.load.image(TITLE_1, TITLE_1)
-        this.load.image(TITLE_2, TITLE_2)
+        this.load.image(TITLE, TITLE)
+        this.load.image(TITLE_GLOW, TITLE_GLOW)
 
         this.load.spritesheet(COIN_SPRITE, COIN_SPRITE, {
             frameWidth: 32,
             frameHeight: 32,
         })
 
-        for (let i = 0; i < COIN_PATTERN.length; i++)
-        {
+        for (let i = 0; i < COIN_PATTERN.length; i++) {
             this.load.text(`pattern${i}`, COIN_PATTERN[i])
         }
 
         this.load.audio(COIN_COLLECT_1, COIN_COLLECT_1)
         this.load.audio(COIN_COLLECT_2, COIN_COLLECT_2)
         this.load.audio(COIN_COLLECT_3, COIN_COLLECT_3)
+
+        this.load.image(BUTTON_BACKING, BUTTON_BACKING)
     }
 
     public create(): void {

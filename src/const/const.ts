@@ -30,14 +30,11 @@ export const ZAP_SPRITE = 'assets/zap/spritesheet.png'
 export const LOGO2 = 'assets/logo2.jpg'
 export const COIN = 'assets/coin/1.png'
 
-export const FONT_NAME = '"New Athletic M54", Verdana, Cambria'
+export const FONT_NAME = 'Verdana'
 //export const FONT_NAME = '"KitschyRetroRegular-9YnqB"'
 //export const FONT_NAME = 'KitschyRetroRegular-9Ynqsss'
 
 export const BG1 = 'assets/bg/bg1.png'
-
-export const TITLE_1 = 'assets/bg/Levels/Title/titleFG_1_TVOS.png'
-export const TITLE_2 = 'assets/bg/Levels/Title/titleFG_2_TVOS.png'
 
 export const COIN_SPRITE = 'assets/coin/coin-sprite.png'
 
@@ -57,3 +54,12 @@ export const COIN_PATTERN = [
 export const COIN_COLLECT_1 = 'assets/SFX/Coin/coin_pickup_1.mp3'
 export const COIN_COLLECT_2 = 'assets/SFX/Coin/coin_pickup_2.mp3'
 export const COIN_COLLECT_3 = 'assets/SFX/Coin/coin_pickup_3.mp3'
+
+export const BUTTON_BACKING = 'assets/UI/buttonBacking.png'
+
+export const TITLE = 'assets/bg/Levels/Title/Objects/title_small.png'
+export const TITLE_GLOW = 'assets/bg/Levels/Title/Objects/titleGlow_small.png'
+
+export enum BACKGROUND {
+
+}

@@ -1,4 +1,4 @@
-import { DEPTH } from '../const/depth'
+import { DEPTH } from '../../const/depth'
 
 export default class Bullet extends Phaser.Physics.Matter.Sprite {
     public constructor(scene: Phaser.Scene, x: number, y: number, key: string) {

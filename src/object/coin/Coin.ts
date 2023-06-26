@@ -4,9 +4,9 @@ import {
     COIN_COLLECT_3,
     COIN_PATTERN,
     COIN_SPRITE,
-} from '../const/const'
+} from '../../const/const'
 import CoinManager from './CoinManager'
-import Player from './Player'
+import Player from '../Player'
 
 export default class Coin {
     private scene: Phaser.Scene

@@ -1,12 +1,12 @@
 import * as Phaser from 'phaser'
 import { BARRY_SPRITE_SHEET, BG1, SCENE } from '../const/const'
 import Player from '../object/Player'
-import Obstacle from '../object/Obstacle'
-import ObstacleManager from '../object/ObstacleManager'
 import Score from '../Score'
 import Background from '../object/Background'
 import ObjectPool from '../object/ObjectPool'
-import CoinManager from '../object/CoinManager'
+import CoinManager from '../object/coin/CoinManager'
+import Obstacle from '../object/obstacle/Obstacle'
+import ObstacleManager from '../object/obstacle/ObstacleManager'
 
 export default class GamePlayScene extends Phaser.Scene {
     private player: Player
@@ -85,14 +85,14 @@ export default class GamePlayScene extends Phaser.Scene {
         this.score.add(delta, this.player.getSpeed() / 10)
 
         if (this.obstacleManager.checkCollider(this.player)) {
-            console.log('You die!')
+            /*console.log('You die!')
             this.score.saveHighScore()
             this.coinManager.saveCoin()
             this.scene.pause()
             this.scene.launch(SCENE.GAMEOVER, {
                 score: this.score.getScore(),
                 coin: this.coinManager.getCoin(),
-            })
+            })*/
         }
 
         this.coinManager.handleColliderWithPlayer(this.player)

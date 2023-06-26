@@ -1,9 +1,9 @@
 import { BULLET, COIN_PATTERN, EXPLOSION } from '../const/const'
-import Bullet from './Bullet'
-import Coin from './Coin'
-import Explosion from './Explosion'
-import Obstacle from './Obstacle'
-import Zap from './Zap'
+import Bullet from './bullet/Bullet'
+import Explosion from './bullet/Explosion'
+import Coin from './coin/Coin'
+import Obstacle from './obstacle/Obstacle'
+import Zap from './obstacle/Zap'
 
 export default class ObjectPool {
     private static bullets: Bullet[] = []

@@ -1,5 +1,5 @@
 import * as Phaser from 'phaser'
-import { COIN, FONT_NAME, SCENE } from '../const/const'
+import { BUTTON_BACKING, COIN, FONT_NAME, SCENE } from '../const/const'
 import Button from '../components/Button'
 
 export default class GameOverScene extends Phaser.Scene {
@@ -35,11 +35,13 @@ export default class GameOverScene extends Phaser.Scene {
         this.add.rectangle(2100, 100 + 100 / 2, 930, 1240, 0x242c46).setOrigin(0.5, 0)
 
         this.add.rectangle(2100, 100 + 100 / 2, 1000, 100, 0x575f61)
+        this.add.nineslice(2100, 100 + 100 / 2, BUTTON_BACKING, undefined, 1000, 50)
 
         const text = this.add
             .text(2100, 100 + 100 / 2, 'RESULTS', {
                 fontSize: '80px',
                 fontFamily: FONT_NAME,
+                fontStyle: 'bold',
             })
             .setOrigin(0.5, 0.5)
         text.setStroke('#000000', 1)
@@ -48,6 +50,7 @@ export default class GameOverScene extends Phaser.Scene {
             .text(2100, 275, 'DISTANCE', {
                 fontSize: '80px',
                 fontFamily: FONT_NAME,
+                fontStyle: 'bold',
             })
             .setOrigin(0.5, 0.5)
         text2.setStroke('#000000', 1)
@@ -56,6 +59,7 @@ export default class GameOverScene extends Phaser.Scene {
             .text(2100, 400, `${Math.floor(this.score)}M`, {
                 fontSize: '125px',
                 fontFamily: FONT_NAME,
+                fontStyle: 'bold',
                 color: '#fef03b'
             })
             .setOrigin(0.5, 0.5)
@@ -64,7 +68,8 @@ export default class GameOverScene extends Phaser.Scene {
         const text4 = this.add
             .text(2100 - 400, 600, 'COLLECTED', {
                 fontSize: '60px',
-                fontFamily: FONT_NAME
+                fontFamily: FONT_NAME,
+                fontStyle: 'bold',
             })
             .setOrigin(0, 0.5)
         text4.setStroke('#000000', 1)
@@ -73,24 +78,27 @@ export default class GameOverScene extends Phaser.Scene {
             .text(2450, 600, `${this.coin}`, {
                 fontSize: '60px',
                 fontFamily: FONT_NAME,
-                color: '#fef03b'
+                color: '#fef03b',
+                fontStyle: 'bold',
             })
             .setOrigin(1, 0.5)
         text5.setStroke('#000000', 1)
 
         this.add.image(2500, 600, COIN).setDisplaySize(60, 60)
 
-        this.playAgainBtn = new Button(this, 2100, 800, 650, 200, 0x575f61, 'PLAY AGAIN', {
+        this.playAgainBtn = new Button(this, 2100, 800, 650, 200, 'PLAY AGAIN', {
             color: '#ffffff',
-            fontSize: '100px',
+            fontSize: '80px',
             fontFamily: FONT_NAME,
+            fontStyle: 'bold',
         })
         this.playAgainBtn.setInteractive()
 
-        this.homeBtn = new Button(this, 2100, 1100, 650, 200, 0x575f61, 'HOME', {
+        this.homeBtn = new Button(this, 2100, 1100, 650, 200, 'HOME', {
             color: '#ffffff',
-            fontSize: '100px',
+            fontSize: '80px',
             fontFamily: FONT_NAME,
+            fontStyle: 'bold',
         })
         this.homeBtn.setInteractive()
     }

@@ -1,35 +1,44 @@
 import * as Phaser from 'phaser'
+import { BUTTON_BACKING } from '../const/const'
 
 export default class Button {
-    private rectangle: Phaser.GameObjects.Rectangle
+    private rectangle: Phaser.GameObjects.NineSlice
     private text: Phaser.GameObjects.Text
 
     private isPointerDown: boolean
     private isPointerOver: boolean
 
-    private rectColor: number
+    private blackRect: Phaser.GameObjects.Rectangle
 
     public constructor(
         scene: Phaser.Scene,
         x: number,
         y: number,
-        width?: number | undefined,
-        height?: number | undefined,
-        fillColor = 0x0000,
+        width: number,
+        height: number,
         content = '',
         style?: Phaser.Types.GameObjects.Text.TextStyle | undefined
     ) {
-        this.rectangle = scene.add.rectangle(x, y, width, height, fillColor)
-        this.text = scene.add.text(x, y, content, style).setOrigin(0.5, 0.5).setStroke('#000000', 1)
-        this.isPointerDown = false
-        this.isPointerOver = false
-        this.rectColor = fillColor
+        if (width && height)
+            this.rectangle = scene.add.nineslice(x, y, BUTTON_BACKING, undefined, width, height, 10, 10).setDisplaySize(width, height)
 
-        this.rectangle.setInteractive()    
+        //scene.add.image(x, y, BUTTON_BACKING).setDisplaySize(width, height)
+
+        this.text = scene.add.text(x, y, content, style).setOrigin(0.5, 0.5).setStroke('#000000', 3)
+        this.isPointerDown = false
+
+        this.isPointerOver = false
+
+        this.blackRect = scene.add
+            .rectangle(x, y, width, height, 0x0000, 1)
+            .setDisplaySize(width, height)
+            .setSize(width, height)
+            .setAlpha(0)
+
+        this.rectangle.setInteractive()
     }
 
-    public setInteractive(): void 
-    {
+    public setInteractive(): void {
         this.rectangle.on('pointerdown', () => this.handlePointerDown(this))
 
         this.rectangle.on('pointerup', () => this.handlePointerUp(this))
@@ -39,38 +48,31 @@ export default class Button {
         this.rectangle.on('pointerout', () => this.handlePointerOut(this))
     }
 
-    private handlePointerDown(btn: Button): void
-    {
+    private handlePointerDown(btn: Button): void {
         this.isPointerDown = true
-        btn.rectangle.setFillStyle(btn.rectColor, 1)
+        btn.blackRect.setAlpha(0.5)
     }
 
-    private handlePointerUp(btn: Button): void
-    {
+    private handlePointerUp(btn: Button): void {
         this.isPointerDown = false
-        btn.rectangle.setFillStyle(btn.rectColor, 0.8)
+        btn.blackRect.setAlpha(0)
     }
 
-    private handlePointerOver(btn: Button): void
-    {
+    private handlePointerOver(btn: Button): void {
         this.isPointerOver = true
-        btn.rectangle.setFillStyle(btn.rectColor, 0.8)
+        btn.blackRect.setAlpha(0.5)
     }
 
-    private handlePointerOut(btn: Button): void
-    {
+    private handlePointerOut(btn: Button): void {
         this.isPointerOver = false
-        btn.rectangle.setFillStyle(btn.rectColor, 1)
-        
+        btn.blackRect.setAlpha(0)
     }
 
-    public getIsPointerDown(): boolean
-    {
+    public getIsPointerDown(): boolean {
         return this.isPointerDown
     }
 
-    public getIsPointerOver(): boolean
-    {
+    public getIsPointerOver(): boolean {
         return this.isPointerOver
     }
 }

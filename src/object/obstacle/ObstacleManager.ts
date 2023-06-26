@@ -1,6 +1,6 @@
-import ObjectPool from './ObjectPool'
+import ObjectPool from '../ObjectPool'
 import Obstacle from './Obstacle'
-import Player from './Player'
+import Player from '../Player'
 import Zap from './Zap'
 
 export default class ObstacleManager {
