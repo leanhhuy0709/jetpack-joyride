@@ -31,11 +31,11 @@ export default class ObstacleManager {
         return false
     }
 
-    public update(delta: number, playerSpeed: number): void {
+    public update(delta: number): void {
         let countRemoveObstacle = 0
 
         for (let i = 0; i < this.obstacles.length; i++) {
-            this.obstacles[i].update(delta, playerSpeed)
+            this.obstacles[i].update(delta)
         }
 
         for (let i = 0; i < this.obstacles.length; i++) {

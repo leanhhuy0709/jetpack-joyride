@@ -22,6 +22,7 @@ import {
     ZAP_EFFECT,
 } from '../const/const'
 import { DEPTH } from '../const/depth'
+import { BACKGROUND } from '../const/background_const'
 
 export default class LoadingScene extends Phaser.Scene {
     private progressBar: Phaser.GameObjects.Graphics
@@ -110,6 +111,9 @@ export default class LoadingScene extends Phaser.Scene {
         this.load.audio(COIN_COLLECT_3, COIN_COLLECT_3)
 
         this.load.image(BUTTON_BACKING, BUTTON_BACKING)
+
+        this.load.image(BACKGROUND.START_ROOM_1, BACKGROUND.START_ROOM_1)
+        this.load.image(BACKGROUND.START_ROOM_2, BACKGROUND.START_ROOM_2)
     }
 
     public create(): void {

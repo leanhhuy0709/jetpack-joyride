@@ -1,5 +1,5 @@
 import * as Phaser from 'phaser'
-import { BUTTON_BACKING, COIN, FONT_NAME, SCENE } from '../const/const'
+import { BUTTON_BACKING, COIN, SCENE } from '../const/const'
 import Button from '../components/Button'
 
 export default class GameOverScene extends Phaser.Scene {
@@ -14,8 +14,7 @@ export default class GameOverScene extends Phaser.Scene {
         })
     }
 
-    public init(data: { score: number, coin: number })
-    {
+    public init(data: { score: number; coin: number }) {
         this.score = data.score
         this.coin = data.coin
     }
@@ -40,7 +39,6 @@ export default class GameOverScene extends Phaser.Scene {
         const text = this.add
             .text(2100, 100 + 100 / 2, 'RESULTS', {
                 fontSize: '80px',
-                fontFamily: FONT_NAME,
                 fontStyle: 'bold',
             })
             .setOrigin(0.5, 0.5)
@@ -49,7 +47,7 @@ export default class GameOverScene extends Phaser.Scene {
         const text2 = this.add
             .text(2100, 275, 'DISTANCE', {
                 fontSize: '80px',
-                fontFamily: FONT_NAME,
+
                 fontStyle: 'bold',
             })
             .setOrigin(0.5, 0.5)
@@ -58,9 +56,9 @@ export default class GameOverScene extends Phaser.Scene {
         const text3 = this.add
             .text(2100, 400, `${Math.floor(this.score)}M`, {
                 fontSize: '125px',
-                fontFamily: FONT_NAME,
+
                 fontStyle: 'bold',
-                color: '#fef03b'
+                color: '#fef03b',
             })
             .setOrigin(0.5, 0.5)
         text3.setStroke('#000000', 1)
@@ -68,7 +66,7 @@ export default class GameOverScene extends Phaser.Scene {
         const text4 = this.add
             .text(2100 - 400, 600, 'COLLECTED', {
                 fontSize: '60px',
-                fontFamily: FONT_NAME,
+
                 fontStyle: 'bold',
             })
             .setOrigin(0, 0.5)
@@ -77,7 +75,7 @@ export default class GameOverScene extends Phaser.Scene {
         const text5 = this.add
             .text(2450, 600, `${this.coin}`, {
                 fontSize: '60px',
-                fontFamily: FONT_NAME,
+
                 color: '#fef03b',
                 fontStyle: 'bold',
             })
@@ -89,7 +87,6 @@ export default class GameOverScene extends Phaser.Scene {
         this.playAgainBtn = new Button(this, 2100, 800, 650, 200, 'PLAY AGAIN', {
             color: '#ffffff',
             fontSize: '80px',
-            fontFamily: FONT_NAME,
             fontStyle: 'bold',
         })
         this.playAgainBtn.setInteractive()
@@ -97,20 +94,16 @@ export default class GameOverScene extends Phaser.Scene {
         this.homeBtn = new Button(this, 2100, 1100, 650, 200, 'HOME', {
             color: '#ffffff',
             fontSize: '80px',
-            fontFamily: FONT_NAME,
             fontStyle: 'bold',
         })
         this.homeBtn.setInteractive()
     }
 
     public update(): void {
-        if (this.homeBtn.getIsPointerDown())
-        {
+        if (this.homeBtn.getIsPointerDown()) {
             this.scene.stop(SCENE.GAMEPLAY)
             this.scene.start(SCENE.MENU)
-        }
-        else if (this.playAgainBtn.getIsPointerDown())
-        {
+        } else if (this.playAgainBtn.getIsPointerDown()) {
             this.scene.stop(SCENE.GAMEPLAY)
             this.scene.start(SCENE.GAMEPLAY)
         }

@@ -7,6 +7,7 @@ import ObjectPool from '../object/ObjectPool'
 import CoinManager from '../object/coin/CoinManager'
 import Obstacle from '../object/obstacle/Obstacle'
 import ObstacleManager from '../object/obstacle/ObstacleManager'
+import { BACKGROUND } from '../const/background_const'
 
 export default class GamePlayScene extends Phaser.Scene {
     private player: Player
@@ -38,11 +39,22 @@ export default class GamePlayScene extends Phaser.Scene {
 
     public create(): void {
         // Initialize game objects
-        //console.log('Initialize game objects')
-
         this.background = new Background(this, BG1)
+        this.add
+            .image(0, 0, BACKGROUND.START_ROOM_1)
+            .setCrop(0, 1024 - 901, 1024, 793)
+            .setOrigin(0, 0)
+            .setDisplaySize((1024 * 1600) / 793, 1600)
+        this.add
+            .image((1024 * 1600) / 793, 0, BACKGROUND.START_ROOM_2)
+            .setCrop(0, 1024 - 901, 1024, 793)
+            .setOrigin(0, 0)
+            .setDisplaySize((1024 * 1600) / 793, 1600)
+
+        
+
         ObjectPool.init(this)
-        this.matter.world.setBounds(0, 0, Infinity, 1600, 64, false, false, true, true)
+        this.matter.world.setBounds(0, 0, 1000, 1600, 64, false, false, true, true)
         this.matter.world.enabled = true
 
         this.ground = this.matter.add.rectangle(0, 1500, 1e9, 150, { isStatic: true })
@@ -80,19 +92,19 @@ export default class GamePlayScene extends Phaser.Scene {
             this.player.falling()
         }
 
-        this.obstacleManager.update(delta, this.player.getSpeed())
+        this.obstacleManager.update(delta)
 
         this.score.add(delta, this.player.getSpeed() / 10)
 
         if (this.obstacleManager.checkCollider(this.player)) {
-            /*console.log('You die!')
+            console.log('You die!')
             this.score.saveHighScore()
             this.coinManager.saveCoin()
             this.scene.pause()
             this.scene.launch(SCENE.GAMEOVER, {
                 score: this.score.getScore(),
                 coin: this.coinManager.getCoin(),
-            })*/
+            })
         }
 
         this.coinManager.handleColliderWithPlayer(this.player)

@@ -30,8 +30,8 @@ export const ZAP_SPRITE = 'assets/zap/spritesheet.png'
 export const LOGO2 = 'assets/logo2.jpg'
 export const COIN = 'assets/coin/1.png'
 
-export const FONT_NAME = 'Verdana'
-//export const FONT_NAME = '"KitschyRetroRegular-9YnqB"'
+//export const FONT_NAME = 'Verdana'
+export const FONT_NAME = '"KitschyRetroRegular-9YnqB"'
 //export const FONT_NAME = 'KitschyRetroRegular-9Ynqsss'
 
 export const BG1 = 'assets/bg/bg1.png'
@@ -60,6 +60,3 @@ export const BUTTON_BACKING = 'assets/UI/buttonBacking.png'
 export const TITLE = 'assets/bg/Levels/Title/Objects/title_small.png'
 export const TITLE_GLOW = 'assets/bg/Levels/Title/Objects/titleGlow_small.png'
 
-export enum BACKGROUND {
-
-}

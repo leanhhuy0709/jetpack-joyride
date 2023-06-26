@@ -7,7 +7,7 @@ export default abstract class Obstacle {
         this.scene = scene
     }
 
-    public update(_delta: number, _playerSpeed: number): void {
+    public update(_delta: number): void {
         //
     }
 
