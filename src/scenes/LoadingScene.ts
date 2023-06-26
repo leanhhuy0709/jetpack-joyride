@@ -1,5 +1,7 @@
 import * as Phaser from 'phaser'
 import {
+    BARRY_BODY,
+    BARRY_HEAD,
     BARRY_SPRITE_SHEET,
     BG1,
     BULLET,
@@ -54,6 +56,17 @@ export default class LoadingScene extends Phaser.Scene {
             frameWidth: 93,
             frameHeight: 95,
         })
+
+        this.load.spritesheet(BARRY_BODY, BARRY_BODY, {
+            frameWidth: 32,
+            frameHeight: 32,
+        })
+
+        this.load.spritesheet(BARRY_HEAD, BARRY_HEAD, {
+            frameWidth: 32,
+            frameHeight: 32,
+        })
+
         this.load.image(BULLET, BULLET)
         this.load.spritesheet(EXPLOSION, EXPLOSION, {
             frameWidth: 64,

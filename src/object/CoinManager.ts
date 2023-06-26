@@ -1,5 +1,6 @@
-import { COIN_PATTERN, COIN_SPRITE, FONT_NAME } from '../const/const'
+import { COIN_SPRITE, FONT_NAME } from '../const/const'
 import Coin from './Coin'
+import ObjectPool from './ObjectPool'
 import Player from './Player'
 
 export default class CoinManager {
@@ -18,15 +19,8 @@ export default class CoinManager {
 
         let tmp = 1000
         for (let i = 0; i < this.numCoin; i++) {
-            this.coins.push(
-                new Coin(
-                    scene,
-                    tmp,
-                    Phaser.Math.Between(400, 800),
-                    Phaser.Math.Between(0, COIN_PATTERN.length - 1)
-                )
-            )
-            tmp += 2000
+            this.coins.push(ObjectPool.getCoin(scene, tmp, Phaser.Math.Between(400, 800)))
+            tmp = this.coins[i].getMaxX() + 700
         }
 
         if (localStorage.getItem('allCoin')) this.allCoin = Number(localStorage.getItem('allCoin'))
@@ -40,12 +34,28 @@ export default class CoinManager {
         this.coinInRoundText.setFontFamily(FONT_NAME)
         this.coinInRoundText.setStroke('#000000', 5)
 
-        this.coinImage = this.scene.add.image(10, 250, COIN_SPRITE).setOrigin(0, 0).setDisplaySize(70, 70)
+        this.coinImage = this.scene.add
+            .image(10, 250, COIN_SPRITE)
+            .setOrigin(0, 0)
+            .setDisplaySize(70, 70)
     }
 
     public update(delta: number, playerSpeed: number) {
+        let numDel = 0
         for (let i = 0; i < this.coins.length; i++) {
             this.coins[i].update(delta, playerSpeed)
+            if (this.coins[i].getMaxX() < this.scene.cameras.main.scrollX)
+            {
+                ObjectPool.removeCoin(this.coins[i])
+                this.coins.splice(i, 1)
+                i--
+                numDel++
+            }
+        }
+
+        for (let i = 0; i < numDel; i++) {
+            const coin = ObjectPool.getCoin(this.scene, this.coins[this.coins.length - 1].getMaxX(), Phaser.Math.Between(400, 800))
+            this.coins.push(coin)
         }
     }
 

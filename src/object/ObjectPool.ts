@@ -1,5 +1,6 @@
-import { BULLET, EXPLOSION } from '../const/const'
+import { BULLET, COIN_PATTERN, EXPLOSION } from '../const/const'
 import Bullet from './Bullet'
+import Coin from './Coin'
 import Explosion from './Explosion'
 import Obstacle from './Obstacle'
 import Zap from './Zap'
@@ -9,14 +10,22 @@ export default class ObjectPool {
     private static explosions: Explosion[] = []
     private static zaps: Zap[] = []
     public static count = 0 //use to check
+    public static coins: Coin[] = []
 
-    public static init(_scene: Phaser.Scene): void {
+    public static init(scene: Phaser.Scene): void {
         ObjectPool.clear()
         for (let i = 0; i < 20; i++) {
-            ObjectPool.removeBullet(new Bullet(_scene, 0, 0, BULLET))
-            ObjectPool.removeExplosion(new Explosion(_scene, 0, 0, EXPLOSION))
-            ObjectPool.removeZap(new Zap(_scene, -100, -100, -100, -100))
+            ObjectPool.removeBullet(new Bullet(scene, 0, 0, BULLET))
+            ObjectPool.removeExplosion(new Explosion(scene, 0, 0, EXPLOSION))
+            ObjectPool.removeZap(new Zap(scene, -100, -100, -100, -100))
         }
+
+        for (let i = 0; i < COIN_PATTERN.length; i++)
+        {
+            const coin = new Coin(scene, 110, 110, COIN_PATTERN.length - i - 1).setVisible(false)
+            ObjectPool.coins.push(coin)
+        }
+
     }
 
     public static getBullet(scene: Phaser.Scene, x: number, y: number, key: string): Bullet {
@@ -74,5 +83,19 @@ export default class ObjectPool {
         ObjectPool.bullets = []
         ObjectPool.explosions = []
         ObjectPool.count = 0
+    }
+
+    public static getCoin(scene: Phaser.Scene, x: number, y: number): Coin {
+        if (ObjectPool.bullets.length > 0) {
+            const coin = ObjectPool.coins.pop() as Coin
+            coin.setAll(scene, x, y)
+            return coin
+        }
+        ObjectPool.count++
+        return new Coin(scene, x, y, 0)
+    }
+
+    public static removeCoin(coin: Coin): void {
+        ObjectPool.coins.push(coin)
     }
 }

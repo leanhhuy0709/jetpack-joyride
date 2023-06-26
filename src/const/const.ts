@@ -15,6 +15,9 @@ export enum PLAYER {
 
 export const BARRY_SPRITE_SHEET = 'assets/barry/spritesheet.png'
 
+export const BARRY_BODY = 'assets/Characters/Barry/defaultBody.png'
+export const BARRY_HEAD = 'assets/Characters/Barry/defaultHead.png'
+
 export const BULLET = 'assets/bullet/1.png'
 export const BULLET_FLASH = 'assets/bullet/bullet-flash.png'
 export const EXPLOSION = 'assets/bullet/explosion-sprite.png'
@@ -28,6 +31,8 @@ export const LOGO2 = 'assets/logo2.jpg'
 export const COIN = 'assets/coin/1.png'
 
 export const FONT_NAME = '"New Athletic M54", Verdana, Cambria'
+//export const FONT_NAME = '"KitschyRetroRegular-9YnqB"'
+//export const FONT_NAME = 'KitschyRetroRegular-9Ynqsss'
 
 export const BG1 = 'assets/bg/bg1.png'
 

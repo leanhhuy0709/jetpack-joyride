@@ -14,15 +14,16 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
     private delayFire: number
     private speed: number
     private bulletFlash: Phaser.GameObjects.Sprite
+    private head: Phaser.Physics.Matter.Sprite
 
     public constructor(scene: Phaser.Scene, x: number, y: number, key: string) {
         super(scene.matter.world, x, y, key)
         this.setDisplaySize(200, 200)
-
-            .setRectangle(175, 150)
+            .setRectangle(120, 150)
             .setFixedRotation()
             .setCollisionGroup(-2)
             .setDepth(DEPTH.OBJECT_VERYHIGH)
+            .setOrigin(0.65, 0.5)
 
         this.isFlying = false
 
@@ -38,14 +39,14 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
                 key: 'fly',
                 frames: this.anims.generateFrameNumbers(key, { start: 3, end: 3 }),
                 frameRate: 10,
-                repeat: -1,
+                repeat: 1,
             })
         if (!this.scene.anims.exists('fall'))
             this.scene.anims.create({
                 key: 'fall',
                 frames: this.anims.generateFrameNumbers(key, { start: 2, end: 2 }),
                 frameRate: 10,
-                repeat: -1,
+                repeat: 1,
             })
 
         this.anims.play('fall')

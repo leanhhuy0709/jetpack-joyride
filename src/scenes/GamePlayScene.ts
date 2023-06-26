@@ -39,13 +39,9 @@ export default class GamePlayScene extends Phaser.Scene {
     public create(): void {
         // Initialize game objects
         //console.log('Initialize game objects')
-        ObjectPool.init(this)
 
         this.background = new Background(this, BG1)
-
-        //this.add.image(0, 0, TITLE_1).setDisplaySize(928 * 1600/790, 1600).setOrigin(0, 0)
-        //this.add.image(928 * 1600/790 + 100, 0, TITLE_2).setDisplaySize(319 * 1600/790, 1600).setOrigin(0, 0)
-
+        ObjectPool.init(this)
         this.matter.world.setBounds(0, 0, Infinity, 1600, 64, false, false, true, true)
         this.matter.world.enabled = true
 
@@ -61,7 +57,7 @@ export default class GamePlayScene extends Phaser.Scene {
 
         this.score = new Score(this)
 
-        this.coinManager = new CoinManager(this, 20)
+        this.coinManager = new CoinManager(this, 7)
     }
 
     public update(_time: number, delta: number): void {
