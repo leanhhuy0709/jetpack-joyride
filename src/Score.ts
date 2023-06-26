@@ -34,16 +34,17 @@ export default class Score extends Phaser.GameObjects.Text {
         this.score += delta * coeff
 
         if (this.highScore < this.score) {
-            
             this.highScore = this.score
         }
-        
+
         this.setNewScore()
     }
 
     public setNewScore(): void {
         this.setText(`${Math.floor(this.score)}m`)
+        this.x = this.scene.cameras.main.scrollX
         this.highScoreText.setText(`Best: ${Math.floor(this.highScore)}m`)
+        this.highScoreText.x = this.scene.cameras.main.scrollX + 0
     }
 
     public resetScore(): void {
@@ -59,7 +60,7 @@ export default class Score extends Phaser.GameObjects.Text {
         this.level = level
     }
 
-    public getScore(): number{
+    public getScore(): number {
         return this.score
     }
 

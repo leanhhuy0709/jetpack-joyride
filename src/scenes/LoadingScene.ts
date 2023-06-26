@@ -5,6 +5,9 @@ import {
     BULLET,
     BULLET_FLASH,
     COIN,
+    COIN_COLLECT_1,
+    COIN_COLLECT_2,
+    COIN_COLLECT_3,
     COIN_PATTERN,
     COIN_SPRITE,
     EXPLOSION,
@@ -88,6 +91,10 @@ export default class LoadingScene extends Phaser.Scene {
         {
             this.load.text(`pattern${i}`, COIN_PATTERN[i])
         }
+
+        this.load.audio(COIN_COLLECT_1, COIN_COLLECT_1)
+        this.load.audio(COIN_COLLECT_2, COIN_COLLECT_2)
+        this.load.audio(COIN_COLLECT_3, COIN_COLLECT_3)
     }
 
     public create(): void {

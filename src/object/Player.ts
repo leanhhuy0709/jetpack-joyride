@@ -74,6 +74,8 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
     public update(delta: number): void {
         super.update()
 
+        this.x += delta * this.speed
+
         if (this.body) {
             if (
                 Math.floor(Math.abs(this.body.velocity.y) * 100) / 100 == 0 &&

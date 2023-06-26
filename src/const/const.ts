@@ -48,3 +48,7 @@ export const COIN_PATTERN = [
     'assets/coin/patterns/coinPattern8.txt',
     'assets/coin/patterns/coinPattern9.txt',
 ]
+
+export const COIN_COLLECT_1 = 'assets/SFX/Coin/coin_pickup_1.mp3'
+export const COIN_COLLECT_2 = 'assets/SFX/Coin/coin_pickup_2.mp3'
+export const COIN_COLLECT_3 = 'assets/SFX/Coin/coin_pickup_3.mp3'

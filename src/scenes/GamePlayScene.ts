@@ -46,10 +46,10 @@ export default class GamePlayScene extends Phaser.Scene {
         //this.add.image(0, 0, TITLE_1).setDisplaySize(928 * 1600/790, 1600).setOrigin(0, 0)
         //this.add.image(928 * 1600/790 + 100, 0, TITLE_2).setDisplaySize(319 * 1600/790, 1600).setOrigin(0, 0)
 
-        this.matter.world.setBounds(0, 0, 10000, 1600)
+        this.matter.world.setBounds(0, 0, Infinity, 1600, 64, false, false, true, true)
         this.matter.world.enabled = true
 
-        this.ground = this.matter.add.rectangle(1600, 1500, 3200, 150, { isStatic: true })
+        this.ground = this.matter.add.rectangle(0, 1500, 1e9, 150, { isStatic: true })
 
         this.matter.world.add(this.ground)
 
@@ -62,12 +62,20 @@ export default class GamePlayScene extends Phaser.Scene {
         this.score = new Score(this)
 
         this.coinManager = new CoinManager(this, 20)
-        
     }
 
     public update(_time: number, delta: number): void {
+        this.cameras.main.scrollX = Number(this.player.x) - 800
+        //console.log(this.player.x)
+
+        //console.log(this.player)
+
+        //console.log(this.cameras.main.scrollX - this.player.x)
         // Update game objects
-        this.background.update(delta, this.player.getSpeed())
+        //console.log(Math.round((1000 / delta)))
+        //const st = Date.now()
+
+        this.background.update()
         this.player.update(delta)
 
         if (this.cursors.space?.isDown) {
@@ -83,9 +91,16 @@ export default class GamePlayScene extends Phaser.Scene {
         if (this.obstacleManager.checkCollider(this.player)) {
             console.log('You die!')
             this.score.saveHighScore()
+            this.coinManager.saveCoin()
             this.scene.pause()
-            this.scene.launch(SCENE.GAMEOVER, { score: this.score.getScore() })
+            this.scene.launch(SCENE.GAMEOVER, {
+                score: this.score.getScore(),
+                coin: this.coinManager.getCoin(),
+            })
         }
+
+        this.coinManager.handleColliderWithPlayer(this.player)
+        this.coinManager.setNewCoin()
 
         if (this.score.getScore() > this.score.getLevel()) {
             this.score.setLevel(this.score.getLevel() + 1000)
@@ -93,5 +108,7 @@ export default class GamePlayScene extends Phaser.Scene {
         }
 
         this.coinManager.update(delta, this.player.getSpeed())
+        //const ed = Date.now()
+        //console.log(ed - st)
     }
 }

@@ -6,6 +6,7 @@ export default class GameOverScene extends Phaser.Scene {
     private playAgainBtn: Button
     private homeBtn: Button
     private score: number
+    private coin: number
 
     public constructor() {
         super({
@@ -13,9 +14,10 @@ export default class GameOverScene extends Phaser.Scene {
         })
     }
 
-    public init(data: { score: number })
+    public init(data: { score: number, coin: number })
     {
         this.score = data.score
+        this.coin = data.coin
     }
 
     public preload(): void {
@@ -68,7 +70,7 @@ export default class GameOverScene extends Phaser.Scene {
         text4.setStroke('#000000', 1)
 
         const text5 = this.add
-            .text(2450, 600, '96', {
+            .text(2450, 600, `${this.coin}`, {
                 fontSize: '60px',
                 fontFamily: FONT_NAME,
                 color: '#fef03b'

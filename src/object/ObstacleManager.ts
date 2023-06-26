@@ -39,7 +39,7 @@ export default class ObstacleManager {
         }
 
         for (let i = 0; i < this.obstacles.length; i++) {
-            if (this.obstacles[i].maxX() + 75 < 0) {
+            if (this.obstacles[i].maxX() + 75 < this.scene.cameras.main.scrollX) {
                 ObjectPool.removeObstacle(this.obstacles[i])
                 countRemoveObstacle++
             } else break

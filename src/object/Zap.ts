@@ -87,8 +87,8 @@ export default class Zap extends Obstacle {
 
     public update(delta: number, playerSpeed: number): void {
         //
-        this.sprite1.x -= delta * playerSpeed
-        this.sprite2.x -= delta * playerSpeed
+        //this.sprite1.x -= delta * playerSpeed
+        //this.sprite2.x -= delta * playerSpeed
 
         if (this.sprite1.x > this.sprite2.x) {
             let tmp = this.sprite1.x

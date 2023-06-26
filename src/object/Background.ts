@@ -15,10 +15,8 @@ export default class Background {
             .setOrigin(0, 0)
     }
 
-    public update(delta: number, playerSpeed: number): void {
-        this.position -= delta * playerSpeed
-
-        if (this.position + this.image1.width <= 0)
+    public update(): void {
+        if (this.position + this.image1.width <= this.scene.cameras.main.scrollX)
             this.position += this.image1.width
 
         this.image1.x = this.position
