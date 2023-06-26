@@ -114,6 +114,9 @@ export default class LoadingScene extends Phaser.Scene {
 
         this.load.image(BACKGROUND.START_ROOM_1, BACKGROUND.START_ROOM_1)
         this.load.image(BACKGROUND.START_ROOM_2, BACKGROUND.START_ROOM_2)
+        this.load.image(BACKGROUND.START_ROOM, BACKGROUND.START_ROOM)
+        this.load.image(BACKGROUND.MID_ROOM, BACKGROUND.MID_ROOM)
+        this.load.image(BACKGROUND.AQUA_ROOM, BACKGROUND.AQUA_ROOM)
     }
 
     public create(): void {
@@ -121,6 +124,6 @@ export default class LoadingScene extends Phaser.Scene {
     }
 
     public update(): void {
-        this.scene.start(SCENE.MENU)
+        this.scene.start(SCENE.GAMEPLAY)
     }
 }
