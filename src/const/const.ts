@@ -36,7 +36,13 @@ export enum SPRITE {
     ROCKET = 'assets/missile/missile.png',
     ROCKET_ALERT = 'assets/missile/missileAlert.png',
     ROCKET_EFFECT = 'assets/missile/missileEffects.png',
-    ROCKET_EXPLOSION = 'assets/missile/missileExplosion.png'
+    ROCKET_EXPLOSION = 'assets/missile/missileExplosion.png',
+    WORKER_1_BODY = 'assets/workers/worker1Body.png',
+    WORKER_1_HEAD = 'assets/workers/worker1Head.png',
+    WORKER_2_BODY = 'assets/workers/worker2Body.png',
+    WORKER_2_HEAD = 'assets/workers/worker2Head.png',
+    WORKER_FAT_BODY = 'assets/workers/workerFatBody.png',
+    WORKER_TALL_BODY = 'assets/workers/workerTallBody.png',
 }
 
 

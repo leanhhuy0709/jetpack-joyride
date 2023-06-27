@@ -9,6 +9,7 @@ import Obstacle from '../object/obstacle/Obstacle'
 import ObstacleManager from '../object/obstacle/ObstacleManager'
 import { DEPTH } from '../const/depth'
 import RocketManager from '../object/obstacle/RocketManager'
+import Worker from '../object/Worker'
 
 export default class GamePlayScene extends Phaser.Scene {
     private player: Player
@@ -28,6 +29,8 @@ export default class GamePlayScene extends Phaser.Scene {
     }
     private coinManager: CoinManager
     private rocketManager: RocketManager
+
+    private worker: Worker
 
     public constructor() {
         super({
@@ -114,6 +117,9 @@ export default class GamePlayScene extends Phaser.Scene {
 
         this.add.image(600, 1220, IMAGE.TABLE).setDepth(DEPTH.BACKGROUND_VERYHIGH).setScale(4.4)
         this.add.image(610, 1120, IMAGE.RADIO).setDepth(DEPTH.BACKGROUND_VERYHIGH).setScale(2)
+
+        this.cameras.main.shake(300, new Phaser.Math.Vector2(0.01, 0.01))
+
         for (let i = 0; i < 1000; i++) {
             const scale = Phaser.Math.Between(1, 15)
             const end = Phaser.Math.Between(2000, 2400)
@@ -151,7 +157,7 @@ export default class GamePlayScene extends Phaser.Scene {
         const doNotTouch = this.add
             .image(370, 1300, IMAGE.DO_NOT_TOUCH)
             .setDepth(DEPTH.OBJECT_VERYHIGH)
-            .setScale(2)
+            .setScale(1.7)
 
         this.tweens.add({
             targets: doNotTouch,
@@ -161,7 +167,6 @@ export default class GamePlayScene extends Phaser.Scene {
             onUpdate: () => {
                 doNotTouch.y = this.evaluateSmokeYPosition(doNotTouch.x, -200, 6.5)
                 doNotTouch.setAngle((doNotTouch.x / 2400) * 360 + 90)
-                //if (smokeImage.y >= 1250) smokeImage.y = 1250
             },
         })
 
@@ -206,28 +211,33 @@ export default class GamePlayScene extends Phaser.Scene {
         this.coinManager = new CoinManager(this, 4)
 
         this.cameras.main.startFollow(this.player, undefined, undefined, 0, -800, 450)
+        this.worker =new Worker(this, 2000, 1000, SPRITE.WORKER_1_HEAD, SPRITE.WORKER_1_BODY)
     }
 
     public update(_time: number, delta: number): void {
         this.cameras.main.scrollX = Number(this.player.x) - 800
-        this.rocketManager.update(delta, this.player)
+        this.worker.update(delta, this.player)
+        this.worker.handleCollider(this.player)
         //const st = Date.now()
 
         this.background.update()
         this.player.update(delta)
 
         if (this.cursors.space?.isDown) {
-            if (this.player.visible)
-                this.player.flying()
+            if (this.player.visible) this.player.flying()
         } else if (this.cursors.space?.isUp) {
             this.player.falling()
         }
 
         this.obstacleManager.update(delta)
+        this.rocketManager.update(delta, this.player)
 
         this.score.add(delta, this.player.getSpeed() / 10)
 
-        if (this.obstacleManager.checkCollider(this.player) || this.rocketManager.checkCollider(this.player)) {
+        if (
+            this.obstacleManager.checkCollider(this.player) ||
+            this.rocketManager.checkCollider(this.player)
+        ) {
             console.log('You die!')
             this.score.saveHighScore()
             this.coinManager.saveCoin()

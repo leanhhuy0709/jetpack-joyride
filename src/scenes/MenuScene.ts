@@ -78,6 +78,11 @@ export default class MenuScene extends Phaser.Scene {
             .setDepth(DEPTH.BACKGROUND_MEDIUM)
             .setScale(1.5)
 
+        this.add
+            .image(870, 1300, IMAGE.DO_NOT_TOUCH)
+            .setDepth(DEPTH.OBJECT_VERYHIGH)
+            .setScale(1.7)
+
         if (this.input.keyboard) this.cursors = this.input.keyboard.createCursorKeys()
 
         this.add.rectangle(0, 0, 500, 1600, 0x01234).setOrigin(0, 0)

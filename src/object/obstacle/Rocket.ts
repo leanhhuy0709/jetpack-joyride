@@ -76,8 +76,6 @@ export default class Rocket extends Obstacle {
         this.speed = Phaser.Math.Between(MIN_SPEED, MAX_SPEED)
         this.moveY = Phaser.Math.Between(MIN_MOVEY, MAX_MOVEY)
         this.isWaiting = false
-
-        console.log(this)
     }
 
     public update(_delta: number, player: Player | undefined = undefined): void {
