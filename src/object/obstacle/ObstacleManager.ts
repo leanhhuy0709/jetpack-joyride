@@ -1,7 +1,6 @@
 import ObjectPool from '../ObjectPool'
 import Obstacle from './Obstacle'
 import Player from '../Player'
-import Zap from './Zap'
 
 export default class ObstacleManager {
     private obstacles: Obstacle[]
@@ -14,10 +13,11 @@ export default class ObstacleManager {
         this.obstacles = []
 
         let tmp = 3500
+
         for (let i = 0; i < numObstacle; i++) {
             this.obstacles.push(ObjectPool.getZap(scene, 1300, 1300, 1750, 500))
             this.obstacles[i].reset(tmp)
-            tmp = (this.obstacles[i] as Zap).maxX() + 1000
+            tmp = this.obstacles[i].maxX() + 1000
         }
     }
 

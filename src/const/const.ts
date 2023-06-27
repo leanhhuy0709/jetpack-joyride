@@ -33,7 +33,10 @@ export enum SPRITE {
     ZAP_SPRITE = 'assets/zap/spritesheet.png',
     COIN_SPRITE = 'assets/coin/coin-sprite.png',
     ALARM_LIGHT_EFFECT = 'assets/bg/Levels/Title/alarmGlow_TVOS.png',
-    
+    ROCKET = 'assets/missile/missile.png',
+    ROCKET_ALERT = 'assets/missile/missileAlert.png',
+    ROCKET_EFFECT = 'assets/missile/missileEffects.png',
+    ROCKET_EXPLOSION = 'assets/missile/missileExplosion.png'
 }
 
 

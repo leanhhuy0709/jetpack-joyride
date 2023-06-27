@@ -79,6 +79,21 @@ export default class LoadingScene extends Phaser.Scene {
             frameHeight: 768 / 2,
         })
 
+        this.load.spritesheet(SPRITE.ROCKET, SPRITE.ROCKET, {
+            frameWidth: 128 / 4,
+            frameHeight: 32,
+        })
+
+        this.load.spritesheet(SPRITE.ROCKET_EFFECT, SPRITE.ROCKET_EFFECT, {
+            frameWidth: 256 / 4,
+            frameHeight: 128 / 2,
+        })
+
+        this.load.spritesheet(SPRITE.ROCKET_ALERT, SPRITE.ROCKET_ALERT, {
+            frameWidth: 256 / 4,
+            frameHeight: 128 / 2,
+        })
+
         for (let i = 0; i < COIN_PATTERN.length; i++) {
             this.load.text(`pattern${i}`, COIN_PATTERN[i])
         }

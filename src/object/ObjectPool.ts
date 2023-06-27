@@ -3,6 +3,7 @@ import Bullet from './bullet/Bullet'
 import Explosion from './bullet/Explosion'
 import Coin from './coin/Coin'
 import Obstacle from './obstacle/Obstacle'
+import Rocket from './obstacle/Rocket'
 import Zap from './obstacle/Zap'
 
 export default class ObjectPool {
@@ -11,13 +12,15 @@ export default class ObjectPool {
     private static zaps: Zap[] = []
     public static count = 0 //use to check
     public static coins: Coin[] = []
+    public static rockets: Rocket[] = []
 
     public static init(scene: Phaser.Scene): void {
         ObjectPool.clear()
-        for (let i = 0; i < 10; i++) {
+        for (let i = 0; i < 0; i++) {
             ObjectPool.removeBullet(new Bullet(scene, 100, 100, IMAGE.BULLET))
             ObjectPool.removeExplosion(new Explosion(scene, 100, 100, SPRITE.EXPLOSION))
             ObjectPool.removeZap(new Zap(scene, -100, -100, -100, -100))
+            ObjectPool.removeRocket(new Rocket(scene, -100, -100))
         }
 
         const randomPattern = []
@@ -28,12 +31,10 @@ export default class ObjectPool {
 
         randomPattern.sort((_a, _b) => Math.random() - 0.5)
 
-        for (let i = 0; i < COIN_PATTERN.length; i++)
-        {
+        for (let i = 0; i < COIN_PATTERN.length; i++) {
             const coin = new Coin(scene, 110, 110, randomPattern[i]).setVisible(false)
             ObjectPool.coins.push(coin)
         }
-
     }
 
     public static getBullet(scene: Phaser.Scene, x: number, y: number, key: string): Bullet {
@@ -105,5 +106,19 @@ export default class ObjectPool {
 
     public static removeCoin(coin: Coin): void {
         ObjectPool.coins.push(coin)
+    }
+
+    public static getRocket(scene: Phaser.Scene, x: number, y: number): Rocket {
+        if (ObjectPool.rockets.length > 0) {
+            const rocket = ObjectPool.rockets.pop() as Rocket
+            rocket.setAll(scene, x, y)
+            return rocket
+        }
+        ObjectPool.count++
+        return new Rocket(scene, x, y)
+    }
+
+    public static removeRocket(rocket: Rocket): void {
+        ObjectPool.rockets.push(rocket)
     }
 }

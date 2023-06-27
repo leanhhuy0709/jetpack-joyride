@@ -59,7 +59,7 @@ export default class MenuScene extends Phaser.Scene {
             .setDepth(DEPTH.BACKGROUND_VERYHIGH)
             .setScale(1.5)
 
-        this.add.image(500, 400, IMAGE.LIGHT).setDepth(DEPTH.BACKGROUND_VERYHIGH).setScale(1.7)
+        this.add.image(1000, 400, IMAGE.LIGHT).setDepth(DEPTH.BACKGROUND_VERYHIGH).setScale(1.7)
 
         this.add
             .image(1010, 1365, IMAGE.LIGHT_EFFECT_1)

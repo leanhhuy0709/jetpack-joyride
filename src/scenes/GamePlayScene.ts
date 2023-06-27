@@ -8,6 +8,7 @@ import CoinManager from '../object/coin/CoinManager'
 import Obstacle from '../object/obstacle/Obstacle'
 import ObstacleManager from '../object/obstacle/ObstacleManager'
 import { DEPTH } from '../const/depth'
+import Rocket from '../object/obstacle/Rocket'
 
 export default class GamePlayScene extends Phaser.Scene {
     private player: Player
@@ -26,6 +27,7 @@ export default class GamePlayScene extends Phaser.Scene {
         shift?: Phaser.Input.Keyboard.Key
     }
     private coinManager: CoinManager
+    private rocket: Rocket
 
     public constructor() {
         super({
@@ -154,7 +156,7 @@ export default class GamePlayScene extends Phaser.Scene {
         this.tweens.add({
             targets: doNotTouch,
             x: 2300,
-            duration: Phaser.Math.Between(1000, 3000),
+            duration: 2000,
             delay: Phaser.Math.Between(0, 100),
             onUpdate: () => {
                 doNotTouch.y = this.evaluateSmokeYPosition(doNotTouch.x, -200, 6.5)
@@ -192,6 +194,11 @@ export default class GamePlayScene extends Phaser.Scene {
                 }
             })
 
+        this.rocket = new Rocket(this, 1000, 1000)
+
+        this.rocket.reset(2000)
+        this.rocket.startAlert()
+
         if (this.input.keyboard) this.cursors = this.input.keyboard.createCursorKeys()
 
         this.obstacleManager = new ObstacleManager(this, 4)
@@ -205,7 +212,7 @@ export default class GamePlayScene extends Phaser.Scene {
 
     public update(_time: number, delta: number): void {
         this.cameras.main.scrollX = Number(this.player.x) - 800
-
+        //this.rocket.update(delta, this.player)
         //const st = Date.now()
 
         this.background.update()
