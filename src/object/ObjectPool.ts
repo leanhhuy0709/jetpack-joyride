@@ -1,4 +1,5 @@
 import { COIN_PATTERN, IMAGE, SPRITE } from '../const/const'
+import Worker from './Worker'
 import Bullet from './bullet/Bullet'
 import Explosion from './bullet/Explosion'
 import Coin from './coin/Coin'
@@ -13,6 +14,7 @@ export default class ObjectPool {
     public static count = 0 //use to check
     public static coins: Coin[] = []
     public static rockets: Rocket[] = []
+    public static workers: Worker[] = []
 
     public static init(scene: Phaser.Scene): void {
         ObjectPool.clear()
@@ -95,6 +97,7 @@ export default class ObjectPool {
         ObjectPool.rockets = []
         ObjectPool.zaps = []
         ObjectPool.coins = []
+        ObjectPool.workers = []
     }
 
     public static getCoin(scene: Phaser.Scene, x: number, y: number): Coin {
@@ -123,5 +126,25 @@ export default class ObjectPool {
 
     public static removeRocket(rocket: Rocket): void {
         ObjectPool.rockets.push(rocket)
+    }
+
+    public static getWorker(
+        scene: Phaser.Scene,
+        x: number,
+        y: number,
+        headKey = SPRITE.WORKER_2_HEAD,
+        bodyKey = SPRITE.WORKER_2_BODY
+    ): Worker {
+        if (ObjectPool.workers.length > 0) {
+            const worker = ObjectPool.workers.pop() as Worker
+            return worker
+        }
+        ObjectPool.count++
+        return new Worker(scene, x, y, headKey, bodyKey)
+    }
+
+    public static removeWorker(worker: Worker): void 
+    {
+        ObjectPool.workers.push(worker)
     }
 }

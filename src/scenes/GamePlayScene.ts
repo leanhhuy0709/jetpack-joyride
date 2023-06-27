@@ -9,7 +9,7 @@ import Obstacle from '../object/obstacle/Obstacle'
 import ObstacleManager from '../object/obstacle/ObstacleManager'
 import { DEPTH } from '../const/depth'
 import RocketManager from '../object/obstacle/RocketManager'
-import Worker from '../object/Worker'
+import WorkerManager from '../object/WorkerManager'
 
 export default class GamePlayScene extends Phaser.Scene {
     private player: Player
@@ -30,7 +30,7 @@ export default class GamePlayScene extends Phaser.Scene {
     private coinManager: CoinManager
     private rocketManager: RocketManager
 
-    private worker: Worker
+    private workerManager: WorkerManager
 
     public constructor() {
         super({
@@ -211,13 +211,13 @@ export default class GamePlayScene extends Phaser.Scene {
         this.coinManager = new CoinManager(this, 4)
 
         this.cameras.main.startFollow(this.player, undefined, undefined, 0, -800, 450)
-        this.worker =new Worker(this, 2000, 1000, SPRITE.WORKER_1_HEAD, SPRITE.WORKER_1_BODY)
+        this.workerManager = new WorkerManager(this, 10)
     }
 
     public update(_time: number, delta: number): void {
         this.cameras.main.scrollX = Number(this.player.x) - 800
-        this.worker.update(delta, this.player)
-        this.worker.handleCollider(this.player)
+        this.workerManager.update(delta, this.player)
+        this.workerManager.handleCollider(this.player)
         //const st = Date.now()
 
         this.background.update()

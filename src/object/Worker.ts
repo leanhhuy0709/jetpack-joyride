@@ -104,21 +104,18 @@ export default class Worker {
     }
 
     public update(delta: number, player: Player): void {
-        
-        if (this.state == WORKER_STATE.DEAD)
-        {
+        if (this.state == WORKER_STATE.DEAD) {
             this.head.setTexture(this.headKey, 13)
             this.body.setTexture(this.bodyKey, 13)
             return
         }
-        
+
         if (this.state == WORKER_STATE.MOVE) {
             if (this.head.anims.currentAnim?.key != this.headKey + 'move') {
                 this.head.play(this.headKey + 'move')
                 this.body.play(this.bodyKey + 'move')
             }
             this.body.x += this.velocity * delta
-            
         } else if (this.state == WORKER_STATE.RUN) {
             if (this.head.anims.currentAnim?.key != this.headKey + 'run') {
                 this.head.play(this.headKey + 'run')
@@ -127,7 +124,7 @@ export default class Worker {
             this.body.x += this.velocity * delta * 1.5
         }
         this.head.x = this.body.x
-            this.head.y = this.body.y - 43
+        this.head.y = this.body.y - 43
 
         if (Math.abs(player.x - this.body.x) < 300) {
             this.state = WORKER_STATE.RUN
@@ -135,7 +132,6 @@ export default class Worker {
     }
 
     public handleCollider(player: Player): void {
-
         if (this.state == WORKER_STATE.DEAD) return
         const bullets = player.getBullets()
 
@@ -149,5 +145,80 @@ export default class Worker {
 
     public getBody(): Phaser.Types.Physics.Matter.MatterBody[] {
         return [this.head, this.body]
+    }
+
+    public setAll(
+        scene: Phaser.Scene,
+        x: number,
+        y: number,
+        headKey = SPRITE.WORKER_2_HEAD,
+        bodyKey = SPRITE.WORKER_2_BODY
+    ): void {
+        this.scene = scene
+        this.body.x = x
+        this.head.x = x
+        this.body.y = y + 43
+        this.head.y = y
+        this.headKey = headKey
+        this.bodyKey = bodyKey
+        this.head.setTexture(headKey)
+        this.body.setTexture(bodyKey)
+
+        if (!this.scene.anims.exists(bodyKey + 'move'))
+            this.scene.anims.create({
+                key: bodyKey + 'move',
+                frames: this.body.anims.generateFrameNumbers(bodyKey, {
+                    start: 0,
+                    end: 3,
+                }),
+                frameRate: 10,
+                repeat: -1,
+            })
+
+        if (!this.scene.anims.exists(headKey + 'move'))
+            this.scene.anims.create({
+                key: headKey + 'move',
+                frames: this.head.anims.generateFrameNumbers(headKey, {
+                    start: 0,
+                    end: 3,
+                }),
+                frameRate: 10,
+                repeat: -1,
+            })
+
+        if (!this.scene.anims.exists(bodyKey + 'run'))
+            this.scene.anims.create({
+                key: bodyKey + 'run',
+                frames: this.body.anims.generateFrameNumbers(bodyKey, {
+                    start: 4,
+                    end: 7,
+                }),
+                frameRate: 10,
+                repeat: -1,
+            })
+
+        if (!this.scene.anims.exists(headKey + 'run'))
+            this.scene.anims.create({
+                key: headKey + 'run',
+                frames: this.head.anims.generateFrameNumbers(headKey, {
+                    start: 4,
+                    end: 7,
+                }),
+                frameRate: 10,
+                repeat: -1,
+            })
+
+            this.velocity = (Math.random() - 0.5) / 2
+
+            this.state = WORKER_STATE.MOVE
+
+            if (this.velocity < 0) {
+                this.body.setFlipX(true)
+                this.head.setFlipX(true)
+            }
+    }
+
+    public getMaxX(): number {
+        return this.body.x + this.body.width
     }
 }
