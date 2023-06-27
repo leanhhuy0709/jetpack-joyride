@@ -1,4 +1,4 @@
-import { GLOW, ORB_ANIM, ZAP_EFFECT } from '../../const/const'
+import { SPRITE } from '../../const/const'
 import { DEPTH } from '../../const/depth'
 import Obstacle from './Obstacle'
 
@@ -11,14 +11,14 @@ export default class Zap extends Obstacle {
     public constructor(scene: Phaser.Scene, x1: number, y1: number, x2: number, y2: number) {
         super(scene)
         this.sprite1 = scene.matter.add
-            .sprite(x1, y1, ORB_ANIM, 0, { isStatic: true })
+            .sprite(x1, y1, SPRITE.ORB_ANIM, 0, { isStatic: true })
             .setCircle(30)
             .setDisplaySize(62 * 2, 42 * 2)
             .setStatic(true)
             .setDepth(DEPTH.OBJECT_HIGH)
             .setCollisionGroup(-2)
         this.sprite2 = scene.matter.add
-            .sprite(x2, y2, ORB_ANIM, 0, { isStatic: true })
+            .sprite(x2, y2, SPRITE.ORB_ANIM, 0, { isStatic: true })
             .setCircle(30)
             .setDisplaySize(62 * 2, 42 * 2)
             .setStatic(true)
@@ -26,16 +26,16 @@ export default class Zap extends Obstacle {
             .setCollisionGroup(-2)
 
         this.glow1 = scene.add
-            .sprite(x1, y1, GLOW, 0)
+            .sprite(x1, y1, SPRITE.GLOW, 0)
             .setDepth(DEPTH.BACKGROUND_MEDIUM)
             .setDisplaySize(230, 230)
         this.glow2 = scene.add
-            .sprite(x2, y2, GLOW, 0)
+            .sprite(x2, y2, SPRITE.GLOW, 0)
             .setDepth(DEPTH.BACKGROUND_MEDIUM)
             .setDisplaySize(230, 230)
 
         this.rect = scene.matter.add
-            .sprite((x1 + x2) / 2, (y1 + y2) / 2, ZAP_EFFECT, 0, {
+            .sprite((x1 + x2) / 2, (y1 + y2) / 2, SPRITE.ZAP_EFFECT, 0, {
                 isStatic: true,
             })
             .setOrigin(0.5, 0.5)
@@ -45,35 +45,35 @@ export default class Zap extends Obstacle {
 
         this.sprite1.anims.create({
             key: 'turn1',
-            frames: this.sprite1.anims.generateFrameNumbers(ORB_ANIM, { start: 0, end: 2 }),
+            frames: this.sprite1.anims.generateFrameNumbers(SPRITE.ORB_ANIM, { start: 0, end: 2 }),
             frameRate: 10,
             repeat: -1,
         })
 
         this.sprite2.anims.create({
             key: 'turn2',
-            frames: this.sprite2.anims.generateFrameNumbers(ORB_ANIM, { start: 0, end: 2 }),
+            frames: this.sprite2.anims.generateFrameNumbers(SPRITE.ORB_ANIM, { start: 0, end: 2 }),
             frameRate: 10,
             repeat: -1,
         })
 
         this.glow1.anims.create({
             key: 'bloom1',
-            frames: this.glow1.anims.generateFrameNumbers(GLOW, { start: 0, end: 15 }),
+            frames: this.glow1.anims.generateFrameNumbers(SPRITE.GLOW, { start: 0, end: 15 }),
             frameRate: 10,
             repeat: -1,
         })
 
         this.glow2.anims.create({
             key: 'bloom2',
-            frames: this.glow2.anims.generateFrameNumbers(GLOW, { start: 0, end: 15 }),
+            frames: this.glow2.anims.generateFrameNumbers(SPRITE.GLOW, { start: 0, end: 15 }),
             frameRate: 10,
             repeat: -1,
         })
 
         this.rect.anims.create({
             key: 'electric',
-            frames: this.rect.anims.generateFrameNumbers(ZAP_EFFECT, { start: 0, end: 3 }),
+            frames: this.rect.anims.generateFrameNumbers(SPRITE.ZAP_EFFECT, { start: 0, end: 3 }),
             frameRate: 10,
             repeat: -1,
         })

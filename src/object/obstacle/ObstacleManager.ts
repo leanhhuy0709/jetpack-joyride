@@ -13,7 +13,7 @@ export default class ObstacleManager {
         this.numObstacle = numObstacle
         this.obstacles = []
 
-        let tmp = 3000
+        let tmp = 3500
         for (let i = 0; i < numObstacle; i++) {
             this.obstacles.push(ObjectPool.getZap(scene, 1300, 1300, 1750, 500))
             this.obstacles[i].reset(tmp)

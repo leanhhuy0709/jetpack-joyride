@@ -1,5 +1,5 @@
 import * as Phaser from 'phaser'
-import { BARRY_SPRITE_SHEET, SCENE } from '../const/const'
+import { IMAGE, SCENE, SPRITE } from '../const/const'
 import Player from '../object/Player'
 import Score from '../Score'
 import Background from '../object/Background'
@@ -7,7 +7,6 @@ import ObjectPool from '../object/ObjectPool'
 import CoinManager from '../object/coin/CoinManager'
 import Obstacle from '../object/obstacle/Obstacle'
 import ObstacleManager from '../object/obstacle/ObstacleManager'
-import { BACKGROUND } from '../const/background_const'
 import { DEPTH } from '../const/depth'
 
 export default class GamePlayScene extends Phaser.Scene {
@@ -40,23 +39,23 @@ export default class GamePlayScene extends Phaser.Scene {
 
     public create(): void {
         // Initialize game objects
-        this.background = new Background(this, BACKGROUND.MID_ROOM)
+        this.background = new Background(this, IMAGE.MID_ROOM)
         const midRoom = this.add
-            .image(1655, 0, BACKGROUND.MID_ROOM)
+            .image(1655, 0, IMAGE.MID_ROOM)
             .setOrigin(0, 200 / 1600)
             .setCrop(0, 200, 2021, 1200)
             .setDisplaySize((2021 * 1600) / 1200, (1600 * 1600) / 1200)
             .setDepth(DEPTH.BACKGROUND_MEDIUM)
 
         const midRoom2 = this.add
-            .image(1655 + (2021 * 1600) / 1200, 0, BACKGROUND.MID_ROOM)
+            .image(1655 + (2021 * 1600) / 1200, 0, IMAGE.MID_ROOM)
             .setOrigin(0, 200 / 1600)
             .setCrop(0, 200, 2021, 1200)
             .setDisplaySize((2021 * 1600) / 1200, (1600 * 1600) / 1200)
             .setDepth(DEPTH.BACKGROUND_MEDIUM)
 
-            const midRoom3 = this.add
-            .image(1655 + (2021 * 1600) / 1200, 0, BACKGROUND.MID_ROOM)
+        const midRoom3 = this.add
+            .image(1655 + (2021 * 1600) / 1200, 0, IMAGE.MID_ROOM)
             .setOrigin(0, 200 / 1600)
             .setCrop(0, 200, 2021, 1200)
             .setDisplaySize((2021 * 1600) / 1200, (1600 * 1600) / 1200)
@@ -66,11 +65,13 @@ export default class GamePlayScene extends Phaser.Scene {
         this.background.setWidth((2021 * 1600) / 1200)
 
         this.add
-            .image(0, 0, BACKGROUND.START_ROOM)
+            .image(0, 0, IMAGE.START_ROOM)
             .setOrigin(0, 200 / 1600)
             .setCrop(0, 200, 1749, 1200)
             .setDisplaySize((1749 * 1600) / 1200, (1600 * 1600) / 1200)
             .setDepth(DEPTH.BACKGROUND_VERYHIGH)
+
+        this.add.image(1000, 200, IMAGE.ALARM_LIGHT).setDepth(DEPTH.BACKGROUND_VERYHIGH)
 
         ObjectPool.init(this)
         this.matter.world.setBounds(0, 0, 1000, 1600, 64, false, false, true, true)
@@ -80,7 +81,7 @@ export default class GamePlayScene extends Phaser.Scene {
 
         this.matter.world.add(this.ground)
 
-        this.player = new Player(this, 800, 240, BARRY_SPRITE_SHEET)
+        this.player = new Player(this, 800, 240, SPRITE.BARRY_SPRITE_SHEET)
 
         if (this.input.keyboard) this.cursors = this.input.keyboard.createCursorKeys()
 
@@ -88,7 +89,7 @@ export default class GamePlayScene extends Phaser.Scene {
 
         this.score = new Score(this)
 
-        this.coinManager = new CoinManager(this, 7)
+        this.coinManager = new CoinManager(this, 4)
     }
 
     public update(_time: number, delta: number): void {

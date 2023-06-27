@@ -1,5 +1,5 @@
 import * as Phaser from 'phaser'
-import { LOGO2, SCENE } from '../const/const'
+import { IMAGE, SCENE } from '../const/const'
 
 export default class InitScene extends Phaser.Scene {
     private progressBar: Phaser.GameObjects.Graphics
@@ -12,7 +12,7 @@ export default class InitScene extends Phaser.Scene {
     }
 
     public preload(): void {
-        this.load.image('loading-bg', LOGO2)
+        this.load.image('loading-bg', IMAGE.LOGO2)
     }
 
     public create(): void {

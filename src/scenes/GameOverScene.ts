@@ -1,5 +1,5 @@
 import * as Phaser from 'phaser'
-import { BUTTON_BACKING, COIN, SCENE } from '../const/const'
+import { IMAGE, SCENE } from '../const/const'
 import Button from '../components/Button'
 
 export default class GameOverScene extends Phaser.Scene {
@@ -34,7 +34,7 @@ export default class GameOverScene extends Phaser.Scene {
         this.add.rectangle(2100, 100 + 100 / 2, 930, 1240, 0x242c46).setOrigin(0.5, 0)
 
         this.add.rectangle(2100, 100 + 100 / 2, 1000, 100, 0x575f61)
-        this.add.nineslice(2100, 100 + 100 / 2, BUTTON_BACKING, undefined, 1000, 50)
+        this.add.nineslice(2100, 100 + 100 / 2, IMAGE.BUTTON_BACKING, undefined, 1000, 50)
 
         const text = this.add
             .text(2100, 100 + 100 / 2, 'RESULTS', {
@@ -82,7 +82,7 @@ export default class GameOverScene extends Phaser.Scene {
             .setOrigin(1, 0.5)
         text5.setStroke('#000000', 1)
 
-        this.add.image(2500, 600, COIN).setDisplaySize(60, 60)
+        this.add.image(2500, 600, IMAGE.COIN).setDisplaySize(60, 60)
 
         this.playAgainBtn = new Button(this, 2100, 800, 650, 200, 'PLAY AGAIN', {
             color: '#ffffff',

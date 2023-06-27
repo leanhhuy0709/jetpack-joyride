@@ -1,5 +1,5 @@
 import * as Phaser from 'phaser'
-import { BUTTON_BACKING } from '../const/const'
+import { IMAGE } from '../const/const'
 
 export default class Button {
     private rectangle: Phaser.GameObjects.NineSlice
@@ -20,7 +20,7 @@ export default class Button {
         style?: Phaser.Types.GameObjects.Text.TextStyle | undefined
     ) {
         if (width && height)
-            this.rectangle = scene.add.nineslice(x, y, BUTTON_BACKING, undefined, width, height, 10, 10).setDisplaySize(width, height)
+            this.rectangle = scene.add.nineslice(x, y, IMAGE.BUTTON_BACKING, undefined, width, height, 10, 10).setDisplaySize(width, height)
 
         //scene.add.image(x, y, BUTTON_BACKING).setDisplaySize(width, height)
 
@@ -74,5 +74,15 @@ export default class Button {
 
     public getIsPointerOver(): boolean {
         return this.isPointerOver
+    }
+
+    public getRectangle(): Phaser.GameObjects.NineSlice
+    {
+        return this.rectangle
+    }
+
+    public getText(): Phaser.GameObjects.Text
+    {
+        return this.text
     }
 }

@@ -1,8 +1,8 @@
-import { COIN_SPRITE, FONT_NAME } from '../../const/const'
 import Coin from './Coin'
 import ObjectPool from '../ObjectPool'
 import Player from '../Player'
 import { DEPTH } from '../../const/depth'
+import { FONT_NAME, SPRITE } from '../../const/const'
 
 export default class CoinManager {
     private coins: Coin[]
@@ -18,7 +18,7 @@ export default class CoinManager {
         this.numCoin = numCoin
         this.coins = []
 
-        let tmp = 1000
+        let tmp = 4000
         for (let i = 0; i < this.numCoin; i++) {
             this.coins.push(ObjectPool.getCoin(scene, tmp, Phaser.Math.Between(400, 800)))
             tmp = this.coins[i].getMaxX() + 700
@@ -37,7 +37,7 @@ export default class CoinManager {
         this.coinInRoundText.setDepth(DEPTH.OBJECT_VERYLOW)
 
         this.coinImage = this.scene.add
-            .image(10, 250, COIN_SPRITE)
+            .image(10, 250, SPRITE.COIN_SPRITE)
             .setOrigin(0, 0)
             .setDisplaySize(70, 70)
             .setDepth(DEPTH.OBJECT_VERYLOW)

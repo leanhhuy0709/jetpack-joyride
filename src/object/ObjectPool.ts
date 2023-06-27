@@ -1,4 +1,4 @@
-import { BULLET, COIN_PATTERN, EXPLOSION } from '../const/const'
+import { COIN_PATTERN, IMAGE, SPRITE } from '../const/const'
 import Bullet from './bullet/Bullet'
 import Explosion from './bullet/Explosion'
 import Coin from './coin/Coin'
@@ -14,9 +14,9 @@ export default class ObjectPool {
 
     public static init(scene: Phaser.Scene): void {
         ObjectPool.clear()
-        for (let i = 0; i < 20; i++) {
-            ObjectPool.removeBullet(new Bullet(scene, 0, 0, BULLET))
-            ObjectPool.removeExplosion(new Explosion(scene, 0, 0, EXPLOSION))
+        for (let i = 0; i < 10; i++) {
+            ObjectPool.removeBullet(new Bullet(scene, 100, 100, IMAGE.BULLET))
+            ObjectPool.removeExplosion(new Explosion(scene, 100, 100, SPRITE.EXPLOSION))
             ObjectPool.removeZap(new Zap(scene, -100, -100, -100, -100))
         }
 
@@ -27,7 +27,6 @@ export default class ObjectPool {
         }
 
         randomPattern.sort((_a, _b) => Math.random() - 0.5)
-
 
         for (let i = 0; i < COIN_PATTERN.length; i++)
         {
@@ -95,7 +94,7 @@ export default class ObjectPool {
     }
 
     public static getCoin(scene: Phaser.Scene, x: number, y: number): Coin {
-        if (ObjectPool.bullets.length > 0) {
+        if (ObjectPool.coins.length > 0) {
             const coin = ObjectPool.coins.pop() as Coin
             coin.setAll(scene, x, y)
             return coin

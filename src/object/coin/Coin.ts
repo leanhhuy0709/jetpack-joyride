@@ -1,12 +1,7 @@
-import {
-    COIN_COLLECT_1,
-    COIN_COLLECT_2,
-    COIN_COLLECT_3,
-    COIN_PATTERN,
-    COIN_SPRITE,
-} from '../../const/const'
 import CoinManager from './CoinManager'
 import Player from '../Player'
+import { DEPTH } from '../../const/depth'
+import { AUDIO, COIN_PATTERN, SPRITE } from '../../const/const'
 
 export default class Coin {
     private scene: Phaser.Scene
@@ -29,11 +24,11 @@ export default class Coin {
             col = 0
         const d = 70
 
-        const temp = this.scene.add.sprite(-20, -20, COIN_SPRITE)
+        const temp = this.scene.add.sprite(-20, -20, SPRITE.COIN_SPRITE)
         if (!this.scene.anims.exists('turn'))
             this.scene.anims.create({
                 key: 'turn',
-                frames: temp.anims.generateFrameNumbers(COIN_SPRITE, { start: 0, end: 7 }),
+                frames: temp.anims.generateFrameNumbers(SPRITE.COIN_SPRITE, { start: 0, end: 7 }),
                 frameRate: 10,
                 repeat: -1,
             })
@@ -53,10 +48,11 @@ export default class Coin {
             if (coinPattern[i] == '1') {
                 this.coins.push(
                     this.scene.matter.add
-                        .sprite(x + col * d, y + row * d, COIN_SPRITE, 0, { isStatic: true })
+                        .sprite(x + col * d, y + row * d, SPRITE.COIN_SPRITE, 0, { isStatic: true })
                         .setDisplaySize(50, 50)
                         .play('turn')
                         .setCollisionGroup(-2)
+                        .setDepth(DEPTH.OBJECT_LOW)
                 )
                 this.minX = Math.min(this.minX, x + col * d)
                 this.maxX = Math.max(this.maxX, x + col * d)
@@ -65,9 +61,9 @@ export default class Coin {
             }
             col++
         }
-        if (!Coin.sound1) Coin.sound1 = this.scene.sound.add(COIN_COLLECT_1).setVolume(0.5)
-        if (!Coin.sound2) Coin.sound2 = this.scene.sound.add(COIN_COLLECT_2).setVolume(0.5)
-        if (!Coin.sound3) Coin.sound3 = this.scene.sound.add(COIN_COLLECT_3).setVolume(0.5)
+        if (!Coin.sound1) Coin.sound1 = this.scene.sound.add(AUDIO.COIN_COLLECT_1).setVolume(0.5)
+        if (!Coin.sound2) Coin.sound2 = this.scene.sound.add(AUDIO.COIN_COLLECT_2).setVolume(0.5)
+        if (!Coin.sound3) Coin.sound3 = this.scene.sound.add(AUDIO.COIN_COLLECT_3).setVolume(0.5)
 
         Coin.sound1.stop()
         Coin.sound2.stop()
@@ -75,11 +71,7 @@ export default class Coin {
     }
 
     public update(_delta: number, _playerSpeed: number): void {
-        //for (let i = 0; i < this.coins.length; i++) {
-        //this.coins[i].x -= delta * playerSpeed
-        //}
-        //this.minX -= delta * playerSpeed
-        //this.maxX -= delta * playerSpeed
+        //
     }
 
     public handleColliderWithPlayer(player: Player, coinManager: CoinManager): void {

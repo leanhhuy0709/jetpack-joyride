@@ -1,5 +1,5 @@
 import * as Phaser from 'phaser'
-import { SCENE, TITLE, TITLE_GLOW } from '../const/const'
+import { SCENE, IMAGE } from '../const/const'
 import Button from '../components/Button'
 
 export default class MenuScene extends Phaser.Scene {
@@ -11,6 +11,16 @@ export default class MenuScene extends Phaser.Scene {
         space?: Phaser.Input.Keyboard.Key
         shift?: Phaser.Input.Keyboard.Key
     }
+
+    private logo: Phaser.GameObjects.Image
+    private logoGlow: Phaser.GameObjects.Image
+
+    private rect: Phaser.GameObjects.Rectangle
+    private coinRect: Button
+    private settingBtn: Button
+
+    private isSpaceClicked: boolean
+
     public constructor() {
         super({
             key: SCENE.MENU,
@@ -23,15 +33,23 @@ export default class MenuScene extends Phaser.Scene {
 
     public create(): void {
         this.add
-            .image(1700, this.cameras.main.height / 2, TITLE_GLOW)
-            .setDisplaySize(
-                (this.cameras.main.width * 5) / 10 + 100,
-                (this.cameras.main.height / 10) * 5 + 100
-            )
-
+            .image(2155, 0, IMAGE.MID_ROOM)
+            .setOrigin(0, 200 / 1600)
+            .setCrop(0, 200, 2021, 1200)
+            .setDisplaySize((2021 * 1600) / 1200, (1600 * 1600) / 1200)
         this.add
-            .image(1600, this.cameras.main.height / 2, TITLE)
-            .setDisplaySize((this.cameras.main.width * 5) / 10, (this.cameras.main.height / 10) * 5)
+            .image(500, 0, IMAGE.START_ROOM)
+            .setOrigin(0, 200 / 1600)
+            .setCrop(0, 200, 1749, 1200)
+            .setDisplaySize((1749 * 1600) / 1200, (1600 * 1600) / 1200)
+
+        this.logoGlow = this.add
+            .image(1700, this.cameras.main.height / 2, IMAGE.TITLE_GLOW)
+            .setDisplaySize(1700, 900)
+
+        this.logo = this.add
+            .image(1600, this.cameras.main.height / 2, IMAGE.TITLE)
+            .setDisplaySize(1600, 800)
 
         if (this.input.keyboard) this.cursors = this.input.keyboard.createCursorKeys()
 
@@ -76,27 +94,76 @@ export default class MenuScene extends Phaser.Scene {
 
         halfBrickBtn.setInteractive()
 
-        this.add.rectangle(2400, 0, 600, 125, 0x01234).setOrigin(0, 0)
+        this.rect = this.add.rectangle(2400, 0, 600, 125, 0x01234).setOrigin(0, 0)
 
         let allCoin = 0
         if (localStorage.getItem('allCoin')) allCoin = Number(localStorage.getItem('allCoin'))
 
-        new Button(this, 2580, 100 / 2 + 12.5, 300, 100, String(allCoin), {
+        this.coinRect = new Button(this, 2580, 100 / 2 + 12.5, 300, 100, String(allCoin), {
             fontSize: '50px',
             fontStyle: 'bold',
         })
 
-        const settingBtn = new Button(this, 2880, 100 / 2 + 12.5, 200, 100, 'Setting', {
+        this.settingBtn = new Button(this, 2880, 100 / 2 + 12.5, 200, 100, 'Setting', {
             fontSize: '50px',
             fontStyle: 'bold',
         })
 
-        settingBtn.setInteractive()
+        this.settingBtn.setInteractive()
+
+        this.isSpaceClicked = false
     }
 
     public update(): void {
-        if (this.cursors.space && this.cursors.space.isDown) {
-            this.scene.start(SCENE.GAMEPLAY)
+        if (this.cursors.space && this.cursors.space.isDown && !this.isSpaceClicked) {
+            this.isSpaceClicked = true
+            this.tweens.add({
+                targets: this.logo,
+                alpha: 0,
+                duration: 300,
+            })
+            this.tweens.add({
+                targets: this.logoGlow,
+                alpha: 0,
+                duration: 300,
+            })
+            this.tweens.add({
+                targets: this.rect,
+                y: -150,
+                duration: 300,
+            })
+            this.tweens.add({
+                targets: this.coinRect.getText(),
+                y: 100 / 2 + 12.5 - 150,
+                duration: 300,
+            })
+            this.tweens.add({
+                targets: this.coinRect.getRectangle(),
+                y: 100 / 2 + 12.5 - 150,
+                duration: 300,
+            })
+            this.tweens.add({
+                targets: this.settingBtn.getText(),
+                y: 100 / 2 + 12.5 - 150,
+                duration: 300,
+            })
+            this.tweens.add({
+                targets: this.settingBtn.getRectangle(),
+                y: 100 / 2 + 12.5 - 150,
+                duration: 300,
+            })
+
+            const scene = this.scene
+            this.tweens.add({
+                targets: this.cameras.main,
+                scrollX: 500,
+                duration: 500,
+                onComplete: () => {
+                    setTimeout(() => {
+                        scene.start(SCENE.GAMEPLAY)
+                    }, 200)
+                },
+            })
         }
     }
 }
