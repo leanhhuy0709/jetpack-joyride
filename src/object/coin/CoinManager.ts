@@ -2,6 +2,7 @@ import { COIN_SPRITE, FONT_NAME } from '../../const/const'
 import Coin from './Coin'
 import ObjectPool from '../ObjectPool'
 import Player from '../Player'
+import { DEPTH } from '../../const/depth'
 
 export default class CoinManager {
     private coins: Coin[]
@@ -33,11 +34,13 @@ export default class CoinManager {
         this.coinInRoundText.setColor('#ffe599')
         this.coinInRoundText.setFontFamily(FONT_NAME)
         this.coinInRoundText.setStroke('#000000', 5)
+        this.coinInRoundText.setDepth(DEPTH.OBJECT_VERYLOW)
 
         this.coinImage = this.scene.add
             .image(10, 250, COIN_SPRITE)
             .setOrigin(0, 0)
             .setDisplaySize(70, 70)
+            .setDepth(DEPTH.OBJECT_VERYLOW)
     }
 
     public update(delta: number, playerSpeed: number) {

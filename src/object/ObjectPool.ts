@@ -20,9 +20,18 @@ export default class ObjectPool {
             ObjectPool.removeZap(new Zap(scene, -100, -100, -100, -100))
         }
 
+        const randomPattern = []
+
+        for (let i = 0; i < COIN_PATTERN.length; i++) {
+            randomPattern.push(i)
+        }
+
+        randomPattern.sort((_a, _b) => Math.random() - 0.5)
+
+
         for (let i = 0; i < COIN_PATTERN.length; i++)
         {
-            const coin = new Coin(scene, 110, 110, COIN_PATTERN.length - i - 1).setVisible(false)
+            const coin = new Coin(scene, 110, 110, randomPattern[i]).setVisible(false)
             ObjectPool.coins.push(coin)
         }
 

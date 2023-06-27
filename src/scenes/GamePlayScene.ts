@@ -8,6 +8,7 @@ import CoinManager from '../object/coin/CoinManager'
 import Obstacle from '../object/obstacle/Obstacle'
 import ObstacleManager from '../object/obstacle/ObstacleManager'
 import { BACKGROUND } from '../const/background_const'
+import { DEPTH } from '../const/depth'
 
 export default class GamePlayScene extends Phaser.Scene {
     private player: Player
@@ -39,50 +40,43 @@ export default class GamePlayScene extends Phaser.Scene {
 
     public create(): void {
         // Initialize game objects
-        //this.background = new Background(this, BG1)
-        this.add
+        this.background = new Background(this, BACKGROUND.MID_ROOM)
+        const midRoom = this.add
             .image(1655, 0, BACKGROUND.MID_ROOM)
             .setOrigin(0, 200 / 1600)
             .setCrop(0, 200, 2021, 1200)
             .setDisplaySize((2021 * 1600) / 1200, (1600 * 1600) / 1200)
+            .setDepth(DEPTH.BACKGROUND_MEDIUM)
 
-        const x = 1094,
-            y = 120
-        this.add
-            .image(2020, 0, BACKGROUND.AQUA_ROOM)
-            .setOrigin(70 / 2324, 120 / 2050)
-            .setCrop(70, 120, 1024, 780)
-            .setDisplaySize((1600 / 780) * 2324, (1600 / 780) * 2050)
+        const midRoom2 = this.add
+            .image(1655 + (2021 * 1600) / 1200, 0, BACKGROUND.MID_ROOM)
+            .setOrigin(0, 200 / 1600)
+            .setCrop(0, 200, 2021, 1200)
+            .setDisplaySize((2021 * 1600) / 1200, (1600 * 1600) / 1200)
+            .setDepth(DEPTH.BACKGROUND_MEDIUM)
 
-        this.add
-            .image(2020 + (1024 * 1600) / 780, 0, BACKGROUND.AQUA_ROOM)
-            .setOrigin(x / 2324, y / 2050)
-            .setCrop(x, y, 2024, 780)
-            .setDisplaySize((1600 / 780) * 2324, (1600 / 780) * 2050)
+            const midRoom3 = this.add
+            .image(1655 + (2021 * 1600) / 1200, 0, BACKGROUND.MID_ROOM)
+            .setOrigin(0, 200 / 1600)
+            .setCrop(0, 200, 2021, 1200)
+            .setDisplaySize((2021 * 1600) / 1200, (1600 * 1600) / 1200)
+            .setDepth(DEPTH.BACKGROUND_MEDIUM)
+
+        this.background.setImage(midRoom, midRoom2, midRoom3)
+        this.background.setWidth((2021 * 1600) / 1200)
 
         this.add
             .image(0, 0, BACKGROUND.START_ROOM)
             .setOrigin(0, 200 / 1600)
             .setCrop(0, 200, 1749, 1200)
             .setDisplaySize((1749 * 1600) / 1200, (1600 * 1600) / 1200)
-
-        this.add
-            .image(1655 + (2021 * 1600) / 1200, 0, BACKGROUND.MID_ROOM)
-            .setOrigin(0, 200 / 1600)
-            .setCrop(0, 200, 2021, 1200)
-            .setDisplaySize((2021 * 1600) / 1200, (1600 * 1600) / 1200)
-
-        this.add
-            .image(1655 + ((2021 * 1600) / 1200) * 2, 0, BACKGROUND.MID_ROOM)
-            .setOrigin(0, 200 / 1600)
-            .setCrop(0, 200, 2021, 1200)
-            .setDisplaySize((2021 * 1600) / 1200, (1600 * 1600) / 1200)
+            .setDepth(DEPTH.BACKGROUND_VERYHIGH)
 
         ObjectPool.init(this)
         this.matter.world.setBounds(0, 0, 1000, 1600, 64, false, false, true, true)
         this.matter.world.enabled = true
 
-        this.ground = this.matter.add.rectangle(0, 1500, 1e9, 200, { isStatic: true })
+        this.ground = this.matter.add.rectangle(0, 1500, 1e9, 250, { isStatic: true })
 
         this.matter.world.add(this.ground)
 
@@ -108,7 +102,7 @@ export default class GamePlayScene extends Phaser.Scene {
         //console.log(Math.round((1000 / delta)))
         //const st = Date.now()
 
-        //this.background.update()
+        this.background.update()
         this.player.update(delta)
 
         if (this.cursors.space?.isDown) {

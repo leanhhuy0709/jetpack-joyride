@@ -1,4 +1,5 @@
 import { FONT_NAME } from './const/const'
+import { DEPTH } from './const/depth'
 
 export default class Score extends Phaser.GameObjects.Text {
     private score: number
@@ -8,13 +9,14 @@ export default class Score extends Phaser.GameObjects.Text {
 
     public constructor(scene: Phaser.Scene) {
         super(scene, 0, 60, '0', {})
-
+        
         this.scene.add.existing(this)
 
         this.setFontSize('80px')
         this.setColor('#ffffff')
         this.setFontFamily(FONT_NAME)
         this.setStroke('#000000', 5)
+        this.setDepth(DEPTH.OBJECT_VERYLOW)
 
         this.highScoreText = this.scene.add.text(0, 150, '0')
         this.highScoreText.setFontSize('80px')
@@ -22,6 +24,7 @@ export default class Score extends Phaser.GameObjects.Text {
         this.highScoreText.setColor('#ffffff')
         this.highScoreText.setFontFamily(FONT_NAME)
         this.highScoreText.setStroke('#000000', 5)
+        this.highScoreText.setDepth(DEPTH.OBJECT_VERYLOW)
 
         this.score = 0
         if (localStorage.getItem('highscore'))
