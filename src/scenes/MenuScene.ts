@@ -1,6 +1,7 @@
 import * as Phaser from 'phaser'
 import { SCENE, IMAGE } from '../const/const'
 import Button from '../components/Button'
+import { DEPTH } from '../const/depth'
 
 export default class MenuScene extends Phaser.Scene {
     private cursors: {
@@ -44,12 +45,38 @@ export default class MenuScene extends Phaser.Scene {
             .setDisplaySize((1749 * 1600) / 1200, (1600 * 1600) / 1200)
 
         this.logoGlow = this.add
-            .image(1700, this.cameras.main.height / 2, IMAGE.TITLE_GLOW)
-            .setDisplaySize(1700, 900)
+            .image(1750, 830, IMAGE.TITLE_GLOW)
+            .setDepth(DEPTH.BACKGROUND_VERYHIGH)
+            .setScale(3)
 
         this.logo = this.add
-            .image(1600, this.cameras.main.height / 2, IMAGE.TITLE)
-            .setDisplaySize(1600, 800)
+            .image(1800, 800, IMAGE.TITLE)
+            .setDepth(DEPTH.BACKGROUND_VERYHIGH)
+            .setScale(1.5)
+
+        this.add
+            .image(1700, 1150, IMAGE.BEST_SCREEN)
+            .setDepth(DEPTH.BACKGROUND_VERYHIGH)
+            .setScale(1.5)
+
+        this.add.image(500, 400, IMAGE.LIGHT).setDepth(DEPTH.BACKGROUND_VERYHIGH).setScale(1.7)
+
+        this.add
+            .image(1010, 1365, IMAGE.LIGHT_EFFECT_1)
+            .setDepth(DEPTH.BACKGROUND_VERYHIGH)
+            .setScale(1.7)
+        this.add
+            .image(1000, 525, IMAGE.LIGHT_EFFECT_2)
+            .setDepth(DEPTH.BACKGROUND_VERYHIGH)
+            .setScale(1.7)
+
+        this.add.image(1100, 1220, IMAGE.TABLE).setDepth(DEPTH.BACKGROUND_VERYHIGH).setScale(4.4)
+        this.add.image(1110, 1120, IMAGE.RADIO).setDepth(DEPTH.BACKGROUND_VERYHIGH).setScale(2)
+
+        this.add
+            .image(1600 + 500, 600, IMAGE.ALARM_LIGHT)
+            .setDepth(DEPTH.BACKGROUND_MEDIUM)
+            .setScale(1.5)
 
         if (this.input.keyboard) this.cursors = this.input.keyboard.createCursorKeys()
 

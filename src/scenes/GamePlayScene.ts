@@ -84,13 +84,15 @@ export default class GamePlayScene extends Phaser.Scene {
         if (!this.anims.exists('alarm-light-turn'))
             this.anims.create({
                 key: 'alarm-light-turn',
-                frames: this.anims.generateFrameNumbers(SPRITE.ALARM_LIGHT_EFFECT, { start: 0, end: 5 }),
+                frames: this.anims.generateFrameNumbers(SPRITE.ALARM_LIGHT_EFFECT, {
+                    start: 0,
+                    end: 5,
+                }),
                 frameRate: 8,
                 repeat: -1,
             })
 
         alarmLightSprite.play('alarm-light-turn')
-        
 
         this.add
             .image(1200, 1150, IMAGE.BEST_SCREEN)
@@ -110,6 +112,56 @@ export default class GamePlayScene extends Phaser.Scene {
 
         this.add.image(600, 1220, IMAGE.TABLE).setDepth(DEPTH.BACKGROUND_VERYHIGH).setScale(4.4)
         this.add.image(610, 1120, IMAGE.RADIO).setDepth(DEPTH.BACKGROUND_VERYHIGH).setScale(2)
+        for (let i = 0; i < 1000; i++) {
+            const scale = Phaser.Math.Between(1, 15)
+            const end = Phaser.Math.Between(2000, 2400)
+            const randomOffset = Phaser.Math.Between(-400, -100)
+            const randomCoef = Phaser.Math.Between(5, 15)
+            const x = Phaser.Math.Between(-300, 300)
+            const smokeImage = this.add
+                .image(x, this.evaluateSmokeYPosition(x, randomOffset, randomCoef), IMAGE.SMOKE)
+                .setDepth(DEPTH.OBJECT_VERYHIGH)
+                .setScale(scale)
+                .setAlpha(Math.random())
+                .setAngle(Phaser.Math.Between(0, 360))
+
+            this.tweens.add({
+                targets: smokeImage,
+                x: end,
+                alpha: 0,
+                duration: Phaser.Math.Between(2000, 4000),
+                delay: Phaser.Math.Between(0, 100),
+                ease: 'Power2',
+                onComplete: () => {
+                    smokeImage.destroy()
+                },
+                onUpdate: () => {
+                    smokeImage.y = this.evaluateSmokeYPosition(
+                        smokeImage.x,
+                        randomOffset,
+                        randomCoef
+                    )
+                    smokeImage.setScale(((end - smokeImage.x) / end) * scale)
+                    if (smokeImage.x >= 800 && smokeImage.y > 1250) smokeImage.alpha = 0
+                },
+            })
+        }
+        const doNotTouch = this.add
+            .image(370, 1300, IMAGE.DO_NOT_TOUCH)
+            .setDepth(DEPTH.BACKGROUND_VERYHIGH)
+            .setScale(2)
+
+        this.tweens.add({
+            targets: doNotTouch,
+            x: 2300,
+            duration: Phaser.Math.Between(1000, 3000),
+            delay: Phaser.Math.Between(0, 100),
+            onUpdate: () => {
+                doNotTouch.y = this.evaluateSmokeYPosition(doNotTouch.x, -200, 6.5)
+                doNotTouch.setAngle((doNotTouch.x / 2400) * 360 + 90)
+                //if (smokeImage.y >= 1250) smokeImage.y = 1250
+            },
+        })
 
         ObjectPool.init(this)
         this.matter.world.setBounds(0, 0, 1000, 1600, 64, false, false, true, true)
@@ -119,7 +171,26 @@ export default class GamePlayScene extends Phaser.Scene {
 
         this.matter.world.add(this.ground)
 
-        this.player = new Player(this, 800, 240, SPRITE.BARRY_SPRITE_SHEET)
+        this.player = new Player(this, 800, 1250, SPRITE.BARRY_SPRITE_SHEET)
+        this.player.setVisible(false)
+        this.player.setSpeed(0)
+
+        const barry = this.add
+            .sprite(100, 1300.05, SPRITE.BARRY_SPRITE_SHEET)
+            .setDepth(DEPTH.OBJECT_MEDIUM)
+            .setDisplaySize(140, 160).play('move')
+        
+            this.add.tween({
+                targets: barry,
+                x: 800,
+                duration: 1000,
+                ease: 'Power2',
+                onComplete: () =>{
+                    this.player.setSpeed(0.5)
+                    this.player.setVisible(true)
+                    barry.destroy()
+                }
+            })
 
         if (this.input.keyboard) this.cursors = this.input.keyboard.createCursorKeys()
 
@@ -128,17 +199,13 @@ export default class GamePlayScene extends Phaser.Scene {
         this.score = new Score(this)
 
         this.coinManager = new CoinManager(this, 4)
+
+        this.cameras.main.startFollow(this.player, undefined, undefined, 0, -800, 450)
     }
 
     public update(_time: number, delta: number): void {
         this.cameras.main.scrollX = Number(this.player.x) - 800
-        //console.log(this.player.x)
 
-        //console.log(this.player)
-
-        //console.log(this.cameras.main.scrollX - this.player.x)
-        // Update game objects
-        //console.log(Math.round((1000 / delta)))
         //const st = Date.now()
 
         this.background.update()
@@ -169,12 +236,20 @@ export default class GamePlayScene extends Phaser.Scene {
         this.coinManager.setNewCoin()
 
         if (this.score.getScore() > this.score.getLevel()) {
-            this.score.setLevel(this.score.getLevel() + 1000)
-            this.player.setSpeed(this.player.getSpeed() + 0.1)
+            this.score.setLevel(this.score.getLevel() + 100)
+            this.player.setSpeed(this.evaluateSpeed(this.score.getScore()))
         }
 
         this.coinManager.update(delta, this.player.getSpeed())
         //const ed = Date.now()
         //console.log(ed - st)
+    }
+
+    private evaluateSmokeYPosition(x: number, offset: number, coef: number): number {
+        return coef * 0.5 * ((x - 1000) / 100) ** 2 + 1000 + offset
+    }
+
+    private evaluateSpeed(score: number): number {
+        return Math.log10((0.5 * score) / 1000 + 1) + 0.5
     }
 }

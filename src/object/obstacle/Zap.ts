@@ -187,15 +187,15 @@ export default class Zap extends Obstacle {
     public reset(minX: number): void {
         const x1 = minX + Phaser.Math.Between(0, 300)
         const x2 = x1 + Phaser.Math.Between(200, 500)
-        const y1 = Phaser.Math.Between(600, 1200)
-        let y2 = Phaser.Math.Between(600, 1200)
+        const y1 = Phaser.Math.Between(600, 1100)
+        let y2 = Phaser.Math.Between(600, 500)
         const tmp = Phaser.Math.Between(0, 4)
         switch (tmp) {
             case 0:
                 y2 = 1250
                 break
             case 1:
-                y2 = 550
+                y2 = 300
                 break
         }
 

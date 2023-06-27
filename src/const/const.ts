@@ -62,8 +62,8 @@ export enum IMAGE {
     LIGHT_EFFECT_2 = 'assets/bg/Levels/Title/lightEffect2.png',
     TABLE = 'assets/bg/Levels/Title/table.png',
     RADIO = 'assets/bg/Levels/Title/radio.png',
-    
-
+    SMOKE = 'assets/bg/particles/smoke.png',
+    DO_NOT_TOUCH = 'assets/bg/Levels/Title/doNotTouchSign_TVOS.png'
 }
 
 export enum AUDIO {
