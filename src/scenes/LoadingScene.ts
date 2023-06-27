@@ -74,6 +74,11 @@ export default class LoadingScene extends Phaser.Scene {
             frameHeight: 32,
         })
 
+        this.load.spritesheet(SPRITE.ALARM_LIGHT_EFFECT, SPRITE.ALARM_LIGHT_EFFECT, {
+            frameWidth: 1266 / 3,
+            frameHeight: 768 / 2,
+        })
+
         for (let i = 0; i < COIN_PATTERN.length; i++) {
             this.load.text(`pattern${i}`, COIN_PATTERN[i])
         }

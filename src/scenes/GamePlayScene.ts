@@ -71,7 +71,45 @@ export default class GamePlayScene extends Phaser.Scene {
             .setDisplaySize((1749 * 1600) / 1200, (1600 * 1600) / 1200)
             .setDepth(DEPTH.BACKGROUND_VERYHIGH)
 
-        this.add.image(1000, 200, IMAGE.ALARM_LIGHT).setDepth(DEPTH.BACKGROUND_VERYHIGH)
+        this.add
+            .image(1600, 600, IMAGE.ALARM_LIGHT)
+            .setDepth(DEPTH.BACKGROUND_VERYHIGH)
+            .setScale(1.5)
+
+        const alarmLightSprite = this.add
+            .sprite(1470, 710, SPRITE.ALARM_LIGHT_EFFECT)
+            .setDepth(DEPTH.BACKGROUND_VERYHIGH)
+            .setScale(1.5)
+
+        if (!this.anims.exists('alarm-light-turn'))
+            this.anims.create({
+                key: 'alarm-light-turn',
+                frames: this.anims.generateFrameNumbers(SPRITE.ALARM_LIGHT_EFFECT, { start: 0, end: 5 }),
+                frameRate: 8,
+                repeat: -1,
+            })
+
+        alarmLightSprite.play('alarm-light-turn')
+        
+
+        this.add
+            .image(1200, 1150, IMAGE.BEST_SCREEN)
+            .setDepth(DEPTH.BACKGROUND_VERYHIGH)
+            .setScale(1.5)
+
+        this.add.image(500, 400, IMAGE.LIGHT).setDepth(DEPTH.BACKGROUND_VERYHIGH).setScale(1.7)
+
+        this.add
+            .image(510, 1365, IMAGE.LIGHT_EFFECT_1)
+            .setDepth(DEPTH.BACKGROUND_VERYHIGH)
+            .setScale(1.7)
+        this.add
+            .image(500, 525, IMAGE.LIGHT_EFFECT_2)
+            .setDepth(DEPTH.BACKGROUND_VERYHIGH)
+            .setScale(1.7)
+
+        this.add.image(600, 1220, IMAGE.TABLE).setDepth(DEPTH.BACKGROUND_VERYHIGH).setScale(4.4)
+        this.add.image(610, 1120, IMAGE.RADIO).setDepth(DEPTH.BACKGROUND_VERYHIGH).setScale(2)
 
         ObjectPool.init(this)
         this.matter.world.setBounds(0, 0, 1000, 1600, 64, false, false, true, true)

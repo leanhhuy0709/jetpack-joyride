@@ -32,7 +32,7 @@ export enum SPRITE {
     ZAP_EFFECT = 'assets/zap/zapEffect.png',
     ZAP_SPRITE = 'assets/zap/spritesheet.png',
     COIN_SPRITE = 'assets/coin/coin-sprite.png',
-
+    ALARM_LIGHT_EFFECT = 'assets/bg/Levels/Title/alarmGlow_TVOS.png',
     
 }
 
@@ -56,6 +56,14 @@ export enum IMAGE {
     MID_ROOM = 'assets/bg/mid1.png',
     AQUA_ROOM = 'assets/bg/atlas/aquarium_assets.png',
     ALARM_LIGHT = 'assets/bg/Levels/Title/alarmLight_TVOS.png',
+    BEST_SCREEN = 'assets/bg/Levels/Title/bestScreen.png',
+    LIGHT = 'assets/bg/Levels/Title/title_light_TVOS.png',
+    LIGHT_EFFECT_1 = 'assets/bg/Levels/Title/lightEffect.png',
+    LIGHT_EFFECT_2 = 'assets/bg/Levels/Title/lightEffect2.png',
+    TABLE = 'assets/bg/Levels/Title/table.png',
+    RADIO = 'assets/bg/Levels/Title/radio.png',
+    
+
 }
 
 export enum AUDIO {
