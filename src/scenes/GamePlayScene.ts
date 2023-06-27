@@ -8,7 +8,7 @@ import CoinManager from '../object/coin/CoinManager'
 import Obstacle from '../object/obstacle/Obstacle'
 import ObstacleManager from '../object/obstacle/ObstacleManager'
 import { DEPTH } from '../const/depth'
-import Rocket from '../object/obstacle/Rocket'
+import RocketManager from '../object/obstacle/RocketManager'
 
 export default class GamePlayScene extends Phaser.Scene {
     private player: Player
@@ -27,7 +27,7 @@ export default class GamePlayScene extends Phaser.Scene {
         shift?: Phaser.Input.Keyboard.Key
     }
     private coinManager: CoinManager
-    private rocket: Rocket
+    private rocketManager: RocketManager
 
     public constructor() {
         super({
@@ -90,7 +90,7 @@ export default class GamePlayScene extends Phaser.Scene {
                     start: 0,
                     end: 5,
                 }),
-                frameRate: 8,
+                frameRate: 5,
                 repeat: -1,
             })
 
@@ -150,7 +150,7 @@ export default class GamePlayScene extends Phaser.Scene {
         }
         const doNotTouch = this.add
             .image(370, 1300, IMAGE.DO_NOT_TOUCH)
-            .setDepth(DEPTH.BACKGROUND_VERYHIGH)
+            .setDepth(DEPTH.OBJECT_VERYHIGH)
             .setScale(2)
 
         this.tweens.add({
@@ -180,24 +180,22 @@ export default class GamePlayScene extends Phaser.Scene {
         const barry = this.add
             .sprite(100, 1300.05, SPRITE.BARRY_SPRITE_SHEET)
             .setDepth(DEPTH.OBJECT_MEDIUM)
-            .setDisplaySize(140, 160).play('move')
-        
-            this.add.tween({
-                targets: barry,
-                x: 800,
-                duration: 1000,
-                ease: 'Power2',
-                onComplete: () =>{
-                    this.player.setSpeed(0.5)
-                    this.player.setVisible(true)
-                    barry.destroy()
-                }
-            })
+            .setDisplaySize(140, 160)
+            .play('move')
 
-        this.rocket = new Rocket(this, 1000, 1000)
+        this.add.tween({
+            targets: barry,
+            x: 800,
+            duration: 1000,
+            ease: 'Power2',
+            onComplete: () => {
+                this.player.setSpeed(0.5)
+                this.player.setVisible(true)
+                barry.destroy()
+            },
+        })
 
-        this.rocket.reset(2000)
-        this.rocket.startAlert()
+        this.rocketManager = new RocketManager(this, 3)
 
         if (this.input.keyboard) this.cursors = this.input.keyboard.createCursorKeys()
 
@@ -212,14 +210,15 @@ export default class GamePlayScene extends Phaser.Scene {
 
     public update(_time: number, delta: number): void {
         this.cameras.main.scrollX = Number(this.player.x) - 800
-        //this.rocket.update(delta, this.player)
+        this.rocketManager.update(delta, this.player)
         //const st = Date.now()
 
         this.background.update()
         this.player.update(delta)
 
         if (this.cursors.space?.isDown) {
-            this.player.flying()
+            if (this.player.visible)
+                this.player.flying()
         } else if (this.cursors.space?.isUp) {
             this.player.falling()
         }
@@ -228,7 +227,7 @@ export default class GamePlayScene extends Phaser.Scene {
 
         this.score.add(delta, this.player.getSpeed() / 10)
 
-        if (this.obstacleManager.checkCollider(this.player)) {
+        if (this.obstacleManager.checkCollider(this.player) || this.rocketManager.checkCollider(this.player)) {
             console.log('You die!')
             this.score.saveHighScore()
             this.coinManager.saveCoin()

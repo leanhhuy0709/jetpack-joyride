@@ -92,6 +92,9 @@ export default class ObjectPool {
         ObjectPool.bullets = []
         ObjectPool.explosions = []
         ObjectPool.count = 0
+        ObjectPool.rockets = []
+        ObjectPool.zaps = []
+        ObjectPool.coins = []
     }
 
     public static getCoin(scene: Phaser.Scene, x: number, y: number): Coin {

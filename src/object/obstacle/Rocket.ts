@@ -3,11 +3,16 @@ import { DEPTH } from '../../const/depth'
 import Player from '../Player'
 import Obstacle from './Obstacle'
 
+const MIN_SPEED = 10
+const MAX_SPEED = 20
+const MIN_MOVEY = 1
+const MAX_MOVEY = 9
 export default class Rocket extends Obstacle {
     private fire: Phaser.Physics.Matter.Sprite
     private alert: Phaser.GameObjects.Sprite
     private speed: number
     private isWaiting: boolean
+    private moveY: number
     public constructor(scene: Phaser.Scene, x: number, y: number) {
         super(scene)
         this.rect = this.scene.matter.add
@@ -16,7 +21,6 @@ export default class Rocket extends Obstacle {
             .setRectangle(85, 50)
             .setStatic(true)
             .setDepth(DEPTH.OBJECT_MEDIUM)
-
             .setCollisionGroup(-2)
 
         if (!this.scene.anims.exists('rocket-turn'))
@@ -38,6 +42,7 @@ export default class Rocket extends Obstacle {
             .setScale(2)
             .setRectangle(85, 50)
             .setStatic(true)
+            .setCollisionGroup(-2)
 
         if (!this.scene.anims.exists('rocket-fire'))
             this.scene.anims.create({
@@ -68,20 +73,26 @@ export default class Rocket extends Obstacle {
                 repeat: 0,
             })
 
-        this.speed = 15
+        this.speed = Phaser.Math.Between(MIN_SPEED, MAX_SPEED)
+        this.moveY = Phaser.Math.Between(MIN_MOVEY, MAX_MOVEY)
         this.isWaiting = false
+
+        console.log(this)
     }
 
     public update(_delta: number, player: Player | undefined = undefined): void {
         if (this.isWaiting && this.alert.anims.isPlaying) {
             //follow player
-            const d = 2
+            const d = this.moveY
             if (player) {
                 if (Math.abs(player.y - this.alert.y) < d) this.alert.y = player.y
                 if (player.y > this.alert.y) this.alert.y += d
                 else if (player.y < this.alert.y) this.alert.y -= d
             }
+            this.alert.x = this.scene.cameras.main.scrollX + 3150
             this.rect.y = this.fire.y = this.alert.y
+            this.rect.x = this.alert.x + 100
+            this.fire.x = this.alert.x + 100 + 80
         }
         if (this.isWaiting && !this.alert.anims.isPlaying) {
             if (!this.rect.visible) {
@@ -103,6 +114,8 @@ export default class Rocket extends Obstacle {
         this.fire.y = y
         this.alert.y = y
         this.isWaiting = false
+        this.speed = Phaser.Math.Between(MIN_SPEED, MAX_SPEED)
+        this.moveY = Phaser.Math.Between(MIN_MOVEY, MAX_MOVEY)
 
         this.rect.setVisible(false)
         this.fire.setVisible(false)
@@ -143,6 +156,8 @@ export default class Rocket extends Obstacle {
         this.rect.y = y
         this.fire.y = y
         this.alert.y = y
+        this.speed = Phaser.Math.Between(MIN_SPEED, MAX_SPEED)
+        this.moveY = Phaser.Math.Between(MIN_MOVEY, MAX_MOVEY)
 
         this.isWaiting = false
         this.rect.setVisible(false)
