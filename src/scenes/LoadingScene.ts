@@ -4,7 +4,6 @@ import { AUDIO, COIN_PATTERN, IMAGE, SCENE, SPRITE } from '../const/const'
 
 export default class LoadingScene extends Phaser.Scene {
     private progressBar: Phaser.GameObjects.Graphics
-    private progressText: Phaser.GameObjects.Text
 
     public constructor() {
         super({
@@ -26,12 +25,6 @@ export default class LoadingScene extends Phaser.Scene {
             this.progressBar.strokeRoundedRect(750, 1250, 1600, 50, 20)
         })
 
-        // Load game assets
-        console.log('Load game assets')
-        this.load.image('logo', 'assets/images/JetpackJoyride.webp')
-        this.load.image('bg', 'assets/images/2.png')
-        // Load game assets
-        console.log('Load game assets')
         this.load.spritesheet(SPRITE.BARRY_SPRITE_SHEET, SPRITE.BARRY_SPRITE_SHEET, {
             frameWidth: 93,
             frameHeight: 95,

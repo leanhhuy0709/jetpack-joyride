@@ -4,11 +4,10 @@ import { DEPTH } from './const/depth'
 export default class Score extends Phaser.GameObjects.Text {
     private score: number
     private highScore: number
-    private highScoreText: Phaser.GameObjects.Text
     private level: number
 
     public constructor(scene: Phaser.Scene) {
-        super(scene, 0, 60, '0', {})
+        super(scene, 10, 60, '0', {})
         
         this.scene.add.existing(this)
 
@@ -17,14 +16,6 @@ export default class Score extends Phaser.GameObjects.Text {
         this.setFontFamily(FONT_NAME)
         this.setStroke('#000000', 5)
         this.setDepth(DEPTH.OBJECT_VERYLOW)
-
-        this.highScoreText = this.scene.add.text(0, 150, '0')
-        this.highScoreText.setFontSize('80px')
-        this.highScoreText.setAlign('right')
-        this.highScoreText.setColor('#ffffff')
-        this.highScoreText.setFontFamily(FONT_NAME)
-        this.highScoreText.setStroke('#000000', 5)
-        this.highScoreText.setDepth(DEPTH.OBJECT_VERYLOW)
 
         this.score = 0
         if (localStorage.getItem('highscore'))
@@ -44,10 +35,8 @@ export default class Score extends Phaser.GameObjects.Text {
     }
 
     public setNewScore(): void {
-        this.setText(`${Math.floor(this.score)}m`)
-        this.x = this.scene.cameras.main.scrollX
-        this.highScoreText.setText(`Best: ${Math.floor(this.highScore)}m`)
-        this.highScoreText.x = this.scene.cameras.main.scrollX + 0
+        this.setText(`${Math.floor(this.score)}`)
+        this.x = this.scene.cameras.main.scrollX + 10
     }
 
     public resetScore(): void {

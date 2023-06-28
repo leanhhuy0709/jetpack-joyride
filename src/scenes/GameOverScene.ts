@@ -1,5 +1,5 @@
 import * as Phaser from 'phaser'
-import { IMAGE, SCENE } from '../const/const'
+import { FONT_NAME, IMAGE, SCENE } from '../const/const'
 import Button from '../components/Button'
 
 export default class GameOverScene extends Phaser.Scene {
@@ -36,6 +36,7 @@ export default class GameOverScene extends Phaser.Scene {
             .text(2100, 100 + 100 / 2, 'RESULTS', {
                 fontSize: '80px',
                 fontStyle: 'bold',
+                fontFamily: FONT_NAME
             })
             .setOrigin(0.5, 0.5)
         text.setStroke('#000000', 1)
@@ -43,8 +44,8 @@ export default class GameOverScene extends Phaser.Scene {
         const text2 = this.add
             .text(2100, 275, 'DISTANCE', {
                 fontSize: '80px',
-
                 fontStyle: 'bold',
+                fontFamily: FONT_NAME
             })
             .setOrigin(0.5, 0.5)
         text2.setStroke('#000000', 1)
@@ -52,9 +53,9 @@ export default class GameOverScene extends Phaser.Scene {
         const text3 = this.add
             .text(2100, 400, `${Math.floor(this.score)}M`, {
                 fontSize: '125px',
-
+                fontFamily: FONT_NAME,
                 fontStyle: 'bold',
-                color: '#fef03b',
+                color: '#fef03b'
             })
             .setOrigin(0.5, 0.5)
         text3.setStroke('#000000', 1)
@@ -62,7 +63,7 @@ export default class GameOverScene extends Phaser.Scene {
         const text4 = this.add
             .text(2100 - 400, 600, 'COLLECTED', {
                 fontSize: '60px',
-
+                fontFamily: FONT_NAME,
                 fontStyle: 'bold',
             })
             .setOrigin(0, 0.5)
@@ -71,7 +72,7 @@ export default class GameOverScene extends Phaser.Scene {
         const text5 = this.add
             .text(2450, 600, `${this.coin}`, {
                 fontSize: '60px',
-
+                fontFamily: FONT_NAME,
                 color: '#fef03b',
                 fontStyle: 'bold',
             })
@@ -84,6 +85,7 @@ export default class GameOverScene extends Phaser.Scene {
             color: '#ffffff',
             fontSize: '80px',
             fontStyle: 'bold',
+            fontFamily: FONT_NAME,
         })
         this.playAgainBtn.setInteractive()
 
@@ -91,6 +93,7 @@ export default class GameOverScene extends Phaser.Scene {
             color: '#ffffff',
             fontSize: '80px',
             fontStyle: 'bold',
+            fontFamily: FONT_NAME,
         })
         this.homeBtn.setInteractive()
     }

@@ -1,5 +1,5 @@
 import * as Phaser from 'phaser'
-import { SCENE, IMAGE } from '../const/const'
+import { SCENE, IMAGE, FONT_NAME } from '../const/const'
 import Button from '../components/Button'
 import { DEPTH } from '../const/depth'
 import StartBackground from '../object/background/StartBackground'
@@ -22,6 +22,14 @@ export default class MenuScene extends Phaser.Scene {
     private settingBtn: Button
 
     private isSpaceClicked: boolean
+
+    private adsBtn: Button
+    private shopBtn: Button
+    private powerUpBtn: Button
+    private costumesBtn: Button
+    private halfBrickBtn: Button
+
+    private playBtn: Button
 
     public constructor() {
         super({
@@ -58,44 +66,53 @@ export default class MenuScene extends Phaser.Scene {
 
         this.add.rectangle(0, 0, 500, 1600, 0x01234).setOrigin(0, 0)
 
-        let highScore = 0
-        if (localStorage.getItem('highscore')) highScore = Number(localStorage.getItem('highscore'))
-
-        const text = this.add
-            .text(250, 100, `BEST: ${Math.floor(highScore)}`, {
-                fontSize: '50px',
-                fontStyle: 'bold',
-            })
-            .setOrigin(0.5, 0.5)
-        text.setStroke('#000000', 1)
-
-        const shopBtn = new Button(this, 250, 300, 300, 100, 'SHOP', {
+        this.adsBtn = new Button(this, 250, 100, 300, 100, 'ADS', {
             fontSize: '50px',
             fontStyle: 'bold',
+            fontFamily: FONT_NAME
         })
 
-        shopBtn.setInteractive()
+        this.adsBtn.setInteractive()
 
-        const powerUpBtn = new Button(this, 250, 500, 300, 100, 'POWER-UPS', {
+        this.shopBtn = new Button(this, 250, 300, 300, 100, 'SHOP', {
             fontSize: '50px',
             fontStyle: 'bold',
+            fontFamily: FONT_NAME
         })
 
-        powerUpBtn.setInteractive()
+        this.shopBtn.setInteractive()
 
-        const costumesBtn = new Button(this, 250, 700, 300, 100, 'COSTUMES', {
+        this.powerUpBtn = new Button(this, 250, 500, 300, 100, 'POWER-UPS', {
             fontSize: '50px',
             fontStyle: 'bold',
+            fontFamily: FONT_NAME
         })
 
-        costumesBtn.setInteractive()
+        this.powerUpBtn.setInteractive()
 
-        const halfBrickBtn = new Button(this, 250, 900, 300, 100, 'HALFBRICK', {
+        this.costumesBtn = new Button(this, 250, 700, 300, 100, 'COSTUMES', {
             fontSize: '50px',
             fontStyle: 'bold',
+            fontFamily: FONT_NAME
         })
 
-        halfBrickBtn.setInteractive()
+        this.costumesBtn.setInteractive()
+
+        this.halfBrickBtn = new Button(this, 250, 900, 300, 100, 'HALFBRICK', {
+            fontSize: '50px',
+            fontStyle: 'bold',
+            fontFamily: FONT_NAME
+        })
+
+        this.halfBrickBtn.setInteractive()
+
+        this.playBtn = new Button(this, 1800, 1300, 300, 100, 'PLAY', {
+            fontSize: '50px',
+            fontStyle: 'bold',
+            fontFamily: FONT_NAME
+        })
+
+        this.playBtn.setInteractive()
 
         this.rect = this.add
             .rectangle(2400, 0, 600, 125, 0x01234)
@@ -108,11 +125,13 @@ export default class MenuScene extends Phaser.Scene {
         this.coinRect = new Button(this, 2580, 100 / 2 + 12.5, 300, 100, String(allCoin), {
             fontSize: '50px',
             fontStyle: 'bold',
+            fontFamily: FONT_NAME
         })
 
         this.settingBtn = new Button(this, 2880, 100 / 2 + 12.5, 200, 100, 'Setting', {
             fontSize: '50px',
             fontStyle: 'bold',
+            fontFamily: FONT_NAME
         })
 
         this.settingBtn.setInteractive()
@@ -124,8 +143,24 @@ export default class MenuScene extends Phaser.Scene {
     public update(): void {
         //Check button first ... else ...
 
+        if (this.adsBtn.getIsPointerDown())
+        {
+            window.open('https://www.youtube.com/watch?v=Jzxi8nid9BQ', '_blank')
+            this.adsBtn.setIsPointerDown(false)
+            return
+        }
+
+        if (this.halfBrickBtn.getIsPointerDown())
+        {
+            window.open('https://www.halfbrick.com/', '_blank')
+            this.halfBrickBtn.setIsPointerDown(false)
+            return
+        }
+        
+
+
         if (
-            (this.input.pointer1.isDown || (this.cursors.space && this.cursors.space.isDown)) &&
+            this.playBtn.getIsPointerDown() &&
             !this.isSpaceClicked
         ) {
             this.isSpaceClicked = true
@@ -162,6 +197,16 @@ export default class MenuScene extends Phaser.Scene {
             this.tweens.add({
                 targets: this.settingBtn.getRectangle(),
                 y: 100 / 2 + 12.5 - 150,
+                duration: 300,
+            })
+            this.tweens.add({
+                targets: this.playBtn.getRectangle(),
+                alpha: 0,
+                duration: 300,
+            })
+            this.tweens.add({
+                targets: this.playBtn.getText(),
+                alpha: 0,
                 duration: 300,
             })
 

@@ -81,4 +81,8 @@ export default class Button {
     public getText(): Phaser.GameObjects.Text {
         return this.text
     }
+
+    public setIsPointerDown(val: boolean): void {
+        this.isPointerDown = val
+    }
 }

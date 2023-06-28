@@ -2,7 +2,7 @@ import Coin from './Coin'
 import ObjectPool from '../ObjectPool'
 import Player from '../Player'
 import { DEPTH } from '../../const/depth'
-import { FONT_NAME, SPRITE } from '../../const/const'
+import { FONT_NAME} from '../../const/const'
 
 export default class CoinManager {
     private coins: Coin[]
@@ -11,7 +11,6 @@ export default class CoinManager {
     private coinInRound = 0
     private coinInRoundText: Phaser.GameObjects.Text
     private allCoin = 0
-    private coinImage: Phaser.GameObjects.Image
 
     public constructor(scene: Phaser.Scene, numCoin: number) {
         this.scene = scene
@@ -28,19 +27,13 @@ export default class CoinManager {
         else this.allCoin = 0
 
         this.coinInRound = 0
-        this.coinInRoundText = this.scene.add.text(100, 240, '0')
+        this.coinInRoundText = this.scene.add.text(10, 150, '0')
         this.coinInRoundText.setFontSize('70px')
         this.coinInRoundText.setAlign('right')
         this.coinInRoundText.setColor('#ffe599')
         this.coinInRoundText.setFontFamily(FONT_NAME)
         this.coinInRoundText.setStroke('#000000', 5)
         this.coinInRoundText.setDepth(DEPTH.OBJECT_VERYLOW)
-
-        this.coinImage = this.scene.add
-            .image(10, 250, SPRITE.COIN_SPRITE)
-            .setOrigin(0, 0)
-            .setDisplaySize(70, 70)
-            .setDepth(DEPTH.OBJECT_VERYLOW)
     }
 
     public update(delta: number, playerSpeed: number) {
@@ -73,8 +66,7 @@ export default class CoinManager {
 
     public setNewCoin(): void {
         this.coinInRoundText.setText(`${this.coinInRound}`)
-        this.coinInRoundText.x = this.scene.cameras.main.scrollX + 100
-        this.coinImage.x = this.scene.cameras.main.scrollX
+        this.coinInRoundText.x = this.scene.cameras.main.scrollX + 10
     }
 
     public resetCoint(): void {

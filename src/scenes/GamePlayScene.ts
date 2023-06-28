@@ -160,7 +160,7 @@ export default class GamePlayScene extends Phaser.Scene {
         this.rocketManager = new RocketManager(this, 3)
         this.obstacleManager = new ObstacleManager(this, 4)
         this.coinManager = new CoinManager(this, 4)
-        this.workerManager = new WorkerManager(this, 1)
+        this.workerManager = new WorkerManager(this, 20)
 
         this.score = new Score(this)
 
@@ -171,6 +171,7 @@ export default class GamePlayScene extends Phaser.Scene {
     }
 
     public update(_time: number, delta: number): void {
+        
         this.background.update()
         this.player.update(delta)
 

@@ -6,7 +6,7 @@ export enum SCENE {
     LOADING = 'LoadingScene',
 }
 
-export const FONT_NAME = '"KitschyRetroRegular-9YnqB"'
+export const FONT_NAME = 'New Athletic M54'
 
 export const COIN_PATTERN = [
     'assets/coin/patterns/coinPattern0.txt',

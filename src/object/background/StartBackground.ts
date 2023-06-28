@@ -1,4 +1,4 @@
-import { IMAGE, SPRITE } from '../../const/const'
+import { FONT_NAME, IMAGE, SPRITE } from '../../const/const'
 import { DEPTH } from '../../const/depth'
 
 export default class StartBackground {
@@ -59,5 +59,14 @@ export default class StartBackground {
             .image(610 + x, 1120, IMAGE.RADIO)
             .setDepth(DEPTH.BACKGROUND_VERYHIGH)
             .setScale(2)
+
+        let highScore = 0
+        if (localStorage.getItem('highscore'))
+            highScore = parseInt(localStorage.getItem('highscore') as string)
+
+        scene.add.text(x + 1200, 1110, `BEST ${highScore}`, {
+            fontSize: '40px',
+            fontFamily: FONT_NAME,
+        }).setDepth(DEPTH.OBJECT_MEDIUM).setOrigin(0.5, 0)
     }
 }
