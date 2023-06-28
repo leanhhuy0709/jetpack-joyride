@@ -83,6 +83,8 @@ export default class Worker {
             })
 
         this.velocity = (Math.random() - 0.5) / 2
+        if (this.velocity < 0) this.velocity -= 0.1
+        else this.velocity += 0.1
 
         this.state = WORKER_STATE.MOVE
 
@@ -100,6 +102,9 @@ export default class Worker {
         if (this.velocity < 0) {
             this.body.setFlipX(true)
             this.head.setFlipX(true)
+        } else {
+            this.body.setFlipX(false)
+            this.head.setFlipX(false)
         }
     }
 
@@ -208,14 +213,19 @@ export default class Worker {
                 repeat: -1,
             })
 
-            this.velocity = (Math.random() - 0.5) / 2
+        this.velocity = (Math.random() - 0.5) / 2
+        if (this.velocity < 0) this.velocity -= 0.1
+        else this.velocity += 0.1
 
-            this.state = WORKER_STATE.MOVE
+        this.state = WORKER_STATE.MOVE
 
-            if (this.velocity < 0) {
-                this.body.setFlipX(true)
-                this.head.setFlipX(true)
-            }
+        if (this.velocity < 0) {
+            this.body.setFlipX(true)
+            this.head.setFlipX(true)
+        } else {
+            this.body.setFlipX(false)
+            this.head.setFlipX(false)
+        }
     }
 
     public getMaxX(): number {

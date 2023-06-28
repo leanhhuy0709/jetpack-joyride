@@ -128,23 +128,35 @@ export default class ObjectPool {
         ObjectPool.rockets.push(rocket)
     }
 
-    public static getWorker(
-        scene: Phaser.Scene,
-        x: number,
-        y: number,
-        headKey = SPRITE.WORKER_2_HEAD,
-        bodyKey = SPRITE.WORKER_2_BODY
-    ): Worker {
+    public static getWorker(scene: Phaser.Scene, x: number, y: number): Worker {
+        let headKey = SPRITE.WORKER_1_HEAD,
+            bodyKey = SPRITE.WORKER_1_BODY
+        if (Phaser.Math.Between(0, 1) % 2) headKey = SPRITE.WORKER_1_HEAD
+        else headKey = SPRITE.WORKER_2_HEAD
+
+        switch (Phaser.Math.Between(0, 2))
+        {
+            case 0: 
+                bodyKey = SPRITE.WORKER_1_BODY
+                break
+            case 1:
+                bodyKey = SPRITE.WORKER_2_BODY
+                break
+            case 2: 
+                bodyKey = SPRITE.WORKER_FAT_BODY
+                break
+        }
+        
         if (ObjectPool.workers.length > 0) {
             const worker = ObjectPool.workers.pop() as Worker
+            worker.setAll(scene, x, y, headKey, bodyKey)
             return worker
         }
         ObjectPool.count++
         return new Worker(scene, x, y, headKey, bodyKey)
     }
 
-    public static removeWorker(worker: Worker): void 
-    {
+    public static removeWorker(worker: Worker): void {
         ObjectPool.workers.push(worker)
     }
 }

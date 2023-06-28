@@ -2,6 +2,7 @@ import * as Phaser from 'phaser'
 import { SCENE, IMAGE } from '../const/const'
 import Button from '../components/Button'
 import { DEPTH } from '../const/depth'
+import StartBackground from '../object/background/StartBackground'
 
 export default class MenuScene extends Phaser.Scene {
     private cursors: {
@@ -38,11 +39,13 @@ export default class MenuScene extends Phaser.Scene {
             .setOrigin(0, 200 / 1600)
             .setCrop(0, 200, 2021, 1200)
             .setDisplaySize((2021 * 1600) / 1200, (1600 * 1600) / 1200)
+    
+        new StartBackground(this, 500, false)
+
         this.add
-            .image(500, 0, IMAGE.START_ROOM)
-            .setOrigin(0, 200 / 1600)
-            .setCrop(0, 200, 1749, 1200)
-            .setDisplaySize((1749 * 1600) / 1200, (1600 * 1600) / 1200)
+            .image(870, 1300, IMAGE.DO_NOT_TOUCH)
+            .setDepth(DEPTH.OBJECT_VERYHIGH)
+            .setScale(1.7)
 
         this.logoGlow = this.add
             .image(1750, 830, IMAGE.TITLE_GLOW)
@@ -53,35 +56,6 @@ export default class MenuScene extends Phaser.Scene {
             .image(1800, 800, IMAGE.TITLE)
             .setDepth(DEPTH.BACKGROUND_VERYHIGH)
             .setScale(1.5)
-
-        this.add
-            .image(1700, 1150, IMAGE.BEST_SCREEN)
-            .setDepth(DEPTH.BACKGROUND_VERYHIGH)
-            .setScale(1.5)
-
-        this.add.image(1000, 400, IMAGE.LIGHT).setDepth(DEPTH.BACKGROUND_VERYHIGH).setScale(1.7)
-
-        this.add
-            .image(1010, 1365, IMAGE.LIGHT_EFFECT_1)
-            .setDepth(DEPTH.BACKGROUND_VERYHIGH)
-            .setScale(1.7)
-        this.add
-            .image(1000, 525, IMAGE.LIGHT_EFFECT_2)
-            .setDepth(DEPTH.BACKGROUND_VERYHIGH)
-            .setScale(1.7)
-
-        this.add.image(1100, 1220, IMAGE.TABLE).setDepth(DEPTH.BACKGROUND_VERYHIGH).setScale(4.4)
-        this.add.image(1110, 1120, IMAGE.RADIO).setDepth(DEPTH.BACKGROUND_VERYHIGH).setScale(2)
-
-        this.add
-            .image(1600 + 500, 600, IMAGE.ALARM_LIGHT)
-            .setDepth(DEPTH.BACKGROUND_MEDIUM)
-            .setScale(1.5)
-
-        this.add
-            .image(870, 1300, IMAGE.DO_NOT_TOUCH)
-            .setDepth(DEPTH.OBJECT_VERYHIGH)
-            .setScale(1.7)
 
         if (this.input.keyboard) this.cursors = this.input.keyboard.createCursorKeys()
 

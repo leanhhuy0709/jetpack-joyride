@@ -10,6 +10,7 @@ import ObstacleManager from '../object/obstacle/ObstacleManager'
 import { DEPTH } from '../const/depth'
 import RocketManager from '../object/obstacle/RocketManager'
 import WorkerManager from '../object/WorkerManager'
+import StartBackground from '../object/background/StartBackground'
 
 export default class GamePlayScene extends Phaser.Scene {
     private player: Player
@@ -69,56 +70,9 @@ export default class GamePlayScene extends Phaser.Scene {
         this.background.setImage(midRoom, midRoom2, midRoom3)
         this.background.setWidth((2021 * 1600) / 1200)
 
-        this.add
-            .image(0, 0, IMAGE.START_ROOM)
-            .setOrigin(0, 200 / 1600)
-            .setCrop(0, 200, 1749, 1200)
-            .setDisplaySize((1749 * 1600) / 1200, (1600 * 1600) / 1200)
-            .setDepth(DEPTH.BACKGROUND_VERYHIGH)
+        new StartBackground(this, 0, true)
 
-        this.add
-            .image(1600, 600, IMAGE.ALARM_LIGHT)
-            .setDepth(DEPTH.BACKGROUND_VERYHIGH)
-            .setScale(1.5)
-
-        const alarmLightSprite = this.add
-            .sprite(1470, 710, SPRITE.ALARM_LIGHT_EFFECT)
-            .setDepth(DEPTH.BACKGROUND_VERYHIGH)
-            .setScale(1.5)
-
-        if (!this.anims.exists('alarm-light-turn'))
-            this.anims.create({
-                key: 'alarm-light-turn',
-                frames: this.anims.generateFrameNumbers(SPRITE.ALARM_LIGHT_EFFECT, {
-                    start: 0,
-                    end: 5,
-                }),
-                frameRate: 5,
-                repeat: -1,
-            })
-
-        alarmLightSprite.play('alarm-light-turn')
-
-        this.add
-            .image(1200, 1150, IMAGE.BEST_SCREEN)
-            .setDepth(DEPTH.BACKGROUND_VERYHIGH)
-            .setScale(1.5)
-
-        this.add.image(500, 400, IMAGE.LIGHT).setDepth(DEPTH.BACKGROUND_VERYHIGH).setScale(1.7)
-
-        this.add
-            .image(510, 1365, IMAGE.LIGHT_EFFECT_1)
-            .setDepth(DEPTH.BACKGROUND_VERYHIGH)
-            .setScale(1.7)
-        this.add
-            .image(500, 525, IMAGE.LIGHT_EFFECT_2)
-            .setDepth(DEPTH.BACKGROUND_VERYHIGH)
-            .setScale(1.7)
-
-        this.add.image(600, 1220, IMAGE.TABLE).setDepth(DEPTH.BACKGROUND_VERYHIGH).setScale(4.4)
-        this.add.image(610, 1120, IMAGE.RADIO).setDepth(DEPTH.BACKGROUND_VERYHIGH).setScale(2)
-
-        this.cameras.main.shake(300, new Phaser.Math.Vector2(0.01, 0.01))
+        this.cameras.main.shake(400, new Phaser.Math.Vector2(0.01, 0.01))
 
         for (let i = 0; i < 1000; i++) {
             const scale = Phaser.Math.Between(1, 15)
@@ -211,7 +165,7 @@ export default class GamePlayScene extends Phaser.Scene {
         this.coinManager = new CoinManager(this, 4)
 
         this.cameras.main.startFollow(this.player, undefined, undefined, 0, -800, 450)
-        this.workerManager = new WorkerManager(this, 10)
+        this.workerManager = new WorkerManager(this, 1)
     }
 
     public update(_time: number, delta: number): void {
