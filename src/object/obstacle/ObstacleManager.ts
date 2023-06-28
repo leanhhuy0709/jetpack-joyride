@@ -7,7 +7,7 @@ export default class ObstacleManager {
     private obstacles: Obstacle[]
     private scene: Phaser.Scene
     private numObstacle: number
-    private minSafeDistance: number
+    private minSafeDistance: number = DEFAULT_SAFE_DISTACE
 
     public constructor(scene: Phaser.Scene, numObstacle: number) {
         this.scene = scene

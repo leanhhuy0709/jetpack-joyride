@@ -216,7 +216,7 @@ export default class GamePlayScene extends Phaser.Scene {
             this.score.setLevel(this.score.getLevel() + 100)
             this.player.setSpeed(this.evaluateSpeed(this.score.getScore()))
             this.obstacleManager.setMinSafeDistance(
-                (DEFAULT_SAFE_DISTACE * this.evaluateSpeed(this.score.getScore())) / 0.5
+                DEFAULT_SAFE_DISTACE + this.score.getScore() / 1000
             )
         }
 
