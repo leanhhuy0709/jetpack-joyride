@@ -24,10 +24,6 @@ export default class GameOverScene extends Phaser.Scene {
     }
 
     public create(): void {
-        /*const image = this.add
-            .image(this.cameras.main.width / 2, this.cameras.main.height / 2, 'bg')
-            .setDisplaySize(this.cameras.main.width, this.cameras.main.height)
-        image.setTint(0x555555)*/
         this.add.rectangle(0, 0, 3200, 1600, 0x000000).setOrigin(0, 0).setAlpha(0.5)
 
         this.add.rectangle(2100, 100 + 100 / 2, 950, 1250, 0x8aa1c0).setOrigin(0.5, 0)

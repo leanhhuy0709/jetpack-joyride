@@ -25,7 +25,6 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
             .setOrigin(0.65, 0.5)
 
         this.isFlying = false
-
         if (!this.scene.anims.exists('move'))
             this.scene.anims.create({
                 key: 'move',

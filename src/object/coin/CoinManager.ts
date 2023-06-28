@@ -47,8 +47,7 @@ export default class CoinManager {
         let numDel = 0
         for (let i = 0; i < this.coins.length; i++) {
             this.coins[i].update(delta, playerSpeed)
-            if (this.coins[i].getMaxX() < this.scene.cameras.main.scrollX)
-            {
+            if (this.coins[i].getMaxX() < this.scene.cameras.main.scrollX) {
                 ObjectPool.removeCoin(this.coins[i])
                 this.coins.splice(i, 1)
                 i--
@@ -57,7 +56,11 @@ export default class CoinManager {
         }
 
         for (let i = 0; i < numDel; i++) {
-            const coin = ObjectPool.getCoin(this.scene, this.coins[this.coins.length - 1].getMaxX() + 700, Phaser.Math.Between(400, 800))
+            const coin = ObjectPool.getCoin(
+                this.scene,
+                this.coins[this.coins.length - 1].getMaxX() + 700,
+                Phaser.Math.Between(400, 800)
+            )
             this.coins.push(coin)
         }
     }

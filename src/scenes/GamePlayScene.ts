@@ -30,8 +30,10 @@ export default class GamePlayScene extends Phaser.Scene {
     }
     private coinManager: CoinManager
     private rocketManager: RocketManager
-
     private workerManager: WorkerManager
+
+    private usingKey: boolean
+    private usingTouch: boolean
 
     public constructor() {
         super({
@@ -129,7 +131,6 @@ export default class GamePlayScene extends Phaser.Scene {
         this.matter.world.enabled = true
 
         this.ground = this.matter.add.rectangle(0, 1500, 1e9, 250, { isStatic: true })
-
         this.matter.world.add(this.ground)
 
         this.player = new Player(this, 800, 1250, SPRITE.BARRY_SPRITE_SHEET)
@@ -154,34 +155,43 @@ export default class GamePlayScene extends Phaser.Scene {
             },
         })
 
-        this.rocketManager = new RocketManager(this, 3)
-
         if (this.input.keyboard) this.cursors = this.input.keyboard.createCursorKeys()
 
+        this.rocketManager = new RocketManager(this, 3)
         this.obstacleManager = new ObstacleManager(this, 4)
+        this.coinManager = new CoinManager(this, 4)
+        this.workerManager = new WorkerManager(this, 1)
 
         this.score = new Score(this)
 
-        this.coinManager = new CoinManager(this, 4)
-
         this.cameras.main.startFollow(this.player, undefined, undefined, 0, -800, 450)
-        this.workerManager = new WorkerManager(this, 1)
+
+        this.input.addPointer(1)
+        this.usingKey = this.usingTouch = true
     }
 
     public update(_time: number, delta: number): void {
-        this.cameras.main.scrollX = Number(this.player.x) - 800
-        this.workerManager.update(delta, this.player)
-        this.workerManager.handleCollider(this.player)
-        //const st = Date.now()
-
         this.background.update()
         this.player.update(delta)
 
         if (this.cursors.space?.isDown) {
-            if (this.player.visible) this.player.flying()
+            this.usingKey = true
+            this.usingTouch = false
+            if (this.usingKey && this.player.visible) this.player.flying()
         } else if (this.cursors.space?.isUp) {
-            this.player.falling()
+            if (this.usingKey) this.player.falling()
         }
+
+        if (this.input.pointer1.isDown) {
+            this.usingKey = false
+            this.usingTouch = true
+            if (this.usingTouch && this.player.visible) this.player.flying()
+        } else {
+            if (this.usingTouch) this.player.falling()
+        }
+
+        this.workerManager.update(delta, this.player)
+        this.workerManager.handleCollider(this.player)
 
         this.obstacleManager.update(delta)
         this.rocketManager.update(delta, this.player)
@@ -211,8 +221,6 @@ export default class GamePlayScene extends Phaser.Scene {
         }
 
         this.coinManager.update(delta, this.player.getSpeed())
-        //const ed = Date.now()
-        //console.log(ed - st)
     }
 
     private evaluateSmokeYPosition(x: number, offset: number, coef: number): number {

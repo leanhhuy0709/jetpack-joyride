@@ -1,5 +1,6 @@
 import * as Phaser from 'phaser'
 import { IMAGE } from '../const/const'
+import { DEPTH } from '../const/depth'
 
 export default class Button {
     private rectangle: Phaser.GameObjects.NineSlice
@@ -20,11 +21,11 @@ export default class Button {
         style?: Phaser.Types.GameObjects.Text.TextStyle | undefined
     ) {
         if (width && height)
-            this.rectangle = scene.add.nineslice(x, y, IMAGE.BUTTON_BACKING, undefined, width, height, 10, 10).setDisplaySize(width, height)
+            this.rectangle = scene.add
+                .nineslice(x, y, IMAGE.BUTTON_BACKING, undefined, width, height, 10, 10)
+                .setDisplaySize(width, height).setDepth(DEPTH.OBJECT_MEDIUM)
 
-        //scene.add.image(x, y, BUTTON_BACKING).setDisplaySize(width, height)
-
-        this.text = scene.add.text(x, y, content, style).setOrigin(0.5, 0.5).setStroke('#000000', 3)
+        this.text = scene.add.text(x, y, content, style).setOrigin(0.5, 0.5).setStroke('#000000', 3).setDepth(DEPTH.OBJECT_MEDIUM)
         this.isPointerDown = false
 
         this.isPointerOver = false
@@ -33,18 +34,15 @@ export default class Button {
             .rectangle(x, y, width, height, 0x0000, 1)
             .setDisplaySize(width, height)
             .setSize(width, height)
-            .setAlpha(0)
+            .setAlpha(0).setDepth(DEPTH.OBJECT_MEDIUM)
 
         this.rectangle.setInteractive()
     }
 
     public setInteractive(): void {
         this.rectangle.on('pointerdown', () => this.handlePointerDown(this))
-
         this.rectangle.on('pointerup', () => this.handlePointerUp(this))
-
         this.rectangle.on('pointerover', () => this.handlePointerOver(this))
-
         this.rectangle.on('pointerout', () => this.handlePointerOut(this))
     }
 
@@ -76,13 +74,11 @@ export default class Button {
         return this.isPointerOver
     }
 
-    public getRectangle(): Phaser.GameObjects.NineSlice
-    {
+    public getRectangle(): Phaser.GameObjects.NineSlice {
         return this.rectangle
     }
 
-    public getText(): Phaser.GameObjects.Text
-    {
+    public getText(): Phaser.GameObjects.Text {
         return this.text
     }
 }

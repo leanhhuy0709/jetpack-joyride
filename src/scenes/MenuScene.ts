@@ -39,13 +39,10 @@ export default class MenuScene extends Phaser.Scene {
             .setOrigin(0, 200 / 1600)
             .setCrop(0, 200, 2021, 1200)
             .setDisplaySize((2021 * 1600) / 1200, (1600 * 1600) / 1200)
-    
+
         new StartBackground(this, 500, false)
 
-        this.add
-            .image(870, 1300, IMAGE.DO_NOT_TOUCH)
-            .setDepth(DEPTH.OBJECT_VERYHIGH)
-            .setScale(1.7)
+        this.add.image(870, 1300, IMAGE.DO_NOT_TOUCH).setDepth(DEPTH.OBJECT_VERYHIGH).setScale(1.7)
 
         this.logoGlow = this.add
             .image(1750, 830, IMAGE.TITLE_GLOW)
@@ -100,7 +97,10 @@ export default class MenuScene extends Phaser.Scene {
 
         halfBrickBtn.setInteractive()
 
-        this.rect = this.add.rectangle(2400, 0, 600, 125, 0x01234).setOrigin(0, 0)
+        this.rect = this.add
+            .rectangle(2400, 0, 600, 125, 0x01234)
+            .setOrigin(0, 0)
+            .setDepth(DEPTH.OBJECT_LOW)
 
         let allCoin = 0
         if (localStorage.getItem('allCoin')) allCoin = Number(localStorage.getItem('allCoin'))
@@ -118,10 +118,16 @@ export default class MenuScene extends Phaser.Scene {
         this.settingBtn.setInteractive()
 
         this.isSpaceClicked = false
+        this.input.addPointer(1)
     }
 
     public update(): void {
-        if (this.cursors.space && this.cursors.space.isDown && !this.isSpaceClicked) {
+        //Check button first ... else ...
+
+        if (
+            (this.input.pointer1.isDown || (this.cursors.space && this.cursors.space.isDown)) &&
+            !this.isSpaceClicked
+        ) {
             this.isSpaceClicked = true
             this.tweens.add({
                 targets: this.logo,
