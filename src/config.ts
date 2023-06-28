@@ -3,6 +3,7 @@ import GamePlayScene from './scenes/GamePlayScene'
 import InitScene from './scenes/InitScene'
 import LoadingScene from './scenes/LoadingScene'
 import MenuScene from './scenes/MenuScene'
+import ShopScene from './scenes/ShopScene'
 
 export const GameConfig: Phaser.Types.Core.GameConfig = {
     title: 'Jetpack Joyride',
@@ -10,7 +11,7 @@ export const GameConfig: Phaser.Types.Core.GameConfig = {
     version: '1.0',
     type: Phaser.AUTO,
     parent: 'game',
-    scene: [InitScene, LoadingScene, MenuScene, GamePlayScene, GameOverScene],
+    scene: [InitScene, LoadingScene, MenuScene, GamePlayScene, GameOverScene, ShopScene],
     input: {
         keyboard: true,
     },
@@ -21,6 +22,7 @@ export const GameConfig: Phaser.Types.Core.GameConfig = {
                 y: 0.95,
             },
             debug: {
+                
                 showBody: false,
                 showStaticBody: false,
                 lineColor: 0xfc1200

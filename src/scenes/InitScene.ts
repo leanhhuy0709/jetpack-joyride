@@ -2,9 +2,6 @@ import * as Phaser from 'phaser'
 import { IMAGE, SCENE } from '../const/const'
 
 export default class InitScene extends Phaser.Scene {
-    private progressBar: Phaser.GameObjects.Graphics
-    private progressText: Phaser.GameObjects.Text
-
     public constructor() {
         super({
             key: SCENE.INIT,

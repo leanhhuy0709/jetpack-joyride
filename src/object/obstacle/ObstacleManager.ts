@@ -2,10 +2,12 @@ import ObjectPool from '../ObjectPool'
 import Obstacle from './Obstacle'
 import Player from '../Player'
 
+export const DEFAULT_SAFE_DISTACE = 800
 export default class ObstacleManager {
     private obstacles: Obstacle[]
     private scene: Phaser.Scene
     private numObstacle: number
+    private minSafeDistance: number
 
     public constructor(scene: Phaser.Scene, numObstacle: number) {
         this.scene = scene
@@ -17,8 +19,10 @@ export default class ObstacleManager {
         for (let i = 0; i < numObstacle; i++) {
             this.obstacles.push(ObjectPool.getZap(scene, 1300, 1300, 1750, 500))
             this.obstacles[i].reset(tmp)
-            tmp = this.obstacles[i].maxX() + 1000
+            tmp = this.obstacles[i].maxX() + Phaser.Math.Between(this.minSafeDistance, this.minSafeDistance + 500)
         }
+
+        this.minSafeDistance = DEFAULT_SAFE_DISTACE
     }
 
     public checkCollider(player: Player): boolean {
@@ -51,9 +55,19 @@ export default class ObstacleManager {
 
         while (this.obstacles.length < this.numObstacle) {
             const zap = ObjectPool.getZap(this.scene, 0, 0, 0, 0)
-            zap.reset(currentMaxX + Phaser.Math.Between(800, 1200))
+            zap.reset(currentMaxX + Phaser.Math.Between(this.minSafeDistance, this.minSafeDistance + 500))
             currentMaxX = zap.maxX()
             this.obstacles.push(zap)
         }
+    }
+
+    public setMinSafeDistance(d: number): void 
+    {
+        this.minSafeDistance = d
+    }
+
+    public getMinSafeDistance(): number
+    {
+        return this.minSafeDistance
     }
 }

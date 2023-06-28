@@ -3,6 +3,7 @@ import { SCENE, IMAGE, FONT_NAME } from '../const/const'
 import Button from '../components/Button'
 import { DEPTH } from '../const/depth'
 import StartBackground from '../object/background/StartBackground'
+import UserData from '../object/shop/UserData'
 
 export default class MenuScene extends Phaser.Scene {
     private cursors: {
@@ -69,7 +70,7 @@ export default class MenuScene extends Phaser.Scene {
         this.adsBtn = new Button(this, 250, 100, 300, 100, 'ADS', {
             fontSize: '50px',
             fontStyle: 'bold',
-            fontFamily: FONT_NAME
+            fontFamily: FONT_NAME,
         })
 
         this.adsBtn.setInteractive()
@@ -77,7 +78,7 @@ export default class MenuScene extends Phaser.Scene {
         this.shopBtn = new Button(this, 250, 300, 300, 100, 'SHOP', {
             fontSize: '50px',
             fontStyle: 'bold',
-            fontFamily: FONT_NAME
+            fontFamily: FONT_NAME,
         })
 
         this.shopBtn.setInteractive()
@@ -85,7 +86,7 @@ export default class MenuScene extends Phaser.Scene {
         this.powerUpBtn = new Button(this, 250, 500, 300, 100, 'POWER-UPS', {
             fontSize: '50px',
             fontStyle: 'bold',
-            fontFamily: FONT_NAME
+            fontFamily: FONT_NAME,
         })
 
         this.powerUpBtn.setInteractive()
@@ -93,7 +94,7 @@ export default class MenuScene extends Phaser.Scene {
         this.costumesBtn = new Button(this, 250, 700, 300, 100, 'COSTUMES', {
             fontSize: '50px',
             fontStyle: 'bold',
-            fontFamily: FONT_NAME
+            fontFamily: FONT_NAME,
         })
 
         this.costumesBtn.setInteractive()
@@ -101,7 +102,7 @@ export default class MenuScene extends Phaser.Scene {
         this.halfBrickBtn = new Button(this, 250, 900, 300, 100, 'HALFBRICK', {
             fontSize: '50px',
             fontStyle: 'bold',
-            fontFamily: FONT_NAME
+            fontFamily: FONT_NAME,
         })
 
         this.halfBrickBtn.setInteractive()
@@ -109,7 +110,7 @@ export default class MenuScene extends Phaser.Scene {
         this.playBtn = new Button(this, 1800, 1300, 300, 100, 'PLAY', {
             fontSize: '50px',
             fontStyle: 'bold',
-            fontFamily: FONT_NAME
+            fontFamily: FONT_NAME,
         })
 
         this.playBtn.setInteractive()
@@ -119,19 +120,19 @@ export default class MenuScene extends Phaser.Scene {
             .setOrigin(0, 0)
             .setDepth(DEPTH.OBJECT_LOW)
 
-        let allCoin = 0
-        if (localStorage.getItem('allCoin')) allCoin = Number(localStorage.getItem('allCoin'))
+        const allCoin = UserData.getAllCoin()
 
         this.coinRect = new Button(this, 2580, 100 / 2 + 12.5, 300, 100, String(allCoin), {
             fontSize: '50px',
             fontStyle: 'bold',
-            fontFamily: FONT_NAME
+            fontFamily: FONT_NAME,
+            color: '#FFF0C8',
         })
 
         this.settingBtn = new Button(this, 2880, 100 / 2 + 12.5, 200, 100, 'Setting', {
             fontSize: '50px',
             fontStyle: 'bold',
-            fontFamily: FONT_NAME
+            fontFamily: FONT_NAME,
         })
 
         this.settingBtn.setInteractive()
@@ -143,26 +144,26 @@ export default class MenuScene extends Phaser.Scene {
     public update(): void {
         //Check button first ... else ...
 
-        if (this.adsBtn.getIsPointerDown())
-        {
-            window.open('https://www.youtube.com/watch?v=Jzxi8nid9BQ', '_blank')
+        if (this.adsBtn.getIsPointerDown()) {
             this.adsBtn.setIsPointerDown(false)
+            window.open('https://www.youtube.com/watch?v=Jzxi8nid9BQ', '_blank')
             return
         }
 
-        if (this.halfBrickBtn.getIsPointerDown())
-        {
-            window.open('https://www.halfbrick.com/', '_blank')
+        if (this.halfBrickBtn.getIsPointerDown()) {
             this.halfBrickBtn.setIsPointerDown(false)
+            window.open('https://www.halfbrick.com/', '_blank')
             return
         }
-        
 
+        if (this.shopBtn.getIsPointerDown()) {
+            this.shopBtn.setIsPointerDown(false)
+            this.scene.pause(SCENE.MENU)
+            this.scene.launch(SCENE.SHOP)
+            return
+        }
 
-        if (
-            this.playBtn.getIsPointerDown() &&
-            !this.isSpaceClicked
-        ) {
+        if (this.playBtn.getIsPointerDown() && !this.isSpaceClicked) {
             this.isSpaceClicked = true
             this.tweens.add({
                 targets: this.logo,
@@ -210,14 +211,13 @@ export default class MenuScene extends Phaser.Scene {
                 duration: 300,
             })
 
-            const scene = this.scene
             this.tweens.add({
                 targets: this.cameras.main,
                 scrollX: 500,
                 duration: 500,
                 onComplete: () => {
                     setTimeout(() => {
-                        scene.start(SCENE.GAMEPLAY)
+                        this.scene.start(SCENE.GAMEPLAY)
                     }, 200)
                 },
             })

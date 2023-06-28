@@ -23,9 +23,14 @@ export default class Button {
         if (width && height)
             this.rectangle = scene.add
                 .nineslice(x, y, IMAGE.BUTTON_BACKING, undefined, width, height, 10, 10)
-                .setDisplaySize(width, height).setDepth(DEPTH.OBJECT_MEDIUM)
+                .setDisplaySize(width, height)
+                .setDepth(DEPTH.OBJECT_MEDIUM)
 
-        this.text = scene.add.text(x, y, content, style).setOrigin(0.5, 0.5).setStroke('#000000', 3).setDepth(DEPTH.OBJECT_MEDIUM)
+        this.text = scene.add
+            .text(x, y, content, style)
+            .setOrigin(0.5, 0.5)
+            .setStroke('#000000', 3)
+            .setDepth(DEPTH.OBJECT_MEDIUM)
         this.isPointerDown = false
 
         this.isPointerOver = false
@@ -34,7 +39,8 @@ export default class Button {
             .rectangle(x, y, width, height, 0x0000, 1)
             .setDisplaySize(width, height)
             .setSize(width, height)
-            .setAlpha(0).setDepth(DEPTH.OBJECT_MEDIUM)
+            .setAlpha(0)
+            .setDepth(DEPTH.OBJECT_MEDIUM)
 
         this.rectangle.setInteractive()
     }
@@ -80,6 +86,10 @@ export default class Button {
 
     public getText(): Phaser.GameObjects.Text {
         return this.text
+    }
+
+    public getBlackRect(): Phaser.GameObjects.Rectangle {
+        return this.blackRect
     }
 
     public setIsPointerDown(val: boolean): void {

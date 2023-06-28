@@ -3,6 +3,7 @@ import ObjectPool from '../ObjectPool'
 import Player from '../Player'
 import { DEPTH } from '../../const/depth'
 import { FONT_NAME} from '../../const/const'
+import UserData from '../shop/UserData'
 
 export default class CoinManager {
     private coins: Coin[]
@@ -10,7 +11,6 @@ export default class CoinManager {
     private numCoin: number
     private coinInRound = 0
     private coinInRoundText: Phaser.GameObjects.Text
-    private allCoin = 0
 
     public constructor(scene: Phaser.Scene, numCoin: number) {
         this.scene = scene
@@ -22,9 +22,6 @@ export default class CoinManager {
             this.coins.push(ObjectPool.getCoin(scene, tmp, Phaser.Math.Between(400, 800)))
             tmp = this.coins[i].getMaxX() + 700
         }
-
-        if (localStorage.getItem('allCoin')) this.allCoin = Number(localStorage.getItem('allCoin'))
-        else this.allCoin = 0
 
         this.coinInRound = 0
         this.coinInRoundText = this.scene.add.text(10, 150, '0')
@@ -78,8 +75,7 @@ export default class CoinManager {
     }
 
     public saveCoin(): void {
-        this.allCoin += this.coinInRound
-        localStorage.setItem('allCoin', `${this.allCoin}`)
+        UserData.addCoin(this.coinInRound)
     }
 
     public getCoin(): number {

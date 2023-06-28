@@ -5,8 +5,7 @@ import Score from '../Score'
 import Background from '../object/Background'
 import ObjectPool from '../object/ObjectPool'
 import CoinManager from '../object/coin/CoinManager'
-import Obstacle from '../object/obstacle/Obstacle'
-import ObstacleManager from '../object/obstacle/ObstacleManager'
+import ObstacleManager, { DEFAULT_SAFE_DISTACE } from '../object/obstacle/ObstacleManager'
 import { DEPTH } from '../const/depth'
 import RocketManager from '../object/obstacle/RocketManager'
 import WorkerManager from '../object/WorkerManager'
@@ -14,8 +13,6 @@ import StartBackground from '../object/background/StartBackground'
 
 export default class GamePlayScene extends Phaser.Scene {
     private player: Player
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    private obstacle: Obstacle
     private obstacleManager: ObstacleManager
     private score: Score
     private background: Background
@@ -171,7 +168,6 @@ export default class GamePlayScene extends Phaser.Scene {
     }
 
     public update(_time: number, delta: number): void {
-        
         this.background.update()
         this.player.update(delta)
 
@@ -219,6 +215,9 @@ export default class GamePlayScene extends Phaser.Scene {
         if (this.score.getScore() > this.score.getLevel()) {
             this.score.setLevel(this.score.getLevel() + 100)
             this.player.setSpeed(this.evaluateSpeed(this.score.getScore()))
+            this.obstacleManager.setMinSafeDistance(
+                (DEFAULT_SAFE_DISTACE * this.evaluateSpeed(this.score.getScore())) / 0.5
+            )
         }
 
         this.coinManager.update(delta, this.player.getSpeed())

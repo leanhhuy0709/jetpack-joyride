@@ -4,6 +4,7 @@ export enum SCENE {
     INIT = 'InitScene',
     GAMEOVER = 'GameOverScene',
     LOADING = 'LoadingScene',
+    SHOP = 'ShopScene'
 }
 
 export const FONT_NAME = 'New Athletic M54'
@@ -72,7 +73,9 @@ export enum IMAGE {
     TABLE = 'assets/bg/Levels/Title/table.png',
     RADIO = 'assets/bg/Levels/Title/radio.png',
     SMOKE = 'assets/bg/particles/smoke.png',
-    DO_NOT_TOUCH = 'assets/bg/Levels/Title/doNotTouchSign_TVOS.png'
+    DO_NOT_TOUCH = 'assets/bg/Levels/Title/doNotTouchSign_TVOS.png',
+    SHOE = 'assets/equipment/shoe.png',
+    GRAVITY_BELT = 'assets/equipment/gravity-belt.png'
 }
 
 export enum AUDIO {

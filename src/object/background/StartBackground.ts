@@ -14,23 +14,24 @@ export default class StartBackground {
             .image(1600 + x, 600, IMAGE.ALARM_LIGHT)
             .setDepth(DEPTH.BACKGROUND_VERYHIGH)
             .setScale(1.5)
+        if (isAlarmLightPlay) {
+            const alarmLightSprite = scene.add
+                .sprite(1470 + x, 710, SPRITE.ALARM_LIGHT_EFFECT)
+                .setDepth(DEPTH.BACKGROUND_VERYHIGH)
+                .setScale(1.5)
 
-        const alarmLightSprite = scene.add
-            .sprite(1470 + x, 710, SPRITE.ALARM_LIGHT_EFFECT)
-            .setDepth(DEPTH.BACKGROUND_VERYHIGH)
-            .setScale(1.5)
-
-        if (!scene.anims.exists('alarm-light-turn'))
-            scene.anims.create({
-                key: 'alarm-light-turn',
-                frames: scene.anims.generateFrameNumbers(SPRITE.ALARM_LIGHT_EFFECT, {
-                    start: 0,
-                    end: 5,
-                }),
-                frameRate: 5,
-                repeat: -1,
-            })
-        if (isAlarmLightPlay) alarmLightSprite.play('alarm-light-turn')
+            if (!scene.anims.exists('alarm-light-turn'))
+                scene.anims.create({
+                    key: 'alarm-light-turn',
+                    frames: scene.anims.generateFrameNumbers(SPRITE.ALARM_LIGHT_EFFECT, {
+                        start: 0,
+                        end: 5,
+                    }),
+                    frameRate: 5,
+                    repeat: -1,
+                })
+            alarmLightSprite.play('alarm-light-turn')
+        }
 
         scene.add
             .image(1200 + x, 1150, IMAGE.BEST_SCREEN)
@@ -64,9 +65,12 @@ export default class StartBackground {
         if (localStorage.getItem('highscore'))
             highScore = parseInt(localStorage.getItem('highscore') as string)
 
-        scene.add.text(x + 1200, 1110, `BEST ${highScore}`, {
-            fontSize: '40px',
-            fontFamily: FONT_NAME,
-        }).setDepth(DEPTH.OBJECT_MEDIUM).setOrigin(0.5, 0)
+        scene.add
+            .text(x + 1200, 1110, `BEST ${highScore}`, {
+                fontSize: '40px',
+                fontFamily: FONT_NAME,
+            })
+            .setDepth(DEPTH.OBJECT_MEDIUM)
+            .setOrigin(0.5, 0)
     }
 }

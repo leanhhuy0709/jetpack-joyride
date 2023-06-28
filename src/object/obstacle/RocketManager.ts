@@ -12,10 +12,10 @@ export default class RocketManager {
         this.rockets = []
 
         this.rocketIdx = []
-        let tmp = 5000
+        let tmp = Phaser.Math.Between(10000, 15000)
         for (let i = 0; i < numIdx; i++) {
             this.rocketIdx.push(tmp)
-            tmp += Phaser.Math.Between(5000, 10000)
+            tmp += Phaser.Math.Between(10000, 15000)
         }
     }
 

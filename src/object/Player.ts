@@ -7,6 +7,7 @@ import GamePlayScene from '../scenes/GamePlayScene'
 import { IMAGE, SPRITE } from '../const/const'
 
 const DELAY_FIRE_BULLET = 5
+export const DEFAULT_JUMP_VELO = -10
 export default class Player extends Phaser.Physics.Matter.Sprite {
     private isFlying: boolean
     private bullets: Bullet[]
@@ -132,9 +133,9 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
                 this.body.position.y = 0
             } else {
                 if (this.getVelocity()) {
-                    if (this.getVelocity() && (this.getVelocity().y as number) > -10) {
+                    if (this.getVelocity() && (this.getVelocity().y as number) > DEFAULT_JUMP_VELO) {
                         this.setVelocityY(Number(this.getVelocity().y) - 0.5)
-                    } else this.setVelocityY(-10)
+                    } else this.setVelocityY(DEFAULT_JUMP_VELO)
                 }
 
                 this.isFlying = true
