@@ -72,6 +72,7 @@ export enum IMAGE {
     DO_NOT_TOUCH = 'assets/bg/Levels/Title/doNotTouchSign_TVOS.png',
     SHOE = 'assets/equipment/shoe.png',
     GRAVITY_BELT = 'assets/equipment/gravity-belt.png',
+    GRAVITY_SUIT = 'assets/equipment/gravity-suit.png',
     BARRY_DEAD = 'assets/barry/barry-dead.png',
 }
 
