@@ -1,4 +1,4 @@
-import { productListKey, productListPrice } from './product-list'
+import { productListKey, productListName, productListPrice } from './product-list'
 
 export enum PRODUCT_STATE {
     EQUIPPED = 'equiped',
@@ -9,7 +9,9 @@ export enum PRODUCT_STATE {
 export default class UserData {
     private static isInit = false
     private static allCoin = 0
+    private static productName: string[] = []
     private static productState: PRODUCT_STATE[] = []
+    private static numProduct = 0
 
     public static init(): void {
         if (UserData.isInit) return
@@ -19,9 +21,13 @@ export default class UserData {
             if (tmp == 'equiped') UserData.productState.push(PRODUCT_STATE.EQUIPPED)
             else if (tmp == 'not_equipped') UserData.productState.push(PRODUCT_STATE.NOT_EQUIPPED)
             else UserData.productState.push(PRODUCT_STATE.HAVE_NOT_BOUGHT_YET)
+
+            UserData.productName.push(productListName[i])
         }
         if (localStorage.getItem('allCoin')) this.allCoin = Number(localStorage.getItem('allCoin'))
         else this.allCoin = 0
+
+        UserData.numProduct = UserData.productState.length
     }
 
     public static getProductState(index: number): PRODUCT_STATE {
@@ -74,5 +80,15 @@ export default class UserData {
 
     public static saveCoin(): void {
         localStorage.setItem('allCoin', `${UserData.allCoin}`)
+    }
+
+    public static getNumProduct(): number {
+        return UserData.numProduct
+    }
+
+    public static getProductName(index: number): string {
+        if (!UserData.isInit) UserData.init()
+        if (index >= UserData.productName.length) return ''
+        return UserData.productName[index]
     }
 }

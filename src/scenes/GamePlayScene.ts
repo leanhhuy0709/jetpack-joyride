@@ -10,7 +10,6 @@ import { DEPTH } from '../const/depth'
 import RocketManager from '../object/obstacle/RocketManager'
 import WorkerManager from '../object/WorkerManager'
 import StartBackground from '../object/background/StartBackground'
-import GravityBelt from '../object/equipment/GravityBelt'
 
 let isTween = false
 export default class GamePlayScene extends Phaser.Scene {
@@ -170,7 +169,7 @@ export default class GamePlayScene extends Phaser.Scene {
 
         isTween = false
 
-        this.player.addEquipment(new GravityBelt(this.player))
+        this.player.loadUserData()
     }
 
     public update(_time: number, delta: number): void {

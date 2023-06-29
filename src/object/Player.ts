@@ -6,6 +6,8 @@ import ObjectPool from './ObjectPool'
 import GamePlayScene from '../scenes/GamePlayScene'
 import { IMAGE, SPRITE } from '../const/const'
 import Equipment from './equipment/Equipment'
+import UserData, { PRODUCT_STATE } from './shop/UserData'
+import GravityBelt from './equipment/GravityBelt'
 
 const DELAY_FIRE_BULLET = 5
 export const DEFAULT_JUMP_VELO = -10
@@ -39,7 +41,7 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
 
         this.equipments = []
 
-        this.state = PLAYER_STATE.FALLING
+        this.state = PLAYER_STATE.MOVING
         this.scene.add.existing(this)
         this.createAnims(key)
     }
@@ -76,7 +78,7 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
                 frameRate: 10,
                 repeat: -1,
             })
-        this.anims.play('fall')
+        this.anims.play('move')
         this.bulletFlash.play('flash')
     }
 
@@ -90,6 +92,18 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
             .sprite(0, 0, SPRITE.BULLET_FLASH)
             .setDisplaySize(150, 150)
             .setDepth(DEPTH.OBJECT_HIGH)
+    }
+
+    public loadUserData(): void {
+        for (let i = 0; i < UserData.getNumProduct(); i++) {
+            if (UserData.getProductState(i) == PRODUCT_STATE.EQUIPPED) {
+                switch (UserData.getProductName(i)) {
+                    case 'Gravity Belt':
+                        this.addEquipment(new GravityBelt(this))
+                        break
+                }
+            }
+        }
     }
 
     public update(delta: number): void {
@@ -107,8 +121,7 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
 
         this.updateBullet(delta)
 
-        for (let i = 0; i < this.equipments.length; i++)
-            this.equipments[i].update(delta)
+        for (let i = 0; i < this.equipments.length; i++) this.equipments[i].update(delta)
     }
 
     private updateBullet(delta: number) {
@@ -174,8 +187,7 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
         this.fireBullet()
         this.bulletFlash.setVisible(true)
 
-        for (let i = 0; i < this.equipments.length; i++)
-            this.equipments[i].flying()
+        for (let i = 0; i < this.equipments.length; i++) this.equipments[i].flying()
     }
 
     public falling(): void {
@@ -186,8 +198,7 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
         }
         this.bulletFlash.setVisible(false)
 
-        for (let i = 0; i < this.equipments.length; i++)
-            this.equipments[i].falling()
+        for (let i = 0; i < this.equipments.length; i++) this.equipments[i].falling()
     }
 
     public moving(): void {
@@ -225,10 +236,8 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
     }
 
     public removeEquipment(type: typeof Equipment): void {
-        for (let i = 0; i < this.equipments.length; i++)
-        {
-            if (this.equipments[i] instanceof type)
-            {
+        for (let i = 0; i < this.equipments.length; i++) {
+            if (this.equipments[i] instanceof type) {
                 this.equipments[i].remove()
                 this.equipments.splice(i, 1)
                 break
