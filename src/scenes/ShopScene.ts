@@ -10,15 +10,43 @@ import {
     productListPrice,
 } from '../object/shop/product-list'
 import UserData, { PRODUCT_STATE } from '../object/shop/UserData'
+import {
+    costumeListKey,
+    costumeListName,
+    costumeListPrice,
+    costumeListDescription,
+} from '../object/shop/costume-list'
 
 export default class ShopScene extends Phaser.Scene {
     private backBtn: Button
     private productTexture: ProductTexture[]
 
+    private keyList: string[]
+    private nameList: string[]
+    private priceList: number[]
+    private descriptionList: string[]
+    private index: number
+
     public constructor() {
         super({
             key: SCENE.SHOP,
         })
+    }
+
+    public init(data: { type: string }): void {
+        if (data.type == 'product') {
+            this.keyList = productListKey
+            this.nameList = productListName
+            this.priceList = productListPrice
+            this.descriptionList = productListDescription
+            this.index = 0
+        } else if (data.type == 'costume') {
+            this.keyList = costumeListKey
+            this.nameList = costumeListName
+            this.priceList = costumeListPrice
+            this.descriptionList = costumeListDescription
+            this.index = productListKey.length
+        }
     }
 
     public create(): void {
@@ -44,13 +72,13 @@ export default class ShopScene extends Phaser.Scene {
         this.add.rectangle(1600, 200, 2800, 1200, 0x1f2944).setOrigin(0.5, 0)
         this.productTexture = []
         let tmp = 350
-        for (let i = 0; i < productListKey.length; i++) {
+        for (let i = 0; i < this.keyList.length; i++) {
             const p1 = new Product(
-                productListKey[i],
-                productListName[i],
-                productListPrice[i],
-                UserData.getProductState(i),
-                productListDescription[i]
+                this.keyList[i],
+                this.nameList[i],
+                this.priceList[i],
+                UserData.getProductState(i + this.index),
+                this.descriptionList[i]
             )
             this.productTexture.push(new ProductTexture(this, 200, tmp, p1, 2800))
             tmp += 350
@@ -65,20 +93,20 @@ export default class ShopScene extends Phaser.Scene {
 
         for (let i = 0; i < this.productTexture.length; i++) {
             if (this.productTexture[i].isButtonClicked()) {
-                switch (UserData.getProductState(i)) {
+                switch (UserData.getProductState(i + this.index)) {
                     case PRODUCT_STATE.EQUIPPED:
-                        UserData.unequip(i)
+                        UserData.unequip(i + this.index)
                         break
                     case PRODUCT_STATE.NOT_EQUIPPED:
-                        UserData.equip(i)
+                        UserData.equip(i + this.index)
                         break
                     case PRODUCT_STATE.HAVE_NOT_BOUGHT_YET:
-                        if (UserData.canBuyProduct(i)) {
-                            UserData.buy(i, productListPrice[i])
+                        if (UserData.canBuyProduct(i + this.index)) {
+                            UserData.buy(i + this.index, this.priceList[i])
                         }
                         break
                 }
-                this.productTexture[i].setState(UserData.getProductState(i))
+                this.productTexture[i].setState(UserData.getProductState(i + this.index))
             }
         }
     }

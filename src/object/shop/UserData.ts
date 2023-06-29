@@ -1,3 +1,4 @@
+import { costumeListKey, costumeListName, costumeListPrice } from './costume-list'
 import { productListKey, productListName, productListPrice } from './product-list'
 
 export enum PRODUCT_STATE {
@@ -11,19 +12,33 @@ export default class UserData {
     private static allCoin = 0
     private static productName: string[] = []
     private static productState: PRODUCT_STATE[] = []
+    private static productPrice: number[] = []
     private static numProduct = 0
 
     public static init(): void {
         if (UserData.isInit) return
         UserData.isInit = true
-        for (let i = 0; i < productListKey.length; i++) {
+        let i = 0
+        for (i = 0; i < productListKey.length; i++) {
             const tmp = localStorage.getItem('product-' + String(i))
             if (tmp == 'equiped') UserData.productState.push(PRODUCT_STATE.EQUIPPED)
             else if (tmp == 'not_equipped') UserData.productState.push(PRODUCT_STATE.NOT_EQUIPPED)
             else UserData.productState.push(PRODUCT_STATE.HAVE_NOT_BOUGHT_YET)
 
             UserData.productName.push(productListName[i])
+            UserData.productPrice.push(productListPrice[i])
         }
+
+        for (; i - productListKey.length < costumeListKey.length; i++) {
+            const tmp = localStorage.getItem('product-' + String(i))
+            if (tmp == 'equiped') UserData.productState.push(PRODUCT_STATE.EQUIPPED)
+            else if (tmp == 'not_equipped') UserData.productState.push(PRODUCT_STATE.NOT_EQUIPPED)
+            else UserData.productState.push(PRODUCT_STATE.HAVE_NOT_BOUGHT_YET)
+
+            UserData.productName.push(costumeListName[i - productListKey.length])
+            UserData.productPrice.push(costumeListPrice[i - productListKey.length])
+        }
+
         if (localStorage.getItem('allCoin')) this.allCoin = Number(localStorage.getItem('allCoin'))
         else this.allCoin = 0
 
@@ -40,7 +55,7 @@ export default class UserData {
         if (!UserData.isInit) UserData.init()
         return (
             UserData.productState[index] == PRODUCT_STATE.HAVE_NOT_BOUGHT_YET &&
-            UserData.allCoin >= productListPrice[index]
+            UserData.allCoin >= this.productPrice[index]
         )
     }
 

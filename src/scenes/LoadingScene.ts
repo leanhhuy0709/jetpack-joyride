@@ -117,6 +117,11 @@ export default class LoadingScene extends Phaser.Scene {
             frameHeight: 256 / 8,
         })
 
+        this.load.spritesheet(SPRITE.DAN_SPRITE_SHEET, SPRITE.DAN_SPRITE_SHEET, {
+            frameWidth: 364 / 4,
+            frameHeight: 103,
+        })
+
         for (let i = 0; i < COIN_PATTERN.length; i++) {
             this.load.text(`pattern${i}`, COIN_PATTERN[i])
         }

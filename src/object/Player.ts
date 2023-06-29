@@ -10,6 +10,7 @@ import UserData, { PRODUCT_STATE } from './shop/UserData'
 import GravityBelt from './equipment/GravityBelt'
 import Shoe from './equipment/Shoe'
 import AntiWorker from './equipment/AntiWorker'
+import Dan from './equipment/Dan'
 
 const DELAY_FIRE_BULLET = 5
 export const DEFAULT_JUMP_VELO = -12
@@ -110,6 +111,9 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
                         break
                     case 'AntiWorker':
                         this.addEquipment(new AntiWorker(this))
+                        break
+                    case 'Dan':
+                        this.addEquipment(new Dan(this))
                         break
                 }
             }

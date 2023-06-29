@@ -172,7 +172,14 @@ export default class MenuScene extends Phaser.Scene {
         if (this.shopBtn.getIsPointerDown()) {
             this.shopBtn.setIsPointerDown(false)
             this.scene.pause(SCENE.MENU)
-            this.scene.launch(SCENE.SHOP)
+            this.scene.launch(SCENE.SHOP, {type: 'product'})
+            return
+        }
+
+        if (this.costumesBtn.getIsPointerDown()) {
+            this.costumesBtn.setIsPointerDown(false)
+            this.scene.pause(SCENE.MENU)
+            this.scene.launch(SCENE.SHOP, {type: 'costume'})
             return
         }
 

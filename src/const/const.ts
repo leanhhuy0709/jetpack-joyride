@@ -46,6 +46,7 @@ export enum SPRITE {
     WORKER_2_HEAD = 'assets/workers/worker2Head.png',
     WORKER_FAT_BODY = 'assets/workers/workerFatBody.png',
     WORKER_TALL_BODY = 'assets/workers/workerTallBody.png',
+    DAN_SPRITE_SHEET = 'assets/dan/spritesheet.png'
 }
 
 export enum IMAGE {

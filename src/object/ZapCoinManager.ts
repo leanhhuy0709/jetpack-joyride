@@ -131,7 +131,7 @@ export default class ZapCoinManager {
         this.coinInRound += coeff
     }
 
-    public getCoin(): number {
+    public getCoinInRound(): number {
         return this.coinInRound
     }
 }

@@ -81,6 +81,39 @@ export default class GamePlayScene extends Phaser.Scene {
 
         this.cameras.main.shake(400, new Phaser.Math.Vector2(0.01, 0.01))
 
+        ObjectPool.init(this)
+        this.matter.world.setBounds(0, 0, 1000, 1600, 64, false, false, true, true)
+        this.matter.world.enabled = true
+
+        this.ground = this.matter.add.rectangle(0, 1500, 1e9, 250, { isStatic: true })
+        this.matter.world.add(this.ground)
+
+        this.player = new Player(this, 800, 1250, SPRITE.BARRY_SPRITE_SHEET)
+
+        if (this.input.keyboard) this.cursors = this.input.keyboard.createCursorKeys()
+
+        this.rocketManager = new RocketManager(this, 3)
+        this.workerManager = new WorkerManager(this, 10)
+        this.zapCoinManager = new ZapCoinManager(this, 10)
+
+        this.score = new Score(this)
+
+        this.cameras.main.startFollow(this.player, undefined, undefined, 0, -800, 450)
+
+        this.input.addPointer(1)
+        this.usingKey = this.usingTouch = true
+
+        this.isTweenDead = false
+
+        this.player.loadUserData()
+        this.tweenStart()
+        this.music = this.sound.add(AUDIO.MUSIC_GAMEPLAY, { volume: Volume.value })
+        this.music.play()
+    }
+
+    private tweenStart(): void {
+        this.player.setVisible(false)
+        this.player.setSpeed(0)
         for (let i = 0; i < 1000; i++) {
             const scale = Phaser.Math.Between(1, 15)
             const end = Phaser.Math.Between(2000, 2400)
@@ -131,19 +164,8 @@ export default class GamePlayScene extends Phaser.Scene {
             },
         })
 
-        ObjectPool.init(this)
-        this.matter.world.setBounds(0, 0, 1000, 1600, 64, false, false, true, true)
-        this.matter.world.enabled = true
-
-        this.ground = this.matter.add.rectangle(0, 1500, 1e9, 250, { isStatic: true })
-        this.matter.world.add(this.ground)
-
-        this.player = new Player(this, 800, 1250, SPRITE.BARRY_SPRITE_SHEET)
-        this.player.setVisible(false)
-        this.player.setSpeed(0)
-
         const barry = this.add
-            .sprite(100, 1300.05, SPRITE.BARRY_SPRITE_SHEET)
+            .sprite(100, 1300.05, this.player.texture.key)
             .setDepth(DEPTH.OBJECT_MEDIUM)
             .setDisplaySize(140, 160)
             .play('move')
@@ -159,26 +181,6 @@ export default class GamePlayScene extends Phaser.Scene {
                 barry.destroy()
             },
         })
-
-        if (this.input.keyboard) this.cursors = this.input.keyboard.createCursorKeys()
-
-        this.rocketManager = new RocketManager(this, 3)
-        this.workerManager = new WorkerManager(this, 10)
-        this.zapCoinManager = new ZapCoinManager(this, 10)
-
-        this.score = new Score(this)
-
-        this.cameras.main.startFollow(this.player, undefined, undefined, 0, -800, 450)
-
-        this.input.addPointer(1)
-        this.usingKey = this.usingTouch = true
-
-        this.isTweenDead = false
-
-        this.player.loadUserData()
-
-        this.music = this.sound.add(AUDIO.MUSIC_GAMEPLAY, { volume: Volume.value })
-        this.music.play()
     }
 
     public update(_time: number, delta: number): void {
@@ -195,7 +197,7 @@ export default class GamePlayScene extends Phaser.Scene {
         }
 
         if (this.cursors.shift?.isDown) {
-            this.scene.pause(SCENE.GAMEPLAY, {music: this.music})
+            this.scene.pause(SCENE.GAMEPLAY, { music: this.music })
             this.scene.launch(SCENE.PAUSE)
         }
 
@@ -236,11 +238,12 @@ export default class GamePlayScene extends Phaser.Scene {
                     onComplete: () => {
                         console.log('You die!')
                         this.score.saveHighScore()
+                        UserData.addCoin(this.zapCoinManager.getCoinInRound())
                         UserData.saveCoin()
                         this.scene.pause()
                         this.scene.launch(SCENE.GAMEOVER, {
                             score: this.score.getScore(),
-                            coin: this.zapCoinManager.getCoin(),
+                            coin: this.zapCoinManager.getCoinInRound(),
                         })
                     },
                     onUpdate: () => {
