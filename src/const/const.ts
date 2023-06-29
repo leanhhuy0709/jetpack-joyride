@@ -78,4 +78,6 @@ export enum AUDIO {
     COIN_COLLECT_1 = 'assets/SFX/Coin/coin_pickup_1.mp3',
     COIN_COLLECT_2 = 'assets/SFX/Coin/coin_pickup_2.mp3',
     COIN_COLLECT_3 = 'assets/SFX/Coin/coin_pickup_3.mp3',
+    MUSIC_GAMEPLAY = 'assets/music/Music_Level.mp3',
+    MUSIC_MENU = 'assets/music/Music_Menu.mp3',
 }

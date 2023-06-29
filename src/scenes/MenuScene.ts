@@ -1,9 +1,10 @@
 import * as Phaser from 'phaser'
-import { SCENE, IMAGE, FONT_NAME } from '../const/const'
+import { SCENE, IMAGE, FONT_NAME, AUDIO } from '../const/const'
 import Button from '../components/Button'
 import { DEPTH } from '../const/depth'
 import StartBackground from '../object/background/StartBackground'
 import UserData from '../object/shop/UserData'
+import Volume from '../object/Volume'
 
 export default class MenuScene extends Phaser.Scene {
     private cursors: {
@@ -31,6 +32,11 @@ export default class MenuScene extends Phaser.Scene {
     private halfBrickBtn: Button
 
     private playBtn: Button
+
+    private music:
+        | Phaser.Sound.WebAudioSound
+        | Phaser.Sound.NoAudioSound
+        | Phaser.Sound.HTML5AudioSound
 
     public constructor() {
         super({
@@ -139,10 +145,15 @@ export default class MenuScene extends Phaser.Scene {
 
         this.isSpaceClicked = false
         this.input.addPointer(1)
+
+        this.music = this.sound.add(AUDIO.MUSIC_MENU, { volume: Volume.value })
+        this.music.play()
     }
 
     public update(): void {
         //Check button first ... else ...
+
+        this.music.setVolume(Volume.value)
 
         this.coinRect.getText().setText(String(UserData.getAllCoin()))
 
@@ -168,7 +179,7 @@ export default class MenuScene extends Phaser.Scene {
         if (this.settingBtn.getIsPointerDown()) {
             this.settingBtn.setIsPointerDown(false)
             this.scene.pause(SCENE.MENU)
-            this.scene.launch(SCENE.SETTING, {scene: SCENE.MENU})
+            this.scene.launch(SCENE.SETTING, { scene: SCENE.MENU, music: this.music })
             return
         }
 
@@ -226,6 +237,7 @@ export default class MenuScene extends Phaser.Scene {
                 duration: 500,
                 onComplete: () => {
                     setTimeout(() => {
+                        this.music.stop()
                         this.scene.start(SCENE.GAMEPLAY)
                     }, 200)
                 },

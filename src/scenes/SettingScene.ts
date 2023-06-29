@@ -12,14 +12,23 @@ export default class SettingScene extends Phaser.Scene {
     private plusBtn: Button
     private minusBtn: Button
 
+    private music:
+        | Phaser.Sound.WebAudioSound
+        | Phaser.Sound.NoAudioSound
+        | Phaser.Sound.HTML5AudioSound
+
     public constructor() {
         super({
             key: SCENE.SETTING,
         })
     }
 
-    public init(data: { scene: SCENE }) {
+    public init(data: {
+        scene: SCENE
+        music: Phaser.Sound.WebAudioSound | Phaser.Sound.NoAudioSound | Phaser.Sound.HTML5AudioSound
+    }) {
         this.prevScene = data.scene
+        this.music = data.music
     }
 
     public create(): void {
@@ -67,10 +76,12 @@ export default class SettingScene extends Phaser.Scene {
             Volume.value += 0.005
             if (Volume.value >= 1) Volume.value = 1
             this.volumeValue.setText(String(Math.ceil(Volume.value * 100)))
+            this.music.setVolume(Volume.value)
         } else if (this.minusBtn.getIsPointerDown()) {
             Volume.value -= 0.005
             if (Volume.value <= 0) Volume.value = 0
             this.volumeValue.setText(String(Math.ceil(Volume.value * 100)))
+            this.music.setVolume(Volume.value)
         }
     }
 }

@@ -1,5 +1,5 @@
 import * as Phaser from 'phaser'
-import { IMAGE, SCENE, SPRITE } from '../const/const'
+import { AUDIO, IMAGE, SCENE, SPRITE } from '../const/const'
 import Player, { PLAYER_STATE } from '../object/Player'
 import Score from '../Score'
 import Background from '../object/Background'
@@ -10,6 +10,7 @@ import WorkerManager from '../object/WorkerManager'
 import StartBackground from '../object/background/StartBackground'
 import ZapCoinManager, { DEFAULT_SAFE_DISTACE } from '../object/ZapCoinManager'
 import UserData from '../object/shop/UserData'
+import Volume from '../object/Volume'
 
 let isTween = false
 export default class GamePlayScene extends Phaser.Scene {
@@ -32,6 +33,11 @@ export default class GamePlayScene extends Phaser.Scene {
 
     private usingKey: boolean
     private usingTouch: boolean
+
+    private music:
+        | Phaser.Sound.WebAudioSound
+        | Phaser.Sound.NoAudioSound
+        | Phaser.Sound.HTML5AudioSound
 
     public constructor() {
         super({
@@ -168,12 +174,14 @@ export default class GamePlayScene extends Phaser.Scene {
 
         isTween = false
 
-        
-
         this.player.loadUserData()
+
+        this.music = this.sound.add(AUDIO.MUSIC_GAMEPLAY, { volume: Volume.value })
+        this.music.play()
     }
 
     public update(_time: number, delta: number): void {
+        this.music.setVolume(Volume.value)
         this.background.update()
         this.player.update(delta)
 
@@ -186,7 +194,7 @@ export default class GamePlayScene extends Phaser.Scene {
         }
 
         if (this.cursors.shift?.isDown) {
-            this.scene.pause(SCENE.GAMEPLAY)
+            this.scene.pause(SCENE.GAMEPLAY, {music: this.music})
             this.scene.launch(SCENE.PAUSE)
         }
 

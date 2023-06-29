@@ -6,6 +6,10 @@ export default class PauseScene extends Phaser.Scene {
     private continueBtn: Button
     private settingBtn: Button
     private homeBtn: Button
+    private music:
+        | Phaser.Sound.WebAudioSound
+        | Phaser.Sound.NoAudioSound
+        | Phaser.Sound.HTML5AudioSound
 
     public constructor() {
         super({
@@ -13,8 +17,10 @@ export default class PauseScene extends Phaser.Scene {
         })
     }
 
-    public preload(): void {
-        //
+    public init(data: {
+        music: Phaser.Sound.WebAudioSound | Phaser.Sound.NoAudioSound | Phaser.Sound.HTML5AudioSound
+    }) {
+        this.music = data.music
     }
 
     public create(): void {
@@ -61,7 +67,7 @@ export default class PauseScene extends Phaser.Scene {
         } else if (this.settingBtn.getIsPointerDown()) {
             this.settingBtn.setIsPointerDown(false)
             this.scene.pause(SCENE.PAUSE)
-            this.scene.launch(SCENE.SETTING, { scene: SCENE.PAUSE })
+            this.scene.launch(SCENE.SETTING, { scene: SCENE.PAUSE, music: this.music })
             return
         }
     }
