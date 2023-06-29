@@ -158,5 +158,6 @@ export default class ObjectPool {
 
     public static removeWorker(worker: Worker): void {
         ObjectPool.workers.push(worker)
+        worker.setVisible(false)
     }
 }

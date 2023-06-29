@@ -231,4 +231,9 @@ export default class Worker {
     public getMaxX(): number {
         return this.body.x + this.body.width
     }
+
+    public setVisible(visible: boolean): void {
+        this.body.setVisible(visible)
+        this.head.setVisible(visible)
+    }
 }

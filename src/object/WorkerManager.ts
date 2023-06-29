@@ -42,4 +42,19 @@ export default class WorkerManager {
             this.workers[i].handleCollider(player)
         }
     }
+
+    public setNumWorker(num: number): void {
+        if (this.workers.length > num) {
+            for (let i = this.workers.length - 1; i >= num; i--) {
+                ObjectPool.removeWorker(this.workers[i])
+                this.workers.pop()
+            }
+        } else if (this.workers.length < num) {
+            let tmp = this.scene.cameras.main.scrollX + 3200 + Phaser.Math.Between(100, 1000)
+            for (let i = this.workers.length; i < num; i++) {
+                this.workers.push(ObjectPool.getWorker(this.scene, tmp, 1200))
+                tmp += Phaser.Math.Between(100, 1000)
+            }
+        }
+    }
 }

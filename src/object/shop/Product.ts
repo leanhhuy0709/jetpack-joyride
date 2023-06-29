@@ -5,12 +5,14 @@ export default class Product {
     private name: string
     private price: number
     private state: PRODUCT_STATE
+    private description: string
 
-    public constructor(imageKey: string, name: string, price: number, state: PRODUCT_STATE) {
+    public constructor(imageKey: string, name: string, price: number, state: PRODUCT_STATE, description = '') {
         this.imageKey = imageKey
         this.name = name
         this.price = price
         this.state = state
+        this.description = description
     }
 
     public getImageKey(): string {
@@ -31,5 +33,9 @@ export default class Product {
 
     public setState(state: PRODUCT_STATE): void {
         this.state = state
+    }
+
+    public getDescription(): string {
+        return this.description
     }
 }

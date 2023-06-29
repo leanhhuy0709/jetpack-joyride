@@ -28,7 +28,7 @@ export default class GamePlayScene extends Phaser.Scene {
     }
     private coinManager: CoinManager
     private rocketManager: RocketManager
-    private workerManager: WorkerManager
+    public workerManager: WorkerManager
 
     private usingKey: boolean
     private usingTouch: boolean
@@ -147,7 +147,7 @@ export default class GamePlayScene extends Phaser.Scene {
             duration: 1000,
             ease: 'Power2',
             onComplete: () => {
-                this.player.setSpeed(0.5)
+                this.player.setSpeed(this.player.getDefaultSpeed())
                 this.player.setVisible(true)
                 barry.destroy()
             },
@@ -242,9 +242,11 @@ export default class GamePlayScene extends Phaser.Scene {
 
         if (this.score.getScore() > this.score.getLevel()) {
             this.score.setLevel(this.score.getLevel() + 100)
-            this.player.setSpeed(this.evaluateSpeed(this.score.getScore()))
+            this.player.setSpeed(
+                this.evaluateSpeed(this.score.getScore(), this.player.getDefaultSpeed())
+            )
             this.obstacleManager.setMinSafeDistance(
-                DEFAULT_SAFE_DISTACE + this.score.getScore() / 1000
+                DEFAULT_SAFE_DISTACE + this.player.getSpeed() * 30
             )
         }
 
@@ -255,7 +257,7 @@ export default class GamePlayScene extends Phaser.Scene {
         return coef * 0.5 * ((x - 1000) / 100) ** 2 + 1000 + offset
     }
 
-    private evaluateSpeed(score: number): number {
-        return Math.log10((0.5 * score) / 1000 + 1) + 0.5
+    private evaluateSpeed(score: number, init: number): number {
+        return Math.log10((0.5 * score) / 1000 + 1) + init
     }
 }

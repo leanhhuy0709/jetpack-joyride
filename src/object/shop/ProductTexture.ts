@@ -38,6 +38,15 @@ export default class ProductTexture {
             })
             .setStroke('#000000', 5)
             .setOrigin(0.5, 0.5)
+
+        const description = scene.add
+            .text(width / 2, 0, product.getDescription(), {
+                fontSize: '60px',
+                fontFamily: FONT_NAME,
+            })
+            .setStroke('#000000', 5)
+            .setOrigin(0.5, 0.5)
+
         let content: string
 
         switch (product.getState()) {
@@ -65,6 +74,7 @@ export default class ProductTexture {
             rect,
             name,
             price,
+            description,
             this.button.getRectangle(),
             this.button.getText(),
             this.button.getBlackRect(),
@@ -78,7 +88,7 @@ export default class ProductTexture {
             this.button.setIsPointerDown(false)
             return true
         }
-        return false 
+        return false
     }
 
     public setState(state: PRODUCT_STATE): void {

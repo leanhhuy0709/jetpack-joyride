@@ -3,7 +3,12 @@ import { FONT_NAME, SCENE } from '../const/const'
 import Button from '../components/Button'
 import Product from '../object/shop/Product'
 import ProductTexture from '../object/shop/ProductTexture'
-import { productListKey, productListName, productListPrice } from '../object/shop/product-list'
+import {
+    productListDescription,
+    productListKey,
+    productListName,
+    productListPrice,
+} from '../object/shop/product-list'
 import UserData, { PRODUCT_STATE } from '../object/shop/UserData'
 
 export default class ShopScene extends Phaser.Scene {
@@ -44,7 +49,8 @@ export default class ShopScene extends Phaser.Scene {
                 productListKey[i],
                 productListName[i],
                 productListPrice[i],
-                UserData.getProductState(i)
+                UserData.getProductState(i),
+                productListDescription[i]
             )
             this.productTexture.push(new ProductTexture(this, 200, tmp, p1, 2800))
             tmp += 350

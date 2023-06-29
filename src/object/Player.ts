@@ -8,6 +8,8 @@ import { IMAGE, SPRITE } from '../const/const'
 import Equipment from './equipment/Equipment'
 import UserData, { PRODUCT_STATE } from './shop/UserData'
 import GravityBelt from './equipment/GravityBelt'
+import Shoe from './equipment/Shoe'
+import AntiWorker from './equipment/AntiWorker'
 
 const DELAY_FIRE_BULLET = 5
 export const DEFAULT_JUMP_VELO = -10
@@ -27,6 +29,7 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
     private bulletFlash: Phaser.GameObjects.Sprite
     private jumpVelo: number = DEFAULT_JUMP_VELO
     private equipments: Equipment[]
+    private defaultSpeed: number
 
     public constructor(scene: Phaser.Scene, x: number, y: number, key: string) {
         super(scene.matter.world, x, y, key)
@@ -44,6 +47,8 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
         this.state = PLAYER_STATE.MOVING
         this.scene.add.existing(this)
         this.createAnims(key)
+        this.speed = 0.5
+        this.defaultSpeed = 0.5
     }
 
     private createAnims(key: string): void {
@@ -86,7 +91,6 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
         this.bullets = []
         this.explosions = []
         this.delayFire = DELAY_FIRE_BULLET
-        this.speed = 0.5
 
         this.bulletFlash = this.scene.add
             .sprite(0, 0, SPRITE.BULLET_FLASH)
@@ -100,6 +104,12 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
                 switch (UserData.getProductName(i)) {
                     case 'Gravity Belt':
                         this.addEquipment(new GravityBelt(this))
+                        break
+                    case 'Shoe':
+                        this.addEquipment(new Shoe(this))
+                        break
+                    case 'AntiWorker':
+                        this.addEquipment(new AntiWorker(this))
                         break
                 }
             }
@@ -243,5 +253,13 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
                 break
             }
         }
+    }
+
+    public getDefaultSpeed(): number {
+        return this.defaultSpeed
+    }
+
+    public setDefaultSpeed(speed: number): void {
+        this.defaultSpeed = speed
     }
 }
