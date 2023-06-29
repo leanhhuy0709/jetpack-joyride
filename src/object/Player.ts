@@ -11,6 +11,7 @@ import GravityBelt from './equipment/GravityBelt'
 import Shoe from './equipment/Shoe'
 import AntiWorker from './equipment/AntiWorker'
 import Dan from './equipment/Dan'
+import GravitySuit from './equipment/GravitySuite'
 
 const DELAY_FIRE_BULLET = 5
 export const DEFAULT_JUMP_VELO = -12
@@ -31,6 +32,7 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
     private jumpVelo: number = DEFAULT_JUMP_VELO
     private equipments: Equipment[]
     private defaultSpeed: number
+    public canFireBullet: boolean
 
     public constructor(scene: Phaser.Scene, x: number, y: number, key: string) {
         super(scene.matter.world, x, y, key)
@@ -50,6 +52,7 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
         this.createAnims(key)
         this.speed = 0.5
         this.defaultSpeed = 0.5
+        this.canFireBullet = true
     }
 
     private createAnims(key: string): void {
@@ -115,6 +118,9 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
                     case 'Dan':
                         this.addEquipment(new Dan(this))
                         break
+                    case 'Gravity Suit':
+                        this.addEquipment(new GravitySuit(this))
+                        break
                 }
             }
         }
@@ -126,12 +132,13 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
 
         this.x += delta * this.speed
 
-        if (this.body) {
-            if (glScene.matter.overlap(this, [glScene.ground]) && this.state != PLAYER_STATE.MOVING)
-                this.moving()
-            else if (this.state == PLAYER_STATE.FLYING) this.flying()
-            else if (this.state == PLAYER_STATE.FALLING) this.falling()
-        }
+        if (
+            glScene.matter.overlap(this, [glScene.ground, glScene.ground2]) &&
+            this.state != PLAYER_STATE.MOVING
+        )
+            this.moving()
+        else if (this.state == PLAYER_STATE.FLYING) this.flying()
+        else if (this.state == PLAYER_STATE.FALLING) this.falling()
 
         this.updateBullet(delta)
 
@@ -169,7 +176,6 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
         }
         if (countRemovedExplosion > 0) this.explosions.splice(0, countRemovedExplosion)
 
-        if (this.y <= 300) this.y = 300
         this.bulletFlash.setPosition(this.x - 11, this.y + 135)
     }
 
@@ -184,29 +190,26 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
     }
 
     public flying(): void {
-        if (this.body) {
-            if (this.body.position.y <= 0) {
-                this.body.position.y = 0
-            } else {
-                if (this.getVelocity()) {
-                    if (this.getVelocity() && (this.getVelocity().y as number) > this.jumpVelo) {
-                        this.setVelocityY(Number(this.getVelocity().y) + this.jumpVelo / 20)
-                    } else this.setVelocityY(this.jumpVelo)
-                }
-
-                this.state = PLAYER_STATE.FLYING
-                this.anims.play('fly')
-            }
+        if (this.getVelocity()) {
+            if (this.getVelocity() && (this.getVelocity().y as number) > this.jumpVelo) {
+                this.setVelocityY(Number(this.getVelocity().y) + this.jumpVelo / 20)
+            } else this.setVelocityY(this.jumpVelo)
         }
-        this.fireBullet()
-        this.bulletFlash.setVisible(true)
 
+        this.state = PLAYER_STATE.FLYING
+        this.anims.play('fly')
+
+        if (this.canFireBullet) {
+            this.fireBullet()
+            this.bulletFlash.setVisible(true)
+        }
         for (let i = 0; i < this.equipments.length; i++) this.equipments[i].flying()
     }
 
     public falling(): void {
-        if (this.body && this.state == PLAYER_STATE.FLYING) {
-            this.setVelocityY(-5)
+        if (this.state == PLAYER_STATE.FLYING) {
+            if (this.canFireBullet) this.setVelocityY(this.jumpVelo / 10)
+            else this.setVelocityY(0)
             this.state = PLAYER_STATE.FALLING
             this.anims.play('fall')
         }

@@ -13,11 +13,11 @@ export default class ProductTexture {
         this.scene = scene
         this.product = product
 
-        const rect = scene.add.rectangle(200, 0, 200, 200, 0x7086a7).setOrigin(0.5, 0.5)
+        const rect = scene.add.rectangle(200, 0, 150, 150, 0x7086a7).setOrigin(0.5, 0.5)
 
         const image = scene.add
             .image(200, 0, product.getImageKey())
-            .setDisplaySize(100, 100)
+            .setDisplaySize(75, 75)
             .setOrigin(0.5, 0.5)
 
         const name = scene.add
@@ -68,7 +68,7 @@ export default class ProductTexture {
         })
         this.button.setInteractive()
 
-        const line = scene.add.rectangle(0, 150, width, 5, 0xffffff).setOrigin(0, 0)
+        const line = scene.add.rectangle(0, 120, width, 5, 0xffffff).setOrigin(0, 0)
 
         this.container = scene.add.container(x, y, [
             rect,

@@ -150,6 +150,7 @@ export default class ObjectPool {
         if (ObjectPool.workers.length > 0) {
             const worker = ObjectPool.workers.pop() as Worker
             worker.setAll(scene, x, y, headKey, bodyKey)
+            worker.setVisible(true)
             return worker
         }
         ObjectPool.count++

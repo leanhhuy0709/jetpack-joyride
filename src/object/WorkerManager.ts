@@ -40,6 +40,7 @@ export default class WorkerManager {
     public handleCollider(player: Player): void {
         for (let i = 0; i < this.workers.length; i++) {
             this.workers[i].handleCollider(player)
+            
         }
     }
 

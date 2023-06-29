@@ -71,7 +71,7 @@ export default class ShopScene extends Phaser.Scene {
 
         this.add.rectangle(1600, 200, 2800, 1200, 0x1f2944).setOrigin(0.5, 0)
         this.productTexture = []
-        let tmp = 350
+        let tmp = 300
         for (let i = 0; i < this.keyList.length; i++) {
             const p1 = new Product(
                 this.keyList[i],
@@ -81,7 +81,7 @@ export default class ShopScene extends Phaser.Scene {
                 this.descriptionList[i]
             )
             this.productTexture.push(new ProductTexture(this, 200, tmp, p1, 2800))
-            tmp += 350
+            tmp += 220
         }
     }
 

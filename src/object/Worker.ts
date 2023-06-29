@@ -16,6 +16,8 @@ export default class Worker {
     protected velocity: number
     protected headKey: string
     protected bodyKey: string
+    private headTranslationX: number
+    private headTranslationY: number
     public constructor(
         scene: Phaser.Scene,
         x: number,
@@ -106,6 +108,9 @@ export default class Worker {
             this.body.setFlipX(false)
             this.head.setFlipX(false)
         }
+
+        this.headTranslationX = 0
+        this.headTranslationY = -43
     }
 
     public update(delta: number, player: Player): void {
@@ -128,11 +133,27 @@ export default class Worker {
             }
             this.body.x += this.velocity * delta * 1.5
         }
-        this.head.x = this.body.x
-        this.head.y = this.body.y - 43
+        this.head.x = this.body.x + this.headTranslationX
+        this.head.y = this.body.y + this.headTranslationY
 
         if (Math.abs(player.x - this.body.x) < 300) {
             this.state = WORKER_STATE.RUN
+        }
+
+        if (this.scene.matter.world.localWorld.gravity.y > 0)
+        {
+            this.body.setFlipY(false)
+            this.head.setFlipY(false)
+
+            this.headTranslationX = 0
+            this.headTranslationY = -43
+        }
+        else {
+            this.body.setFlipY(true)
+            this.head.setFlipY(true)
+
+            this.headTranslationX = 0
+            this.headTranslationY = 43
         }
     }
 

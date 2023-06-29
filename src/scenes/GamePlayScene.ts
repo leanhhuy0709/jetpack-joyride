@@ -40,6 +40,8 @@ export default class GamePlayScene extends Phaser.Scene {
         | Phaser.Sound.NoAudioSound
         | Phaser.Sound.HTML5AudioSound
 
+    public ground2: MatterJS.BodyType
+
     public constructor() {
         super({
             key: SCENE.GAMEPLAY,
@@ -87,6 +89,9 @@ export default class GamePlayScene extends Phaser.Scene {
 
         this.ground = this.matter.add.rectangle(0, 1500, 1e9, 250, { isStatic: true })
         this.matter.world.add(this.ground)
+
+        this.ground2 = this.matter.add.rectangle(0, 120, 1e9, 250, { isStatic: true })
+        this.matter.world.add(this.ground2)
 
         this.player = new Player(this, 800, 1250, SPRITE.BARRY_SPRITE_SHEET)
 
@@ -184,6 +189,7 @@ export default class GamePlayScene extends Phaser.Scene {
     }
 
     public update(_time: number, delta: number): void {
+        
         this.music.setVolume(Volume.value)
         this.background.update()
         this.player.update(delta)
@@ -191,7 +197,9 @@ export default class GamePlayScene extends Phaser.Scene {
         if (this.cursors.space?.isDown) {
             this.usingKey = true
             this.usingTouch = false
-            if (this.usingKey && this.player.visible) this.player.flying()
+            if (this.usingKey && this.player.visible) {
+                this.player.flying()
+            }
         } else if (this.cursors.space?.isUp) {
             if (this.usingKey) this.player.falling()
         }
