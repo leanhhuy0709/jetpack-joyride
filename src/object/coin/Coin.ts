@@ -1,7 +1,7 @@
-import CoinManager from './CoinManager'
 import Player from '../Player'
 import { DEPTH } from '../../const/depth'
 import { AUDIO, COIN_PATTERN, SPRITE } from '../../const/const'
+import ZapCoinManager from '../ZapCoinManager'
 
 export default class Coin {
     private scene: Phaser.Scene
@@ -70,11 +70,7 @@ export default class Coin {
         Coin.sound3.stop()
     }
 
-    public update(_delta: number, _playerSpeed: number): void {
-        //
-    }
-
-    public handleColliderWithPlayer(player: Player, coinManager: CoinManager): void {
+    public handleColliderWithPlayer(player: Player, coinManager: ZapCoinManager): void {
         const diff = 100
         if (
             player.x - diff > this.maxX + this.coins[0].width / 2 ||

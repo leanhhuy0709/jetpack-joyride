@@ -12,7 +12,7 @@ import Shoe from './equipment/Shoe'
 import AntiWorker from './equipment/AntiWorker'
 
 const DELAY_FIRE_BULLET = 5
-export const DEFAULT_JUMP_VELO = -10
+export const DEFAULT_JUMP_VELO = -12
 
 export enum PLAYER_STATE {
     FLYING,

@@ -8,6 +8,7 @@ export default class Zap extends Obstacle {
     private isSpin: boolean
     private glow1: Phaser.GameObjects.Sprite
     private glow2: Phaser.GameObjects.Sprite
+    
     public constructor(scene: Phaser.Scene, x1: number, y1: number, x2: number, y2: number) {
         super(scene)
         this.sprite1 = scene.matter.add

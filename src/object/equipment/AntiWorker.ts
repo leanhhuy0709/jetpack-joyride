@@ -9,6 +9,6 @@ export default class AntiWorker extends Equipment {
 
     public remove() {
         const glScene = this.player.scene as GamePlayScene
-        glScene.workerManager.setNumWorker(5)
+        glScene.workerManager.setNumWorker(10)
     }
 }

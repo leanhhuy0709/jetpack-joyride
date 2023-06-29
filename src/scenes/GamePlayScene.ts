@@ -4,17 +4,16 @@ import Player, { PLAYER_STATE } from '../object/Player'
 import Score from '../Score'
 import Background from '../object/Background'
 import ObjectPool from '../object/ObjectPool'
-import CoinManager from '../object/coin/CoinManager'
-import ObstacleManager, { DEFAULT_SAFE_DISTACE } from '../object/obstacle/ObstacleManager'
 import { DEPTH } from '../const/depth'
 import RocketManager from '../object/obstacle/RocketManager'
 import WorkerManager from '../object/WorkerManager'
 import StartBackground from '../object/background/StartBackground'
+import ZapCoinManager, { DEFAULT_SAFE_DISTACE } from '../object/ZapCoinManager'
+import UserData from '../object/shop/UserData'
 
 let isTween = false
 export default class GamePlayScene extends Phaser.Scene {
     private player: Player
-    private obstacleManager: ObstacleManager
     private score: Score
     private background: Background
     public ground: MatterJS.BodyType
@@ -26,9 +25,10 @@ export default class GamePlayScene extends Phaser.Scene {
         space?: Phaser.Input.Keyboard.Key
         shift?: Phaser.Input.Keyboard.Key
     }
-    private coinManager: CoinManager
-    private rocketManager: RocketManager
+
+    public rocketManager: RocketManager
     public workerManager: WorkerManager
+    public zapCoinManager: ZapCoinManager
 
     private usingKey: boolean
     private usingTouch: boolean
@@ -156,9 +156,8 @@ export default class GamePlayScene extends Phaser.Scene {
         if (this.input.keyboard) this.cursors = this.input.keyboard.createCursorKeys()
 
         this.rocketManager = new RocketManager(this, 3)
-        this.obstacleManager = new ObstacleManager(this, 4)
-        this.coinManager = new CoinManager(this, 4)
-        this.workerManager = new WorkerManager(this, 20)
+        this.workerManager = new WorkerManager(this, 10)
+        this.zapCoinManager = new ZapCoinManager(this, 10)
 
         this.score = new Score(this)
 
@@ -184,6 +183,11 @@ export default class GamePlayScene extends Phaser.Scene {
             if (this.usingKey) this.player.falling()
         }
 
+        if (this.cursors.shift?.isDown) {
+            this.scene.pause(SCENE.GAMEPLAY)
+            this.scene.launch(SCENE.PAUSE)
+        }
+
         if (this.input.pointer1.isDown) {
             this.usingKey = false
             this.usingTouch = true
@@ -195,16 +199,15 @@ export default class GamePlayScene extends Phaser.Scene {
         this.workerManager.update(delta, this.player)
         this.workerManager.handleCollider(this.player)
 
-        this.obstacleManager.update(delta)
+        this.zapCoinManager.update(delta)
         this.rocketManager.update(delta, this.player)
 
         this.score.add(delta, this.player.getSpeed() / 10)
 
         if (
-            this.obstacleManager.checkCollider(this.player) ||
+            this.zapCoinManager.checkCollider(this.player) ||
             this.rocketManager.checkCollider(this.player)
         ) {
-            //do something
             this.player.state = PLAYER_STATE.DEAD
             if (!isTween) {
                 const dead = this.add
@@ -215,18 +218,18 @@ export default class GamePlayScene extends Phaser.Scene {
                 this.player.setSpeed(0)
                 this.tweens.add({
                     targets: dead,
-                    x: this.player.x + 1000 * sp * 2,
+                    x: this.player.x + 1000 * sp,
                     y: 1350,
                     angle: 90,
-                    duration: 1000,
+                    duration: 500,
                     onComplete: () => {
                         console.log('You die!')
                         this.score.saveHighScore()
-                        this.coinManager.saveCoin()
+                        UserData.saveCoin()
                         this.scene.pause()
                         this.scene.launch(SCENE.GAMEOVER, {
                             score: this.score.getScore(),
-                            coin: this.coinManager.getCoin(),
+                            coin: this.zapCoinManager.getCoin(),
                         })
                     },
                     onUpdate: () => {
@@ -237,20 +240,17 @@ export default class GamePlayScene extends Phaser.Scene {
             }
         }
 
-        this.coinManager.handleColliderWithPlayer(this.player)
-        this.coinManager.setNewCoin()
+        this.zapCoinManager.setNewCoin()
 
         if (this.score.getScore() > this.score.getLevel()) {
             this.score.setLevel(this.score.getLevel() + 100)
             this.player.setSpeed(
                 this.evaluateSpeed(this.score.getScore(), this.player.getDefaultSpeed())
             )
-            this.obstacleManager.setMinSafeDistance(
+            this.zapCoinManager.setMinSafeDistance(
                 DEFAULT_SAFE_DISTACE + this.player.getSpeed() * 30
             )
         }
-
-        this.coinManager.update(delta, this.player.getSpeed())
     }
 
     private evaluateSmokeYPosition(x: number, offset: number, coef: number): number {

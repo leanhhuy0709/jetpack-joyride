@@ -7,7 +7,7 @@ export default class Shoe extends Equipment {
     }
 
     public init() {
-        this.player.setDefaultSpeed(1)
+        this.player.setDefaultSpeed(0.75)
     }
 
     public remove() {
