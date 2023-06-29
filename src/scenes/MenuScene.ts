@@ -144,6 +144,8 @@ export default class MenuScene extends Phaser.Scene {
     public update(): void {
         //Check button first ... else ...
 
+        this.coinRect.getText().setText(String(UserData.getAllCoin()))
+
         if (this.adsBtn.getIsPointerDown()) {
             this.adsBtn.setIsPointerDown(false)
             window.open('https://www.youtube.com/watch?v=Jzxi8nid9BQ', '_blank')

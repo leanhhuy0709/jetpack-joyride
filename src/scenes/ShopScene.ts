@@ -4,10 +4,11 @@ import Button from '../components/Button'
 import Product from '../object/shop/Product'
 import ProductTexture from '../object/shop/ProductTexture'
 import { productListKey, productListName, productListPrice } from '../object/shop/product-list'
-import UserData from '../object/shop/UserData'
+import UserData, { PRODUCT_STATE } from '../object/shop/UserData'
 
 export default class ShopScene extends Phaser.Scene {
     private backBtn: Button
+    private productTexture: ProductTexture[]
 
     public constructor() {
         super({
@@ -36,25 +37,43 @@ export default class ShopScene extends Phaser.Scene {
             .setOrigin(0.5, 0)
 
         this.add.rectangle(1600, 200, 2800, 1200, 0x1f2944).setOrigin(0.5, 0)
+        this.productTexture = []
         let tmp = 350
         for (let i = 0; i < productListKey.length; i++) {
             const p1 = new Product(
                 productListKey[i],
                 productListName[i],
                 productListPrice[i],
-                UserData.getIsBuy(i)
+                UserData.getProductState(i)
             )
-            new ProductTexture(this, 200, tmp, p1, 2800)
+            this.productTexture.push(new ProductTexture(this, 200, tmp, p1, 2800))
             tmp += 350
         }
-
-        //this.add.container()
     }
 
     public update(_time: number, _delta: number): void {
         if (this.backBtn.getIsPointerDown()) {
             this.scene.stop(SCENE.SHOP)
             this.scene.resume(SCENE.MENU)
+        }
+
+        for (let i = 0; i < this.productTexture.length; i++) {
+            if (this.productTexture[i].isButtonClicked()) {
+                switch (UserData.getProductState(i)) {
+                    case PRODUCT_STATE.EQUIPPED:
+                        UserData.unequip(i)
+                        break
+                    case PRODUCT_STATE.NOT_EQUIPPED:
+                        UserData.equip(i)
+                        break
+                    case PRODUCT_STATE.HAVE_NOT_BOUGHT_YET:
+                        if (UserData.canBuyProduct(i)) {
+                            UserData.buy(i, productListPrice[i])
+                        }
+                        break
+                }
+                this.productTexture[i].setState(UserData.getProductState(i))
+            }
         }
     }
 }

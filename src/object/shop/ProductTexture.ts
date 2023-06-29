@@ -1,11 +1,13 @@
 import Button from '../../components/Button'
 import { FONT_NAME } from '../../const/const'
 import Product from './Product'
+import { PRODUCT_STATE } from './UserData'
 
 export default class ProductTexture {
     private scene: Phaser.Scene
     private product: Product
     private container: Phaser.GameObjects.Container
+    private button: Button
 
     public constructor(scene: Phaser.Scene, x: number, y: number, product: Product, width: number) {
         this.scene = scene
@@ -13,7 +15,10 @@ export default class ProductTexture {
 
         const rect = scene.add.rectangle(200, 0, 200, 200, 0x7086a7).setOrigin(0.5, 0.5)
 
-        const image = scene.add.image(200, 0, product.getImageKey()).setDisplaySize(100, 100).setOrigin(0.5, 0.5)
+        const image = scene.add
+            .image(200, 0, product.getImageKey())
+            .setDisplaySize(100, 100)
+            .setOrigin(0.5, 0.5)
 
         const name = scene.add
             .text(500, 0, product.getName(), {
@@ -33,39 +38,63 @@ export default class ProductTexture {
             })
             .setStroke('#000000', 5)
             .setOrigin(0.5, 0.5)
-        let button
-        if (product.getIsBuy()) {
-            button = new Button(scene, width - 200, 0, 200, 80, 'EQUIP', {
-                color: '#ffffff',
-                fontSize: '40px',
-                fontStyle: 'bold',
-                fontFamily: FONT_NAME,
-            })
-        } else {
-            button = new Button(scene, width - 200, 0, 200, 80, 'BUY', {
-                color: '#ffffff',
-                fontSize: '40px',
-                fontStyle: 'bold',
-                fontFamily: FONT_NAME,
-            })
-            button.setInteractive()
+        let content: string
+
+        switch (product.getState()) {
+            case PRODUCT_STATE.EQUIPPED:
+                content = 'UNEQUIP'
+                break
+            case PRODUCT_STATE.NOT_EQUIPPED:
+                content = 'EQUIP'
+                break
+            case PRODUCT_STATE.HAVE_NOT_BOUGHT_YET:
+                content = 'BUY'
+                break
         }
+        this.button = new Button(scene, width - 200, 0, 200, 80, content, {
+            color: '#ffffff',
+            fontSize: '40px',
+            fontStyle: 'bold',
+            fontFamily: FONT_NAME,
+        })
+        this.button.setInteractive()
 
         const line = scene.add.rectangle(0, 150, width, 5, 0xffffff).setOrigin(0, 0)
-
-
-        
 
         this.container = scene.add.container(x, y, [
             rect,
             name,
             price,
-            button.getRectangle(),
-            button.getText(),
-            button.getBlackRect(),
+            this.button.getRectangle(),
+            this.button.getText(),
+            this.button.getBlackRect(),
             line,
-            image
+            image,
         ])
+    }
 
+    public isButtonClicked(): boolean {
+        if (this.button.getIsPointerDown()) {
+            this.button.setIsPointerDown(false)
+            return true
+        }
+        return false 
+    }
+
+    public setState(state: PRODUCT_STATE): void {
+        this.product.setState(state)
+        let content: string
+        switch (state) {
+            case PRODUCT_STATE.EQUIPPED:
+                content = 'UNEQUIP'
+                break
+            case PRODUCT_STATE.NOT_EQUIPPED:
+                content = 'EQUIP'
+                break
+            case PRODUCT_STATE.HAVE_NOT_BOUGHT_YET:
+                content = 'BUY'
+                break
+        }
+        this.button.getText().setText(content)
     }
 }
