@@ -5,6 +5,8 @@ import Equipment from './Equipment'
 
 export default class GravityBelt extends Equipment {
     private gravity_effect: Phaser.GameObjects.Sprite
+    private transitionX: number
+    private transitionY: number
 
     public constructor(player: Player) {
         super(player)
@@ -28,6 +30,9 @@ export default class GravityBelt extends Equipment {
             })
         }
         this.gravity_effect.play('gravity_effect')
+
+        this.transitionX = -10
+        this.transitionY = 20
     }
 
     public init() {
@@ -36,15 +41,42 @@ export default class GravityBelt extends Equipment {
     }
 
     public update(_delta: number): void {
-        this.gravity_effect.setPosition(this.player.x - 10, this.player.y + 20)
+        this.gravity_effect.setPosition(
+            this.player.x + this.transitionX,
+            this.player.y + this.transitionY
+        )
 
         if (this.player.state != PLAYER_STATE.FALLING) this.gravity_effect.setVisible(false)
         else this.gravity_effect.setVisible(true)
 
         const gravity = this.player.scene.matter.world.localWorld.gravity.y
 
-        if (gravity > 0) this.gravity_effect.setFlipY(false)
-            else this.gravity_effect.setFlipY(true)
+        const newFlip = gravity < 0
+
+        if (this.gravity_effect.flipX != newFlip) {
+            this.player.scene.anims.remove('gravity_effect')
+            this.gravity_effect.setFlipX(newFlip)
+            this.player.scene.anims.create({
+                key: 'gravity_effect',
+                frames: this.gravity_effect.anims.generateFrameNumbers(SPRITE.ROCKET_EFFECT, {
+                    start: 4,
+                    end: 7,
+                }),
+                frameRate: 10,
+                repeat: -1,
+            })
+            this.gravity_effect.play('gravity_effect')
+            if (newFlip)
+            {
+                this.transitionX = -15
+                this.transitionY = -20
+            }
+            else 
+            {
+                this.transitionX = -15
+                this.transitionY = 20
+            }
+        }
     }
 
     public remove() {
