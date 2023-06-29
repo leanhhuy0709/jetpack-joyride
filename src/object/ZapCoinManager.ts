@@ -88,11 +88,12 @@ export default class ZapCoinManager {
             }
         }
 
-        let tmp =
-            Math.max(
-                this.zaps[this.zaps.length - 1].maxX(),
-                this.coins[this.coins.length - 1].getMaxX()
-            ) + Phaser.Math.Between(this.minSafeDistance, this.minSafeDistance + 500)
+        let tmp = this.scene.cameras.main.scrollX + 3200
+
+        if (this.zaps.length > 0) tmp = Math.max(tmp, this.zaps[this.zaps.length - 1].maxX())
+        if (this.coins.length > 0) tmp = Math.max(tmp, this.coins[this.coins.length - 1].getMaxX())
+
+        tmp += Phaser.Math.Between(this.minSafeDistance, this.minSafeDistance + 500)
         for (let i = 0; i < numRemoved; i++) {
             if (Phaser.Math.Between(0, 99) < 30) {
                 const coin = ObjectPool.getCoin(this.scene, tmp, Phaser.Math.Between(400, 800))

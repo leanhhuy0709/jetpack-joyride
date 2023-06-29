@@ -12,7 +12,6 @@ import ZapCoinManager, { DEFAULT_SAFE_DISTACE } from '../object/ZapCoinManager'
 import UserData from '../object/shop/UserData'
 import Volume from '../object/Volume'
 
-let isTween = false
 export default class GamePlayScene extends Phaser.Scene {
     private player: Player
     private score: Score
@@ -33,6 +32,8 @@ export default class GamePlayScene extends Phaser.Scene {
 
     private usingKey: boolean
     private usingTouch: boolean
+
+    private isTweenDead: boolean
 
     private music:
         | Phaser.Sound.WebAudioSound
@@ -172,7 +173,7 @@ export default class GamePlayScene extends Phaser.Scene {
         this.input.addPointer(1)
         this.usingKey = this.usingTouch = true
 
-        isTween = false
+        this.isTweenDead = false
 
         this.player.loadUserData()
 
@@ -219,7 +220,7 @@ export default class GamePlayScene extends Phaser.Scene {
             this.rocketManager.checkCollider(this.player)
         ) {
             this.player.state = PLAYER_STATE.DEAD
-            if (!isTween) {
+            if (!this.isTweenDead) {
                 const dead = this.add
                     .sprite(this.player.x, this.player.y, IMAGE.BARRY_DEAD)
                     .setDepth(DEPTH.OBJECT_HIGH)
@@ -228,7 +229,7 @@ export default class GamePlayScene extends Phaser.Scene {
                 this.player.setSpeed(0)
                 this.tweens.add({
                     targets: dead,
-                    x: this.player.x + 1000 * sp,
+                    x: this.player.x + 500 * sp,
                     y: 1350,
                     angle: 90,
                     duration: 500,
@@ -246,7 +247,7 @@ export default class GamePlayScene extends Phaser.Scene {
                         this.player.setPosition(dead.x, dead.y)
                     },
                 })
-                isTween = true
+                this.isTweenDead = true
             }
         }
 
