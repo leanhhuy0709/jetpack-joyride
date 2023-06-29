@@ -5,16 +5,26 @@ import Explosion from './bullet/Explosion'
 import ObjectPool from './ObjectPool'
 import GamePlayScene from '../scenes/GamePlayScene'
 import { IMAGE, SPRITE } from '../const/const'
+import Equipment from './equipment/Equipment'
 
 const DELAY_FIRE_BULLET = 5
 export const DEFAULT_JUMP_VELO = -10
+
+export enum PLAYER_STATE {
+    FLYING,
+    FALLING,
+    MOVING,
+    DEAD,
+}
 export default class Player extends Phaser.Physics.Matter.Sprite {
-    private isFlying: boolean
+    public state: PLAYER_STATE
     private bullets: Bullet[]
     private explosions: Explosion[]
     private delayFire: number
     private speed: number
     private bulletFlash: Phaser.GameObjects.Sprite
+    private jumpVelo: number = DEFAULT_JUMP_VELO
+    private equipments: Equipment[]
 
     public constructor(scene: Phaser.Scene, x: number, y: number, key: string) {
         super(scene.matter.world, x, y, key)
@@ -25,7 +35,16 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
             .setDepth(DEPTH.OBJECT_VERYHIGH)
             .setOrigin(0.65, 0.5)
 
-        this.isFlying = false
+        this.initBullet()
+
+        this.equipments = []
+
+        this.state = PLAYER_STATE.FALLING
+        this.scene.add.existing(this)
+        this.createAnims(key)
+    }
+
+    private createAnims(key: string): void {
         if (!this.scene.anims.exists('move'))
             this.scene.anims.create({
                 key: 'move',
@@ -47,16 +66,6 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
                 frameRate: 10,
                 repeat: 1,
             })
-
-        this.anims.play('fall')
-        this.scene.add.existing(this)
-
-        this.bullets = []
-        this.explosions = []
-        this.delayFire = DELAY_FIRE_BULLET
-        this.speed = 0.5
-
-        this.bulletFlash = this.scene.add.sprite(x, y, SPRITE.BULLET_FLASH).setDisplaySize(150, 150)
         if (!this.scene.anims.exists('flash'))
             this.scene.anims.create({
                 key: 'flash',
@@ -67,28 +76,46 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
                 frameRate: 10,
                 repeat: -1,
             })
-
+        this.anims.play('fall')
         this.bulletFlash.play('flash')
+    }
+
+    private initBullet(): void {
+        this.bullets = []
+        this.explosions = []
+        this.delayFire = DELAY_FIRE_BULLET
+        this.speed = 0.5
+
+        this.bulletFlash = this.scene.add
+            .sprite(0, 0, SPRITE.BULLET_FLASH)
+            .setDisplaySize(150, 150)
+            .setDepth(DEPTH.OBJECT_HIGH)
     }
 
     public update(delta: number): void {
         super.update()
+        const glScene = this.scene as GamePlayScene
 
         this.x += delta * this.speed
 
         if (this.body) {
-            if (
-                Math.floor(Math.abs(this.body.velocity.y) * 100) / 100 == 0 &&
-                this.anims.currentAnim?.key != 'move'
-            )
+            if (glScene.matter.overlap(this, [glScene.ground]) && this.state != PLAYER_STATE.MOVING)
                 this.moving()
-            else if (this.isFlying) this.flying()
-            else this.falling()
+            else if (this.state == PLAYER_STATE.FLYING) this.flying()
+            else if (this.state == PLAYER_STATE.FALLING) this.falling()
         }
+
+        this.updateBullet(delta)
+
+        for (let i = 0; i < this.equipments.length; i++)
+            this.equipments[i].update(delta)
+    }
+
+    private updateBullet(delta: number) {
+        const glScene = this.scene as GamePlayScene
 
         for (let i = 0; i < this.getBullets().length; i++) {
             this.bullets[i].update(delta)
-            const glScene = this.scene as GamePlayScene
 
             if (glScene.matter.overlap(this.bullets[i], [glScene.ground])) {
                 this.explosions.push(
@@ -122,7 +149,9 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
     public fireBullet(): void {
         this.delayFire += 0.5
         if (this.delayFire >= DELAY_FIRE_BULLET) {
-            this.bullets.push(ObjectPool.getBullet(this.scene, this.x - 10, this.y + 95, IMAGE.BULLET))
+            this.bullets.push(
+                ObjectPool.getBullet(this.scene, this.x - 10, this.y + 95, IMAGE.BULLET)
+            )
             this.delayFire -= DELAY_FIRE_BULLET
         }
     }
@@ -133,30 +162,37 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
                 this.body.position.y = 0
             } else {
                 if (this.getVelocity()) {
-                    if (this.getVelocity() && (this.getVelocity().y as number) > DEFAULT_JUMP_VELO) {
-                        this.setVelocityY(Number(this.getVelocity().y) - 0.5)
-                    } else this.setVelocityY(DEFAULT_JUMP_VELO)
+                    if (this.getVelocity() && (this.getVelocity().y as number) > this.jumpVelo) {
+                        this.setVelocityY(Number(this.getVelocity().y) + this.jumpVelo / 20)
+                    } else this.setVelocityY(this.jumpVelo)
                 }
 
-                this.isFlying = true
+                this.state = PLAYER_STATE.FLYING
                 this.anims.play('fly')
             }
         }
         this.fireBullet()
         this.bulletFlash.setVisible(true)
+
+        for (let i = 0; i < this.equipments.length; i++)
+            this.equipments[i].flying()
     }
 
     public falling(): void {
-        if (this.body && this.isFlying) {
+        if (this.body && this.state == PLAYER_STATE.FLYING) {
             this.setVelocityY(-5)
-            this.isFlying = false
+            this.state = PLAYER_STATE.FALLING
             this.anims.play('fall')
         }
         this.bulletFlash.setVisible(false)
+
+        for (let i = 0; i < this.equipments.length; i++)
+            this.equipments[i].falling()
     }
 
     public moving(): void {
         this.anims.play('move')
+        this.state = PLAYER_STATE.MOVING
     }
 
     public getBullets(): Bullet[] {
@@ -169,5 +205,34 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
 
     public setSpeed(speed: number): void {
         this.speed = speed
+    }
+
+    public setJumpVelo(jumpVelo: number): void {
+        this.jumpVelo = jumpVelo
+    }
+
+    public getJumpVelo(): number {
+        return this.jumpVelo
+    }
+
+    public addEquipment(equipment: Equipment): void {
+        equipment.init()
+        this.equipments.push(equipment)
+    }
+
+    public getEquipments(): Equipment[] {
+        return this.equipments
+    }
+
+    public removeEquipment(type: typeof Equipment): void {
+        for (let i = 0; i < this.equipments.length; i++)
+        {
+            if (this.equipments[i] instanceof type)
+            {
+                this.equipments[i].remove()
+                this.equipments.splice(i, 1)
+                break
+            }
+        }
     }
 }

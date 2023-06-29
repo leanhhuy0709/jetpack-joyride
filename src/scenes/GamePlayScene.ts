@@ -1,6 +1,6 @@
 import * as Phaser from 'phaser'
 import { IMAGE, SCENE, SPRITE } from '../const/const'
-import Player from '../object/Player'
+import Player, { PLAYER_STATE } from '../object/Player'
 import Score from '../Score'
 import Background from '../object/Background'
 import ObjectPool from '../object/ObjectPool'
@@ -10,7 +10,9 @@ import { DEPTH } from '../const/depth'
 import RocketManager from '../object/obstacle/RocketManager'
 import WorkerManager from '../object/WorkerManager'
 import StartBackground from '../object/background/StartBackground'
+import GravityBelt from '../object/equipment/GravityBelt'
 
+let isTween = false
 export default class GamePlayScene extends Phaser.Scene {
     private player: Player
     private obstacleManager: ObstacleManager
@@ -165,6 +167,10 @@ export default class GamePlayScene extends Phaser.Scene {
 
         this.input.addPointer(1)
         this.usingKey = this.usingTouch = true
+
+        isTween = false
+
+        this.player.addEquipment(new GravityBelt(this.player))
     }
 
     public update(_time: number, delta: number): void {
@@ -199,14 +205,37 @@ export default class GamePlayScene extends Phaser.Scene {
             this.obstacleManager.checkCollider(this.player) ||
             this.rocketManager.checkCollider(this.player)
         ) {
-            console.log('You die!')
-            this.score.saveHighScore()
-            this.coinManager.saveCoin()
-            this.scene.pause()
-            this.scene.launch(SCENE.GAMEOVER, {
-                score: this.score.getScore(),
-                coin: this.coinManager.getCoin(),
-            })
+            //do something
+            this.player.state = PLAYER_STATE.DEAD
+            if (!isTween) {
+                const dead = this.add
+                    .sprite(this.player.x, this.player.y, IMAGE.BARRY_DEAD)
+                    .setDepth(DEPTH.OBJECT_HIGH)
+                this.player.setVisible(false)
+                const sp = this.player.getSpeed()
+                this.player.setSpeed(0)
+                this.tweens.add({
+                    targets: dead,
+                    x: this.player.x + 1000 * sp * 2,
+                    y: 1350,
+                    angle: 90,
+                    duration: 1000,
+                    onComplete: () => {
+                        console.log('You die!')
+                        this.score.saveHighScore()
+                        this.coinManager.saveCoin()
+                        this.scene.pause()
+                        this.scene.launch(SCENE.GAMEOVER, {
+                            score: this.score.getScore(),
+                            coin: this.coinManager.getCoin(),
+                        })
+                    },
+                    onUpdate: () => {
+                        this.player.setPosition(dead.x, dead.y)
+                    },
+                })
+                isTween = true
+            }
         }
 
         this.coinManager.handleColliderWithPlayer(this.player)

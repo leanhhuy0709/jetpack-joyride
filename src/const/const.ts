@@ -4,7 +4,7 @@ export enum SCENE {
     INIT = 'InitScene',
     GAMEOVER = 'GameOverScene',
     LOADING = 'LoadingScene',
-    SHOP = 'ShopScene'
+    SHOP = 'ShopScene',
 }
 
 export const FONT_NAME = 'New Athletic M54'
@@ -46,13 +46,6 @@ export enum SPRITE {
     WORKER_TALL_BODY = 'assets/workers/workerTallBody.png',
 }
 
-
-
-
-
-
-
-
 export enum IMAGE {
     BULLET = 'assets/bullet/1.png',
     COIN = 'assets/coin/1.png',
@@ -75,7 +68,8 @@ export enum IMAGE {
     SMOKE = 'assets/bg/particles/smoke.png',
     DO_NOT_TOUCH = 'assets/bg/Levels/Title/doNotTouchSign_TVOS.png',
     SHOE = 'assets/equipment/shoe.png',
-    GRAVITY_BELT = 'assets/equipment/gravity-belt.png'
+    GRAVITY_BELT = 'assets/equipment/gravity-belt.png',
+    BARRY_DEAD = 'assets/barry/barry-dead.png',
 }
 
 export enum AUDIO {

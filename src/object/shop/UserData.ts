@@ -10,7 +10,7 @@ export default class UserData {
         UserData.isInit = true
         for (let i = 0; i < productListKey.length; i++) {
             if (localStorage.getItem('product-' + String(i))) UserData.isBuy.push(true)
-            else UserData.isBuy.push(true)
+            else UserData.isBuy.push(false)
         }
         if (localStorage.getItem('allCoin')) this.allCoin = Number(localStorage.getItem('allCoin'))
         else this.allCoin = 0
