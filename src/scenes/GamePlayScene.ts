@@ -168,6 +168,8 @@ export default class GamePlayScene extends Phaser.Scene {
 
         isTween = false
 
+        
+
         this.player.loadUserData()
     }
 

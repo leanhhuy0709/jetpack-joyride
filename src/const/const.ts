@@ -6,6 +6,7 @@ export enum SCENE {
     LOADING = 'LoadingScene',
     SHOP = 'ShopScene',
     PAUSE = 'PauseScene',
+    SETTING = 'SettingScene'
 }
 
 export const FONT_NAME = 'New Athletic M54'

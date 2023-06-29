@@ -165,6 +165,13 @@ export default class MenuScene extends Phaser.Scene {
             return
         }
 
+        if (this.settingBtn.getIsPointerDown()) {
+            this.settingBtn.setIsPointerDown(false)
+            this.scene.pause(SCENE.MENU)
+            this.scene.launch(SCENE.SETTING, {scene: SCENE.MENU})
+            return
+        }
+
         if (this.playBtn.getIsPointerDown() && !this.isSpaceClicked) {
             this.isSpaceClicked = true
             this.tweens.add({

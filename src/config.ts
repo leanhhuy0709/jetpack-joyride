@@ -4,6 +4,7 @@ import InitScene from './scenes/InitScene'
 import LoadingScene from './scenes/LoadingScene'
 import MenuScene from './scenes/MenuScene'
 import PauseScene from './scenes/PauseScene'
+import SettingScene from './scenes/SettingScene'
 import ShopScene from './scenes/ShopScene'
 
 export const GameConfig: Phaser.Types.Core.GameConfig = {
@@ -12,7 +13,7 @@ export const GameConfig: Phaser.Types.Core.GameConfig = {
     version: '1.0',
     type: Phaser.AUTO,
     parent: 'game',
-    scene: [InitScene, LoadingScene, MenuScene, GamePlayScene, GameOverScene, ShopScene, PauseScene],
+    scene: [InitScene, LoadingScene, MenuScene, GamePlayScene, GameOverScene, ShopScene, PauseScene, SettingScene],
     input: {
         keyboard: true,
     },

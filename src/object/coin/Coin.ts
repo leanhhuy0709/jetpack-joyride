@@ -2,6 +2,7 @@ import Player from '../Player'
 import { DEPTH } from '../../const/depth'
 import { AUDIO, COIN_PATTERN, SPRITE } from '../../const/const'
 import ZapCoinManager from '../ZapCoinManager'
+import Volume from '../Volume'
 
 export default class Coin {
     private scene: Phaser.Scene
@@ -11,9 +12,9 @@ export default class Coin {
     private minY: number
     private maxY: number
     private coinPatternIdx: number
-    private static sound1: Phaser.Sound.BaseSound
-    private static sound2: Phaser.Sound.BaseSound
-    private static sound3: Phaser.Sound.BaseSound
+    private static sound1: Phaser.Sound.WebAudioSound | Phaser.Sound.NoAudioSound | Phaser.Sound.HTML5AudioSound
+    private static sound2: Phaser.Sound.WebAudioSound | Phaser.Sound.NoAudioSound | Phaser.Sound.HTML5AudioSound
+    private static sound3: Phaser.Sound.WebAudioSound | Phaser.Sound.NoAudioSound | Phaser.Sound.HTML5AudioSound
 
     public constructor(scene: Phaser.Scene, x: number, y: number, coinPatternIdx = 1) {
         this.scene = scene
@@ -61,10 +62,9 @@ export default class Coin {
             }
             col++
         }
-        if (!Coin.sound1) Coin.sound1 = this.scene.sound.add(AUDIO.COIN_COLLECT_1).setVolume(0.5)
-        if (!Coin.sound2) Coin.sound2 = this.scene.sound.add(AUDIO.COIN_COLLECT_2).setVolume(0.5)
-        if (!Coin.sound3) Coin.sound3 = this.scene.sound.add(AUDIO.COIN_COLLECT_3).setVolume(0.5)
-
+        if (!Coin.sound1) Coin.sound1 = this.scene.sound.add(AUDIO.COIN_COLLECT_1)
+        if (!Coin.sound2) Coin.sound2 = this.scene.sound.add(AUDIO.COIN_COLLECT_2)
+        if (!Coin.sound3) Coin.sound3 = this.scene.sound.add(AUDIO.COIN_COLLECT_3)
         Coin.sound1.stop()
         Coin.sound2.stop()
         Coin.sound3.stop()
@@ -152,6 +152,7 @@ export default class Coin {
     }
 
     public static playSound(): void {
+        Coin.sound1.setVolume(Volume.value)
         Coin.sound1.play()
         //Coin.sound2.play()
         //Coin.sound3.play()

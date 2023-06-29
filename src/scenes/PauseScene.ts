@@ -59,7 +59,10 @@ export default class PauseScene extends Phaser.Scene {
             this.scene.resume(SCENE.GAMEPLAY)
             this.scene.stop(SCENE.PAUSE)
         } else if (this.settingBtn.getIsPointerDown()) {
-            //
+            this.settingBtn.setIsPointerDown(false)
+            this.scene.pause(SCENE.PAUSE)
+            this.scene.launch(SCENE.SETTING, { scene: SCENE.PAUSE })
+            return
         }
     }
 }
