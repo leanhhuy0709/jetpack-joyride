@@ -59,6 +59,7 @@ export default class PauseScene extends Phaser.Scene {
 
     public update(): void {
         if (this.homeBtn.getIsPointerDown()) {
+            this.music.stop()
             this.scene.stop(SCENE.GAMEPLAY)
             this.scene.start(SCENE.MENU)
         } else if (this.continueBtn.getIsPointerDown()) {

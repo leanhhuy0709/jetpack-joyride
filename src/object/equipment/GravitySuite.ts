@@ -1,4 +1,4 @@
-import Player, { DEFAULT_JUMP_VELO, PLAYER_STATE } from '../Player'
+import Player, { DEFAULT_JUMP_VELO } from '../Player'
 import Equipment from './Equipment'
 
 export default class GravitySuit extends Equipment {
@@ -19,7 +19,8 @@ export default class GravitySuit extends Equipment {
     }
 
     public remove() {
-        this.player.scene.matter.world.setGravity(0, 0.95)
+        const gravity = this.player.scene.matter.world.localWorld.gravity.y
+        this.player.scene.matter.world.setGravity(0, Math.abs(gravity))
         this.player.setJumpVelo(DEFAULT_JUMP_VELO)
     }
 
@@ -38,9 +39,6 @@ export default class GravitySuit extends Equipment {
             else this.player.setFlipY(true)
             this.player.setJumpVelo(0)
             this.flyFlag = false
-
-            this.player.state = PLAYER_STATE.FALLING
-            this.player.play('fall')
         }
     }
 }

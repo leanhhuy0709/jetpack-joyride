@@ -36,8 +36,9 @@ export default class GravityBelt extends Equipment {
     }
 
     public init() {
-        this.player.scene.matter.world.setGravity(0, 0.95 * 2)
-        this.player.setJumpVelo(DEFAULT_JUMP_VELO * 1.25)
+        const gravity = this.player.scene.matter.world.localWorld.gravity.y
+        this.player.scene.matter.world.setGravity(0, gravity * 2)
+        this.player.setJumpVelo(DEFAULT_JUMP_VELO * 1.3)
     }
 
     public update(_delta: number): void {
@@ -46,7 +47,7 @@ export default class GravityBelt extends Equipment {
             this.player.y + this.transitionY
         )
 
-        if (this.player.state != PLAYER_STATE.FALLING) this.gravity_effect.setVisible(false)
+        if (this.player.playerState != PLAYER_STATE.FALLING || !this.player.visible) this.gravity_effect.setVisible(false)
         else this.gravity_effect.setVisible(true)
 
         const gravity = this.player.scene.matter.world.localWorld.gravity.y
@@ -66,13 +67,10 @@ export default class GravityBelt extends Equipment {
                 repeat: -1,
             })
             this.gravity_effect.play('gravity_effect')
-            if (newFlip)
-            {
+            if (newFlip) {
                 this.transitionX = -15
                 this.transitionY = -20
-            }
-            else 
-            {
+            } else {
                 this.transitionX = -15
                 this.transitionY = 20
             }
@@ -80,7 +78,8 @@ export default class GravityBelt extends Equipment {
     }
 
     public remove() {
-        this.player.scene.matter.world.setGravity(0, 0.95)
+        const gravity = this.player.scene.matter.world.localWorld.gravity.y
+        this.player.scene.matter.world.setGravity(0, gravity / 2)
         this.player.setJumpVelo(DEFAULT_JUMP_VELO)
     }
 }

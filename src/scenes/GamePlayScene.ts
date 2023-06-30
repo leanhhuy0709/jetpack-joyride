@@ -14,9 +14,9 @@ import UserData from '../object/shop/UserData'
 
 export default class GamePlayScene extends Phaser.Scene {
     private player: Player
-    private score: Score
+
     private background: Background
-    public ground: MatterJS.BodyType
+
     private cursors: {
         left: Phaser.Input.Keyboard.Key
         right: Phaser.Input.Keyboard.Key
@@ -26,6 +26,7 @@ export default class GamePlayScene extends Phaser.Scene {
         shift?: Phaser.Input.Keyboard.Key
     }
 
+    public score: Score
     public rocketManager: RocketManager
     public workerManager: WorkerManager
     public zapCoinManager: ZapCoinManager
@@ -40,6 +41,7 @@ export default class GamePlayScene extends Phaser.Scene {
         | Phaser.Sound.NoAudioSound
         | Phaser.Sound.HTML5AudioSound
 
+    public ground: MatterJS.BodyType
     public ground2: MatterJS.BodyType
 
     private fpsText: Phaser.GameObjects.Text
@@ -202,9 +204,11 @@ export default class GamePlayScene extends Phaser.Scene {
     }
 
     public update(_time: number, delta: number): void {
+        this.matter.world.update(_time, delta)
+
         this.music.setVolume(Volume.value)
         this.background.update()
-        this.player.update(delta)
+        
 
         if (this.cursors.space?.isDown) {
             this.usingKey = true
@@ -228,6 +232,9 @@ export default class GamePlayScene extends Phaser.Scene {
         } else {
             if (this.usingTouch) this.player.falling()
         }
+
+        this.player.update(delta)
+        
 
         this.workerManager.update(delta, this.player)
         this.workerManager.handleCollider(this.player)
@@ -287,14 +294,17 @@ export default class GamePlayScene extends Phaser.Scene {
         }
 
         if (this.matter.config.debug) {
-            if (this.matter.config.debug as Phaser.Types.Physics.Matter.MatterDebugConfig)
-                this.fpsText.setVisible(true)
+            const debug = this.matter.config.debug as Phaser.Types.Physics.Matter.MatterDebugConfig
+
+            if (debug.showBody) this.fpsText.setVisible(true)
             else this.fpsText.setVisible(false)
         }
 
         this.fpsText
             .setText(`FPS: ${Math.floor(this.game.loop.actualFps)}`)
             .setPosition(this.cameras.main.scrollX + 3200, 100)
+
+        
     }
 
     private evaluateSmokeYPosition(x: number, offset: number, coef: number): number {

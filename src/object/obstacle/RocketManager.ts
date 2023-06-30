@@ -1,3 +1,4 @@
+import GamePlayScene from '../../scenes/GamePlayScene'
 import ObjectPool from '../ObjectPool'
 import Player from '../Player'
 import Rocket from './Rocket'
@@ -6,16 +7,18 @@ export default class RocketManager {
     private scene: Phaser.Scene
     private rockets: Rocket[]
     private rocketIdx: number[]
+    private minDistance: number
 
     public constructor(scene: Phaser.Scene, numIdx: number) {
         this.scene = scene
         this.rockets = []
 
+        this.minDistance = 5000
         this.rocketIdx = []
-        let tmp = Phaser.Math.Between(10000, 15000)
+        let tmp = Phaser.Math.Between(this.minDistance, this.minDistance * 2)
         for (let i = 0; i < numIdx; i++) {
             this.rocketIdx.push(tmp)
-            tmp += Phaser.Math.Between(10000, 15000)
+            tmp += Phaser.Math.Between(this.minDistance, this.minDistance * 2)
         }
     }
 
@@ -49,7 +52,8 @@ export default class RocketManager {
             }
             this.rocketIdx.splice(0, 1)
             this.rocketIdx.push(
-                this.rocketIdx[this.rocketIdx.length - 1] + Phaser.Math.Between(5000, 10000)
+                this.rocketIdx[this.rocketIdx.length - 1] +
+                    Phaser.Math.Between(this.minDistance, this.minDistance * 2)
             )
         }
 
@@ -68,5 +72,13 @@ export default class RocketManager {
             }
             this.rockets = []
         }
+        const gpScene = this.scene as GamePlayScene
+        this.evaluateMinDistance(gpScene.score.getScore())
+    }
+
+    public evaluateMinDistance(score: number, init = 5000): void {
+        this.minDistance = init - Math.log10((0.5 * score) / 1000 + 1) * 1500
+        if (this.minDistance < init - 3000)
+            this.minDistance = init - 3000
     }
 }

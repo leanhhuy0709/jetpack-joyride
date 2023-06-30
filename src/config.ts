@@ -21,15 +21,14 @@ export const GameConfig: Phaser.Types.Core.GameConfig = {
         default: 'matter',
         matter: {
             gravity: {
-                y: 0.95,
+                y: 0.25,
             },
             debug: {
                 
-                showBody: true,
-                showStaticBody: true,
+                showBody: false,
+                showStaticBody: false,
                 lineColor: 0xfc1200,
-            }
-            
+            },
         },
     },
 

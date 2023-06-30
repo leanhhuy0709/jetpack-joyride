@@ -14,16 +14,16 @@ import Dan from './equipment/Dan'
 import GravitySuit from './equipment/GravitySuite'
 
 const DELAY_FIRE_BULLET = 5
-export const DEFAULT_JUMP_VELO = -12
+export const DEFAULT_JUMP_VELO = -8
 
 export enum PLAYER_STATE {
-    FLYING,
-    FALLING,
-    MOVING,
-    DEAD,
+    FLYING = 'Fly',
+    FALLING = 'Fall',
+    MOVING = 'Move',
+    DEAD = 'Dead',
 }
 export default class Player extends Phaser.Physics.Matter.Sprite {
-    public state: PLAYER_STATE
+    public playerState: PLAYER_STATE
     private bullets: Bullet[]
     private explosions: Explosion[]
     private delayFire: number
@@ -47,7 +47,7 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
 
         this.equipments = []
 
-        this.state = PLAYER_STATE.MOVING
+        this.playerState = PLAYER_STATE.MOVING
         this.scene.add.existing(this)
         this.createAnims(key)
         this.speed = 0.5
@@ -130,19 +130,22 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
         super.update()
         const gpScene = this.scene as GamePlayScene
         this.x += delta * this.speed
-        if (
-            gpScene.matter.overlap(this, [gpScene.ground, gpScene.ground2]) &&
-            this.state != PLAYER_STATE.MOVING
-        ) {
-            this.moving()
-        } else if (this.state == PLAYER_STATE.FLYING) this.flying()
-        else if (this.state == PLAYER_STATE.FALLING) this.falling()
-        else if (
-            !gpScene.matter.overlap(this, [gpScene.ground, gpScene.ground2]) &&
-            this.state == PLAYER_STATE.MOVING
-        ) {
-            this.state = PLAYER_STATE.FALLING
-            this.anims.play('fall')
+
+        switch (this.playerState) {
+            case PLAYER_STATE.MOVING:
+                if (!gpScene.matter.overlap(this, [gpScene.ground, gpScene.ground2])) {
+                    this.falling()
+                }
+                break
+            case PLAYER_STATE.FLYING:
+                break
+            case PLAYER_STATE.FALLING:
+                if (gpScene.matter.overlap(this, [gpScene.ground, gpScene.ground2])) {
+                    this.moving()
+                } else this.falling()
+                break
+            case PLAYER_STATE.DEAD:
+                break
         }
 
         this.updateBullet(delta)
@@ -195,36 +198,34 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
     }
 
     public flying(): void {
-        if (this.getVelocity()) {
-            if (this.getVelocity() && (this.getVelocity().y as number) > this.jumpVelo) {
-                this.setVelocityY(Number(this.getVelocity().y) + this.jumpVelo / 20)
-            } else this.setVelocityY(this.jumpVelo)
-        }
-
-        this.state = PLAYER_STATE.FLYING
-        this.anims.play('fly')
-
         if (this.canFireBullet) {
+            if (this.getVelocity()) {
+                if (this.getVelocity() && (this.getVelocity().y as number) > this.jumpVelo) {
+                    this.setVelocityY(Number(this.getVelocity().y) + this.jumpVelo / 20)
+                } else this.setVelocityY(this.jumpVelo)
+            }
             this.fireBullet()
             this.bulletFlash.setVisible(true)
         }
+        this.playerState = PLAYER_STATE.FLYING
+        this.anims.play('fly')
         for (let i = 0; i < this.equipments.length; i++) this.equipments[i].flying()
     }
 
     public falling(): void {
-        if (this.state == PLAYER_STATE.FLYING) {
-            if (this.canFireBullet) this.setVelocityY(this.jumpVelo / 10)
-            this.state = PLAYER_STATE.FALLING
+        const gpScene = this.scene as GamePlayScene
+        if (!gpScene.matter.overlap(this, [gpScene.ground, gpScene.ground2])) {
+            this.playerState = PLAYER_STATE.FALLING
             this.anims.play('fall')
+            this.bulletFlash.setVisible(false)
         }
-        this.bulletFlash.setVisible(false)
 
         for (let i = 0; i < this.equipments.length; i++) this.equipments[i].falling()
     }
 
     public moving(): void {
         this.anims.play('move')
-        this.state = PLAYER_STATE.MOVING
+        this.playerState = PLAYER_STATE.MOVING
     }
 
     public getBullets(): Bullet[] {
