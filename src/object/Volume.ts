@@ -1,3 +1,3 @@
 export default class Volume {
-    public static value = 1
+    public static value = 0.5
 }

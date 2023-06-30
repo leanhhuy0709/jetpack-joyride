@@ -192,6 +192,7 @@ export default class MenuScene extends Phaser.Scene {
 
         if (this.playBtn.getIsPointerDown() && !this.isSpaceClicked) {
             this.isSpaceClicked = true
+            this.music.stop()
             this.tweens.add({
                 targets: this.logo,
                 alpha: 0,
