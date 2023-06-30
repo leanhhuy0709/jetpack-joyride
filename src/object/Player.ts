@@ -128,17 +128,22 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
 
     public update(delta: number): void {
         super.update()
-        const glScene = this.scene as GamePlayScene
-
+        const gpScene = this.scene as GamePlayScene
         this.x += delta * this.speed
-
         if (
-            glScene.matter.overlap(this, [glScene.ground, glScene.ground2]) &&
+            gpScene.matter.overlap(this, [gpScene.ground, gpScene.ground2]) &&
             this.state != PLAYER_STATE.MOVING
-        )
+        ) {
             this.moving()
-        else if (this.state == PLAYER_STATE.FLYING) this.flying()
+        } else if (this.state == PLAYER_STATE.FLYING) this.flying()
         else if (this.state == PLAYER_STATE.FALLING) this.falling()
+        else if (
+            !gpScene.matter.overlap(this, [gpScene.ground, gpScene.ground2]) &&
+            this.state == PLAYER_STATE.MOVING
+        ) {
+            this.state = PLAYER_STATE.FALLING
+            this.anims.play('fall')
+        }
 
         this.updateBullet(delta)
 
@@ -146,12 +151,12 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
     }
 
     private updateBullet(delta: number) {
-        const glScene = this.scene as GamePlayScene
+        const gpScene = this.scene as GamePlayScene
 
         for (let i = 0; i < this.getBullets().length; i++) {
             this.bullets[i].update(delta)
 
-            if (glScene.matter.overlap(this.bullets[i], [glScene.ground])) {
+            if (gpScene.matter.overlap(this.bullets[i], [gpScene.ground])) {
                 this.explosions.push(
                     ObjectPool.getExplosion(
                         this.scene,
@@ -209,7 +214,6 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
     public falling(): void {
         if (this.state == PLAYER_STATE.FLYING) {
             if (this.canFireBullet) this.setVelocityY(this.jumpVelo / 10)
-            else this.setVelocityY(0)
             this.state = PLAYER_STATE.FALLING
             this.anims.play('fall')
         }

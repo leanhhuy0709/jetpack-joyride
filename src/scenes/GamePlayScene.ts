@@ -1,16 +1,16 @@
 import * as Phaser from 'phaser'
-import { AUDIO, IMAGE, SCENE, SPRITE } from '../const/const'
+import { AUDIO, FONT_NAME, IMAGE, SCENE, SPRITE } from '../const/const'
 import Player, { PLAYER_STATE } from '../object/Player'
 import Score from '../Score'
 import Background from '../object/Background'
-import ObjectPool from '../object/ObjectPool'
 import { DEPTH } from '../const/depth'
 import RocketManager from '../object/obstacle/RocketManager'
 import WorkerManager from '../object/WorkerManager'
-import StartBackground from '../object/background/StartBackground'
 import ZapCoinManager, { DEFAULT_SAFE_DISTACE } from '../object/ZapCoinManager'
-import UserData from '../object/shop/UserData'
+import ObjectPool from '../object/ObjectPool'
 import Volume from '../object/Volume'
+import StartBackground from '../object/background/StartBackground'
+import UserData from '../object/shop/UserData'
 
 export default class GamePlayScene extends Phaser.Scene {
     private player: Player
@@ -41,6 +41,8 @@ export default class GamePlayScene extends Phaser.Scene {
         | Phaser.Sound.HTML5AudioSound
 
     public ground2: MatterJS.BodyType
+
+    private fpsText: Phaser.GameObjects.Text
 
     public constructor() {
         super({
@@ -98,8 +100,8 @@ export default class GamePlayScene extends Phaser.Scene {
         if (this.input.keyboard) this.cursors = this.input.keyboard.createCursorKeys()
 
         this.rocketManager = new RocketManager(this, 3)
-        this.workerManager = new WorkerManager(this, 10)
-        this.zapCoinManager = new ZapCoinManager(this, 10)
+        this.workerManager = new WorkerManager(this, 5)
+        this.zapCoinManager = new ZapCoinManager(this, 5)
 
         this.score = new Score(this)
 
@@ -114,6 +116,15 @@ export default class GamePlayScene extends Phaser.Scene {
         this.tweenStart()
         this.music = this.sound.add(AUDIO.MUSIC_GAMEPLAY, { volume: Volume.value })
         this.music.play()
+
+        this.fpsText = this.add
+            .text(3200, 100, '100fps', {
+                fontSize: '80px',
+                fontStyle: 'bold',
+                fontFamily: FONT_NAME,
+            })
+            .setDepth(DEPTH.OBJECT_VERYHIGH)
+            .setOrigin(1, 0)
     }
 
     private tweenStart(): void {
@@ -186,10 +197,11 @@ export default class GamePlayScene extends Phaser.Scene {
                 barry.destroy()
             },
         })
+
+        //this.matter.world.autoUpdate = false
     }
 
     public update(_time: number, delta: number): void {
-        
         this.music.setVolume(Volume.value)
         this.background.update()
         this.player.update(delta)
@@ -205,8 +217,8 @@ export default class GamePlayScene extends Phaser.Scene {
         }
 
         if (this.cursors.shift?.isDown) {
-            this.scene.pause(SCENE.GAMEPLAY, { music: this.music })
-            this.scene.launch(SCENE.PAUSE)
+            this.scene.pause(SCENE.GAMEPLAY)
+            this.scene.launch(SCENE.PAUSE, { music: this.music })
         }
 
         if (this.input.pointer1.isDown) {
@@ -273,6 +285,16 @@ export default class GamePlayScene extends Phaser.Scene {
                 DEFAULT_SAFE_DISTACE + this.player.getSpeed() * 30
             )
         }
+
+        if (this.matter.config.debug) {
+            if (this.matter.config.debug as Phaser.Types.Physics.Matter.MatterDebugConfig)
+                this.fpsText.setVisible(true)
+            else this.fpsText.setVisible(false)
+        }
+
+        this.fpsText
+            .setText(`FPS: ${Math.floor(this.game.loop.actualFps)}`)
+            .setPosition(this.cameras.main.scrollX + 3200, 100)
     }
 
     private evaluateSmokeYPosition(x: number, offset: number, coef: number): number {

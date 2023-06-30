@@ -18,7 +18,7 @@ export default class ObjectPool {
 
     public static init(scene: Phaser.Scene): void {
         ObjectPool.clear()
-        for (let i = 0; i < 0; i++) {
+        for (let i = 0; i < 5; i++) {
             ObjectPool.removeBullet(new Bullet(scene, 100, 100, IMAGE.BULLET))
             ObjectPool.removeExplosion(new Explosion(scene, 100, 100, SPRITE.EXPLOSION))
             ObjectPool.removeZap(new Zap(scene, -100, -100, -100, -100))

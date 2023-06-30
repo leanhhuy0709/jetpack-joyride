@@ -140,15 +140,13 @@ export default class Worker {
             this.state = WORKER_STATE.RUN
         }
 
-        if (this.scene.matter.world.localWorld.gravity.y > 0)
-        {
+        if (this.scene.matter.world.localWorld.gravity.y > 0) {
             this.body.setFlipY(false)
             this.head.setFlipY(false)
 
             this.headTranslationX = 0
             this.headTranslationY = -43
-        }
-        else {
+        } else {
             this.body.setFlipY(true)
             this.head.setFlipY(true)
 
