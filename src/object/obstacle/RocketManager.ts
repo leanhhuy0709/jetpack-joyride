@@ -13,7 +13,7 @@ export default class RocketManager {
         this.scene = scene
         this.rockets = []
 
-        this.minDistance = 5000
+        this.minDistance = 2000
         this.rocketIdx = []
         let tmp = Phaser.Math.Between(this.minDistance, this.minDistance * 2)
         for (let i = 0; i < numIdx; i++) {
@@ -76,9 +76,9 @@ export default class RocketManager {
         this.evaluateMinDistance(gpScene.score.getScore())
     }
 
-    public evaluateMinDistance(score: number, init = 5000): void {
+    public evaluateMinDistance(score: number, init = 4500): void {
         this.minDistance = init - Math.log10((0.5 * score) / 923 + 1) * 1300
-        if (this.minDistance < init - 3000)
-            this.minDistance = init - 3000
+        if (this.minDistance < init - 2000)
+            this.minDistance = init - 2000
     }
 }
