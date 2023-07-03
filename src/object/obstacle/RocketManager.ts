@@ -13,7 +13,7 @@ export default class RocketManager {
         this.scene = scene
         this.rockets = []
 
-        this.minDistance = 2000
+        this.minDistance = 3500
         this.rocketIdx = []
         let tmp = Phaser.Math.Between(this.minDistance, this.minDistance * 2)
         for (let i = 0; i < numIdx; i++) {
