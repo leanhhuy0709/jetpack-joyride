@@ -38,7 +38,6 @@ export default class Dan extends Equipment {
         })
 
         this.player.play('move')
-       
     }
 
     public remove() {

@@ -64,27 +64,27 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
     }
 
     private createAnims(key: string): void {
-        if (!this.scene.anims.exists('move'))
-            this.scene.anims.create({
-                key: 'move',
-                frames: this.anims.generateFrameNumbers(key, { start: 0, end: 1 }),
-                frameRate: 10,
-                repeat: -1,
-            })
-        if (!this.scene.anims.exists('fly'))
-            this.scene.anims.create({
-                key: 'fly',
-                frames: this.anims.generateFrameNumbers(key, { start: 3, end: 3 }),
-                frameRate: 10,
-                repeat: 1,
-            })
-        if (!this.scene.anims.exists('fall'))
-            this.scene.anims.create({
-                key: 'fall',
-                frames: this.anims.generateFrameNumbers(key, { start: 2, end: 2 }),
-                frameRate: 10,
-                repeat: 1,
-            })
+        if (this.scene.anims.exists('move')) this.scene.anims.remove('move')
+        this.scene.anims.create({
+            key: 'move',
+            frames: this.anims.generateFrameNumbers(key, { start: 0, end: 1 }),
+            frameRate: 10,
+            repeat: -1,
+        })
+        if (this.scene.anims.exists('fly')) this.scene.anims.remove('fly')
+        this.scene.anims.create({
+            key: 'fly',
+            frames: this.anims.generateFrameNumbers(key, { start: 3, end: 3 }),
+            frameRate: 10,
+            repeat: 1,
+        })
+        if (this.scene.anims.exists('fall')) this.scene.anims.remove('fall')
+        this.scene.anims.create({
+            key: 'fall',
+            frames: this.anims.generateFrameNumbers(key, { start: 2, end: 2 }),
+            frameRate: 10,
+            repeat: 1,
+        })
         if (!this.scene.anims.exists('flash'))
             this.scene.anims.create({
                 key: 'flash',
