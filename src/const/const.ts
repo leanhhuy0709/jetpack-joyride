@@ -6,7 +6,7 @@ export enum SCENE {
     LOADING = 'LoadingScene',
     SHOP = 'ShopScene',
     PAUSE = 'PauseScene',
-    SETTING = 'SettingScene'
+    SETTING = 'SettingScene',
 }
 
 export const FONT_NAME = 'New Athletic M54'
@@ -46,7 +46,7 @@ export enum SPRITE {
     WORKER_2_HEAD = 'assets/workers/worker2Head.png',
     WORKER_FAT_BODY = 'assets/workers/workerFatBody.png',
     WORKER_TALL_BODY = 'assets/workers/workerTallBody.png',
-    DAN_SPRITE_SHEET = 'assets/dan/spritesheet.png'
+    DAN_SPRITE_SHEET = 'assets/dan/spritesheet.png',
 }
 
 export enum IMAGE {
@@ -74,6 +74,7 @@ export enum IMAGE {
     GRAVITY_BELT = 'assets/equipment/gravity-belt.png',
     GRAVITY_SUIT = 'assets/equipment/gravity-suit.png',
     BARRY_DEAD = 'assets/barry/barry-dead.png',
+    SHADOW = 'assets/barry/effect_shadow.png',
 }
 
 export enum AUDIO {

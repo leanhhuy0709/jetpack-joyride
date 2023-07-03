@@ -17,7 +17,7 @@ export default class Bullet extends Phaser.Physics.Matter.Sprite {
             .setTexture(key)
 
         if (this.body) {
-            const vX = Phaser.Math.Between(-10, 10)
+            const vX = Phaser.Math.Between(-5, 15)
             const vY = 30
             this.setVelocityY(vY)
             this.setVelocityX(vX)

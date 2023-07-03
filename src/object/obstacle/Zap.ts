@@ -1,5 +1,6 @@
 import { SPRITE } from '../../const/const'
 import { DEPTH } from '../../const/depth'
+import GamePlayScene from '../../scenes/GamePlayScene'
 import Obstacle from './Obstacle'
 
 export default class Zap extends Obstacle {
@@ -8,7 +9,10 @@ export default class Zap extends Obstacle {
     private isSpin: boolean
     private glow1: Phaser.GameObjects.Sprite
     private glow2: Phaser.GameObjects.Sprite
-    
+
+    private spinChance: number
+    private hardChance: number
+
     public constructor(scene: Phaser.Scene, x1: number, y1: number, x2: number, y2: number) {
         super(scene)
         this.sprite1 = scene.matter.add
@@ -33,6 +37,9 @@ export default class Zap extends Obstacle {
             .setStatic(true)
             .setDepth(DEPTH.OBJECT_HIGH)
             .setCollisionGroup(-2)
+
+        this.spinChance = 0.1
+        this.hardChance = 0.1
 
         this.sprite2.anims.create({
             key: 'turn2',
@@ -141,6 +148,9 @@ export default class Zap extends Obstacle {
         }
         this.updateRect()
         this.updateGlow()
+
+        const gpScene = this.scene as GamePlayScene
+        this.evaluateSpinChance(gpScene.score.getScore())
     }
 
     public updateGlow(): void {
@@ -188,17 +198,12 @@ export default class Zap extends Obstacle {
     public reset(minX: number): void {
         const x1 = minX + Phaser.Math.Between(0, 300)
         const x2 = x1 + Phaser.Math.Between(200, 500)
-        const y1 = Phaser.Math.Between(600, 1100)
-        let y2 = Phaser.Math.Between(600, 500)
-        const tmp = Phaser.Math.Between(0, 4)
-        switch (tmp) {
-            case 0:
-                y2 = 1250
-                break
-            case 1:
-                y2 = 300
-                break
-        }
+        const y1 = Phaser.Math.Between(650, 1000)
+        let y2 = Phaser.Math.Between(650, 1000)
+        const tmp = Math.random()
+
+        if (tmp < this.hardChance) y2 = 1250
+        else if (tmp < this.hardChance * 2) y2 = 300
 
         this.sprite1.setRotation(Math.PI / 2 + Math.atan((y2 - y1) / (x2 - x1)))
         this.sprite2.setRotation(-Math.PI / 2 + Math.atan((y2 - y1) / (x2 - x1)))
@@ -243,7 +248,20 @@ export default class Zap extends Obstacle {
         this.sprite2.y = y2
         this.updateRect()
         this.updateGlow()
-        if (Phaser.Math.Between(0, 10) == 10) this.isSpin = true
+
+        const tmp = Math.random()
+
+        if (tmp < this.spinChance) this.isSpin = true
         else this.isSpin = false
+    }
+
+    public evaluateSpinChance(score: number): void {
+        this.spinChance = Math.log10((0.5 * score) / 123 + 1) / 3
+
+        if (this.spinChance > 0.6) this.spinChance = 0.6
+
+        this.hardChance = Math.log10((0.5 * score) / 123 + 1) / 6
+
+        if (this.hardChance > 0.3) this.hardChance = 0.3
     }
 }

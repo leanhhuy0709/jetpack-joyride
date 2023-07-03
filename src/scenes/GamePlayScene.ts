@@ -244,11 +244,15 @@ export default class GamePlayScene extends Phaser.Scene {
 
         this.score.add(delta, this.player.getSpeed() / 10)
 
+        if (!this.music.isPlaying && !this.isTweenDead) this.music.play()
+
         if (
             this.zapCoinManager.checkCollider(this.player) ||
             this.rocketManager.checkCollider(this.player)
         ) {
             this.player.state = PLAYER_STATE.DEAD
+            this.player.getBulletFlash().setVisible(false)
+            
             if (!this.isTweenDead) {
                 const dead = this.add
                     .sprite(this.player.x, this.player.y, IMAGE.BARRY_DEAD)
@@ -265,6 +269,7 @@ export default class GamePlayScene extends Phaser.Scene {
                     onComplete: () => {
                         console.log('You die!')
                         this.score.saveHighScore()
+                        this.music.stop()
                         UserData.addCoin(this.zapCoinManager.getCoinInRound())
                         UserData.saveCoin()
                         this.scene.pause()
@@ -299,6 +304,8 @@ export default class GamePlayScene extends Phaser.Scene {
             if (debug.showBody) this.fpsText.setVisible(true)
             else this.fpsText.setVisible(false)
         }
+
+        
 
         this.fpsText
             .setText(`FPS: ${Math.floor(this.game.loop.actualFps)}`)

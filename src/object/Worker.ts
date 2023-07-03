@@ -1,4 +1,4 @@
-import { SPRITE } from '../const/const'
+import { IMAGE, SPRITE } from '../const/const'
 import { DEPTH } from '../const/depth'
 import Player from './Player'
 
@@ -18,6 +18,7 @@ export default class Worker {
     protected bodyKey: string
     private headTranslationX: number
     private headTranslationY: number
+    private shadow: Phaser.GameObjects.Sprite
     public constructor(
         scene: Phaser.Scene,
         x: number,
@@ -111,6 +112,12 @@ export default class Worker {
 
         this.headTranslationX = 0
         this.headTranslationY = -43
+
+        this.shadow = scene.add
+            .sprite(x, y + 160, IMAGE.SHADOW)
+            .setDepth(DEPTH.OBJECT_LOW)
+            .setScale(3)
+            .setAlpha(0)
     }
 
     public update(delta: number, player: Player): void {
@@ -153,6 +160,12 @@ export default class Worker {
             this.headTranslationX = 0
             this.headTranslationY = 43
         }
+
+        this.shadow
+            .setPosition(this.body.x, this.shadow.y)
+            .setAlpha((this.body.y - 320) / (1300 - 320))
+            .setScale((3 * (this.body.y - 320)) / (1300 - 320))
+            .setVisible(this.body.visible)
     }
 
     public handleCollider(player: Player): void {

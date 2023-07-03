@@ -13,7 +13,7 @@ import AntiWorker from './equipment/AntiWorker'
 import Dan from './equipment/Dan'
 import GravitySuit from './equipment/GravitySuite'
 
-const DELAY_FIRE_BULLET = 5
+const DELAY_FIRE_BULLET = 2
 export const DEFAULT_JUMP_VELO = -8
 
 export enum PLAYER_STATE {
@@ -33,6 +33,7 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
     private equipments: Equipment[]
     private defaultSpeed: number
     public canFireBullet: boolean
+    private shadow: Phaser.GameObjects.Sprite
 
     public constructor(scene: Phaser.Scene, x: number, y: number, key: string) {
         super(scene.matter.world, x, y, key)
@@ -50,9 +51,16 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
         this.playerState = PLAYER_STATE.MOVING
         this.scene.add.existing(this)
         this.createAnims(key)
-        this.speed = 0.5
+
         this.defaultSpeed = 0.5
+        this.speed = this.defaultSpeed
         this.canFireBullet = true
+
+        this.shadow = scene.add
+            .sprite(x, y + 120, IMAGE.SHADOW)
+            .setDepth(DEPTH.OBJECT_MEDIUM)
+            .setScale(3)
+            .setAlpha(0)
     }
 
     private createAnims(key: string): void {
@@ -145,10 +153,17 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
                 } else this.falling()
                 break
             case PLAYER_STATE.DEAD:
+                this.bulletFlash.setVisible(false)
                 break
         }
 
         this.updateBullet(delta)
+
+        this.shadow
+            .setPosition(this.x - 10, this.shadow.y)
+            .setAlpha((this.y - 320) / (1300 - 320))
+            .setScale((3 * (this.y - 320)) / (1300 - 320))
+            .setVisible(this.visible)
 
         for (let i = 0; i < this.equipments.length; i++) this.equipments[i].update(delta)
     }
@@ -273,5 +288,9 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
 
     public setDefaultSpeed(speed: number): void {
         this.defaultSpeed = speed
+    }
+
+    public getBulletFlash(): Phaser.GameObjects.Sprite {
+        return this.bulletFlash
     }
 }

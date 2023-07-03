@@ -37,8 +37,8 @@ export default class GravityBelt extends Equipment {
 
     public init() {
         const gravity = this.player.scene.matter.world.localWorld.gravity.y
-        this.player.scene.matter.world.setGravity(0, gravity * 2)
-        this.player.setJumpVelo(DEFAULT_JUMP_VELO * 1.3)
+        this.player.scene.matter.world.setGravity(0, gravity * 2.5)
+        this.player.setJumpVelo(DEFAULT_JUMP_VELO * 1.5)
     }
 
     public update(_delta: number): void {

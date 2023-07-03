@@ -77,7 +77,7 @@ export default class RocketManager {
     }
 
     public evaluateMinDistance(score: number, init = 5000): void {
-        this.minDistance = init - Math.log10((0.5 * score) / 1000 + 1) * 1500
+        this.minDistance = init - Math.log10((0.5 * score) / 923 + 1) * 1300
         if (this.minDistance < init - 3000)
             this.minDistance = init - 3000
     }
